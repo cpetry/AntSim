@@ -19,12 +19,12 @@ class Ant extends Collider {
 			// check distance
 			if (distToObj < this.visibilityDistance){
 				// TODO some error in calculating radians
-				// check for <0 and >2*pi !!
-				var fromToRad = math.acos(math.dot(math.divide(fromTo, distToObj), math.matrix([1,0])));
-				//console.log(fromToRad)
+				var directionVec = math.matrix([math.sin(this.directionRad), math.cos(this.directionRad)])
+				var fromToDir = math.divide(fromTo, distToObj);
+				var fromObjToDirRad = math.acos(math.dot(fromToDir, directionVec));
+				//console.log(math.abs(fromObjToDirRad))
 				// check inside cone
-				if (this.directionRad - this.visibilityRangeRad < fromToRad
-				&& this.directionRad + this.visibilityRangeRad > fromToRad){
+				if (math.abs(fromObjToDirRad) < this.visibilityRangeRad){
 					console.log("seeing sth!")
 					this.visibleObjs.push(objects[i]);	
 				}				
@@ -54,7 +54,7 @@ class Ant extends Collider {
 	// One function the user should be able to write him/herself
 	getNewDirection(){
 		this.directionRad += getRandomArbitrary(-0.5,0.5);
-		this.directionRad = this.directionRad % (3.14*2);
+		//this.directionRad = this.directionRad % (3.14*2);
 		var direction = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)]);
 		return direction;
 	}
@@ -63,7 +63,10 @@ class Ant extends Collider {
 		//console.log("Draw Ant!")
 		this.context.beginPath();
 		this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
-		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1], this.visibilityDistance, this.directionRad-this.visibilityRangeRad, this.directionRad+this.visibilityRangeRad, false);
+		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1],
+				this.visibilityDistance, 
+				this.directionRad-this.visibilityRangeRad, 
+				this.directionRad+this.visibilityRangeRad, false);
 		this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
 		this.context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
 		this.context.fill();
