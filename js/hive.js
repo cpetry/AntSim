@@ -2,7 +2,7 @@ class Hive extends Collider {
 	constructor(canvas, position, size, collisionObjs){
 		super(canvas, position, size, collisionObjs);
 	}
-		
+
 	draw(){
 		//console.log("Draw Hive!")
 		var lineWidth = 2;

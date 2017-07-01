@@ -1,8 +1,35 @@
 class Ant extends Collider {
 	constructor(canvas, position, collisionObjs){
 		super(canvas, position, 2, collisionObjs);
-		this.directionRad = getRandomArbitrary(0,3.14);
+		this.directionRad = getRandomArbitrary(0,3.14*2);
 		this.speed = 2.5;
+		this.visibilityDistance = 35;
+		this.visibilityRangeRad = 1;
+		this.visibleObjs = [];
+	}
+	
+	setVisibleObjects(objects){
+		this.visibleObjs = [];
+		for (var i=0; i<objects.length; i++){
+			if (this == objects[i])
+				continue;
+			
+			var fromTo = math.subtract(objects[i].getPosition(), this.position);
+			var distToObj = math.norm(fromTo,2);
+			// check distance
+			if (distToObj < this.visibilityDistance){
+				// TODO some error in calculating radians
+				// check for <0 and >2*pi !!
+				var fromToRad = math.acos(math.dot(math.divide(fromTo, distToObj), math.matrix([1,0])));
+				//console.log(fromToRad)
+				// check inside cone
+				if (this.directionRad - this.visibilityRangeRad < fromToRad
+				&& this.directionRad + this.visibilityRangeRad > fromToRad){
+					console.log("seeing sth!")
+					this.visibleObjs.push(objects[i]);	
+				}				
+			}
+		}
 	}
 	
 	// checks and walks if possible
@@ -27,6 +54,7 @@ class Ant extends Collider {
 	// One function the user should be able to write him/herself
 	getNewDirection(){
 		this.directionRad += getRandomArbitrary(-0.5,0.5);
+		this.directionRad = this.directionRad % (3.14*2);
 		var direction = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)]);
 		return direction;
 	}
@@ -34,11 +62,20 @@ class Ant extends Collider {
 	draw(){
 		//console.log("Draw Ant!")
 		this.context.beginPath();
-		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1], this.size, 0, 2 * Math.PI, false);
-		this.context.fillStyle = 'black';
+		this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
+		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1], this.visibilityDistance, this.directionRad-this.visibilityRangeRad, this.directionRad+this.visibilityRangeRad, false);
+		this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
+		this.context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
 		this.context.fill();
-		this.context.lineWidth = 2;
 		this.context.strokeStyle = '#003300';
-		this.context.stroke();
+		this.context.stroke();	
+	
+		this.context.beginPath();
+		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1], this.size, 0, 2 * Math.PI, false);
+		this.context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
+		this.context.fill();
+		this.context.lineWidth = 1;
+		this.context.strokeStyle = '#003300';
+		this.context.stroke();	
 	}
 }

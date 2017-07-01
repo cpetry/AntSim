@@ -49,7 +49,9 @@ window.requestAnimationFrame = function() {
 			//Clear screen
 			context.clearRect(0, 0, width, height);
 			hive.draw();
+
 			for (var i = 0; i < ants.length; i++) {
+				ants[i].setVisibleObjects(collisionObjects);
 				var newDirection = ants[i].getNewDirection();
 				ants[i].walkTo(newDirection, collisionObjects);
 				ants[i].draw();
