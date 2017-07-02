@@ -61,21 +61,22 @@ class Ant extends Collider {
 	
 	draw(){
 		//console.log("Draw Ant!")
-		this.context.beginPath();
-		this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
-		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1],
-				this.visibilityDistance, 
-				this.directionRad-this.visibilityRangeRad, 
-				this.directionRad+this.visibilityRangeRad, false);
-		this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
-		this.context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
-		this.context.fill();
-		this.context.strokeStyle = '#003300';
-		this.context.stroke();	
-	
+		if (Debug.getVisibility()){		
+			this.context.beginPath();
+			this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
+			this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1],
+					this.visibilityDistance, 
+					this.directionRad-this.visibilityRangeRad, 
+					this.directionRad+this.visibilityRangeRad, false);
+			this.context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
+			this.context.fill();
+			this.context.strokeStyle = '#003300';
+			this.context.stroke();	
+	}
+
 		this.context.beginPath();
 		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1], this.size, 0, 2 * Math.PI, false);
-		this.context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
+		this.context.fillStyle = '#000000';
 		this.context.fill();
 		this.context.lineWidth = 1;
 		this.context.strokeStyle = '#003300';

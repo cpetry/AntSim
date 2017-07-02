@@ -10,55 +10,53 @@ window.requestAnimationFrame = function() {
         }
 }();
 
-(function(window, document){
 
-    var canvas       = document.getElementById("terrarium"),
-        context      = canvas.getContext("2d"),
-        width        = canvas.width,
-        height       = canvas.height;
-    var now;
-    var then = Date.now();
-	var fps = 10;
-	var interval = 1000/fps;
-	var delta;
+var canvas       = document.getElementById("terrarium"),
+	context      = canvas.getContext("2d"),
+	width        = canvas.width,
+	height       = canvas.height;
+var now;
+var then = Date.now();
+var fps = 10;
+var interval = 1000/fps;
+var delta;
+
+var collisionObjects = [];
+var hive;
+var ants = [];
+
+function init(){
+	var hivePos = math.matrix([width/2,height/2]);
+	hive = new Hive(canvas, hivePos, 12, collisionObjects);
+	collisionObjects.push(hive);
+	for (var i=0; i< 10; i++){
+		var antPos = math.add(math.matrix([getRandomArbitrary(-50,50),getRandomArbitrary(-50,50)]), hivePos);
+		var newAnt = new Ant(canvas, antPos, collisionObjects)
+		ants.push(newAnt);
+		collisionObjects.push(newAnt);
+	}
+}
+		
+function draw(){
+	now = Date.now();
+	delta = now - then;
 	
-	var collisionObjects = [];
-	var hive;
-	var ants = [];
-	
-	function init(){
-		var hivePos = math.matrix([width/2,height/2]);
-		hive = new Hive(canvas, hivePos, 12, collisionObjects);
-		collisionObjects.push(hive);
-		for (var i=0; i< 10; i++){
-			var antPos = math.add(math.matrix([getRandomArbitrary(-50,50),getRandomArbitrary(-50,50)]), hivePos);
-			var newAnt = new Ant(canvas, antPos, collisionObjects)
-			ants.push(newAnt);
-			collisionObjects.push(newAnt);
+	if(delta > interval) {
+		then = now - (delta % interval);
+		//Clear screen
+		context.clearRect(0, 0, width, height);
+		hive.draw();
+
+		for (var i = 0; i < ants.length; i++) {
+			ants[i].setVisibleObjects(collisionObjects);
+			var newDirection = ants[i].getNewDirection();
+			ants[i].walkTo(newDirection, collisionObjects);
+			ants[i].draw();
 		}
 	}
-	init();
-			
-    function draw(){
-        requestAnimationFrame(draw);
-		now = Date.now();
-		delta = now - then;
-		
-		if(delta > interval) {
-			then = now - (delta % interval);
-			//Clear screen
-			context.clearRect(0, 0, width, height);
-			hive.draw();
-
-			for (var i = 0; i < ants.length; i++) {
-				ants[i].setVisibleObjects(collisionObjects);
-				var newDirection = ants[i].getNewDirection();
-				ants[i].walkTo(newDirection, collisionObjects);
-				ants[i].draw();
-			}
-        }
-        
-    }
-    draw();
-
-}(this, this.document))
+	
+	if (Settings.getAutoIterateFrames())
+		requestAnimationFrame(draw);
+}
+	
+window.onload = function(){init();requestAnimationFrame(draw);}
