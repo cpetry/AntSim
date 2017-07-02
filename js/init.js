@@ -24,6 +24,7 @@ var delta;
 var collisionObjects = [];
 var hive;
 var ants = [];
+var settings = new Settings();
 
 function init(){
 	var hivePos = math.matrix([width/2,height/2]);
@@ -55,8 +56,8 @@ function draw(){
 		}
 	}
 	
-	if (Settings.getAutoIterateFrames())
+	if (settings.getAutoIterateFrames())
 		requestAnimationFrame(draw);
 }
 	
-window.onload = function(){init();requestAnimationFrame(draw);}
+window.onload = function(){init();draw();requestAnimationFrame(draw);}

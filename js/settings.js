@@ -5,17 +5,17 @@ class Settings
 		this.showDirection = false;
 	}
 	
-	static setShowDirection(enabled){
+	setShowDirection(enabled){
 		this.showDirection=enabled;
 	}
-	static getShowDirection(){
+	getShowDirection(){
 		return this.showDirection;
 	}
 
-	static setAutoIterateFrames(enabled){
+	setAutoIterateFrames(enabled){
 		this.autoIterateFrames=enabled;
 	}
-	static getAutoIterateFrames(){
+	getAutoIterateFrames(){
 		return this.autoIterateFrames;
 	}
 }
