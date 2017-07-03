@@ -1,7 +1,7 @@
 class Ant extends Collider {
 	constructor(canvas, position, collisionObjs){
 		super(canvas, position, 2, collisionObjs);
-		this.directionRad = getRandomArbitrary(0, 3.14*2);
+		this.directionRad = rand(0, 3.14*2);
 		this.speed = 2.5;
 		this.visibilityDistance = 35;
 		this.visibilityRangeRad = 1;
@@ -52,7 +52,7 @@ class Ant extends Collider {
 	
 	// One function the user should be able to write him/herself
 	getNewDirection(){
-		this.directionRad += getRandomArbitrary(-0.5,0.5);
+		this.directionRad += rand(-0.5,0.5);
 		this.directionRad = this.directionRad % (3.14*2);
 		var direction = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)]);
 		return direction;

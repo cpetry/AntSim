@@ -9,6 +9,6 @@ function inside(position, size, canvas){
 		return false;
 }
 
-function getRandomArbitrary(min, max){
+function rand(min, max){
 	return Math.random() * (max - min) + min;
 }

@@ -5,7 +5,7 @@ class Collider {
 		this.context = canvas.getContext("2d");
 		this.size = size;
 		while(this.checkCollision(colObjs, position)){
-			position = math.add(math.matrix([getRandomArbitrary(-10,10),getRandomArbitrary(-10,10)]), position);
+			position = math.add(math.matrix([rand(-10,10),rand(-10,10)]), position);
 		}
 		this.position = position;
 	}

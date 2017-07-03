@@ -24,6 +24,7 @@ var delta;
 var collisionObjects = [];
 var hive;
 var ants = [];
+var food = [];
 var settings = new Settings();
 
 function init(){
@@ -31,27 +32,52 @@ function init(){
 	hive = new Hive(canvas, hivePos, 12, collisionObjects);
 	collisionObjects.push(hive);
 	for (var i=0; i< 10; i++){
-		var antPos = math.add(math.matrix([getRandomArbitrary(-50,50),getRandomArbitrary(-50,50)]), hivePos);
+		var antPos = math.add(math.matrix([rand(-50,50),rand(-50,50)]), hivePos);
 		var newAnt = new Ant(canvas, antPos, collisionObjects)
 		ants.push(newAnt);
 		collisionObjects.push(newAnt);
 	}
 }
-		
+
+function simulate(){
+	for (var i = 0; i < ants.length; i++) {
+		ants[i].setVisibleObjects(collisionObjects);
+		var newDirection = ants[i].getNewDirection();
+		ants[i].walkTo(newDirection, collisionObjects);
+	}
+	
+	for (var i = 0; i < food.length; i++) {
+		food[i].decay();
+		// remove food if it is "empty"
+		if (food[i].isEmpty())
+			food.splice(i, 1);
+	}
+	var createFood = Math.floor(rand(0,1.05));
+	if (createFood && food.length < 10){
+		var foodPos = math.matrix([rand(0,canvas.width),rand(0,canvas.height)]);
+		var newFood = new Food(canvas, foodPos, 1000, collisionObjects)
+		food.push(newFood);
+		collisionObjects.push(newFood);
+	}
+	
+}
+
 function draw(){
 	now = Date.now();
 	delta = now - then;
 	
 	if(delta > interval) {
 		then = now - (delta % interval);
+		simulate();
+		
 		//Clear screen
 		context.clearRect(0, 0, width, height);
 		hive.draw();
 
+		for (var i = 0; i < food.length; i++) {
+			food[i].draw();
+		}
 		for (var i = 0; i < ants.length; i++) {
-			ants[i].setVisibleObjects(collisionObjects);
-			var newDirection = ants[i].getNewDirection();
-			ants[i].walkTo(newDirection, collisionObjects);
 			ants[i].draw();
 		}
 	}
