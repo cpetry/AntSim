@@ -52,10 +52,28 @@ class Ant extends Collider {
 	
 	// One function the user should be able to write him/herself
 	getNewDirection(){
-		this.directionRad += rand(-0.5,0.5);
-		this.directionRad = this.directionRad % (3.14*2);
-		var direction = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)]);
-		return direction;
+		var isFoodInSight = false;
+		var nearestFood;
+		for(var i=0; i<this.visibleObjs.length; i++){
+			if (typeof(this.visibleObjs[i]) === "Food"){
+				nearestFood = this.visibleObjs[i];
+				isFoodInSight=true;
+			}
+		}
+		if (isFoodInSight){
+			var fromTo = math.subtract(nearestFood.getPosition(), this.position);
+			var distToObj = math.norm(fromTo,2);
+			var directionVec = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)])
+			var fromToDir = math.divide(fromTo, distToObj);
+			var fromObjToDirRad = math.acos(math.dot(fromToDir, directionVec));
+			return this.directionRad-fromObjToDirRad;
+		}
+		else{
+			this.directionRad += rand(-0.5,0.5);
+			this.directionRad = this.directionRad % (3.14*2);
+			var direction = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)]);
+			return direction;		
+		}
 	}
 	
 	draw(){
