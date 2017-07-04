@@ -47,4 +47,21 @@ class Collider {
 		else
 			return false;
 	}
+	
+	getDirectionVecFromAngle(){
+		var direction = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)]);
+		return direction;
+	}
+	
+	getDistanceToObject(obj){
+		var fromTo = math.subtract(obj.getPosition(), this.position);
+		return math.norm(fromTo,2);
+	}
+	
+	getAngleToObject(obj){
+		var directionVec = math.matrix([math.cos(this.directionRad), math.sin(this.directionRad)])
+		var toObjVec = math.subtract(obj.getPosition(), this.position);
+			
+		return angleBetweenVectorsRad(directionVec, toObjVec);
+	}
 }

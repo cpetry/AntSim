@@ -1,6 +1,6 @@
 class Food extends Collider {
 	constructor(canvas, position, amount, collisionObjs){
-		super(canvas, position, amount / 100, collisionObjs);
+		super(canvas, position, amount / 100.0, collisionObjs);
 		this.amount = amount;
 	}
 	
@@ -27,7 +27,6 @@ class Food extends Collider {
 	}
 
 	draw(){
-		//console.log("Draw Hive!")
 		var pos = this.position.valueOf();
 		var lineWidth = 2;
 		this.context.beginPath();

@@ -5,6 +5,7 @@
 	<body>
 		<canvas align="center" width="800" height="400" id="terrarium"></canvas>
 		<div>Settings<br/>
+		<input type="number" id="fps" value="next" onchange="settings.setFramesPerSecond(document.getElementById('fps').value);" />
 		<input type="checkbox" id="autoFrame" onchange="settings.setAutoIterateFrames(document.getElementById('autoFrame').checked);requestAnimationFrame(draw);" checked /> AutoFrame <br/>
 		<input type="button" id="nextFrame" value="next" onclick="requestAnimationFrame(draw);" />
 		</div>

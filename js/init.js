@@ -17,8 +17,6 @@ var canvas       = document.getElementById("terrarium"),
 	height       = canvas.height;
 var now;
 var then = Date.now();
-var fps = 10;
-var interval = 1000/fps;
 var delta;
 
 var collisionObjects = [];
@@ -31,7 +29,7 @@ function init(){
 	var hivePos = math.matrix([width/2,height/2]);
 	hive = new Hive(canvas, hivePos, 12, collisionObjects);
 	collisionObjects.push(hive);
-	for (var i=0; i< 10; i++){
+	for (var i=0; i< 30; i++){
 		var antPos = math.add(math.matrix([rand(-50,50),rand(-50,50)]), hivePos);
 		var newAnt = new Ant(canvas, antPos, collisionObjects)
 		ants.push(newAnt);
@@ -49,8 +47,13 @@ function simulate(){
 	for (var i = 0; i < food.length; i++) {
 		food[i].decay();
 		// remove food if it is "empty"
-		if (food[i].isEmpty())
+		if (food[i].isEmpty() && i > -1){
+			for (var a =0; a < collisionObjects.length; a++){
+				if (collisionObjects[a] == food[i])	
+					collisionObjects.splice(a, 1);
+			}
 			food.splice(i, 1);
+		}
 	}
 	var createFood = Math.floor(rand(0,1.05));
 	if (createFood && food.length < 10){
@@ -65,7 +68,7 @@ function simulate(){
 function draw(){
 	now = Date.now();
 	delta = now - then;
-	
+	var interval = 1000/settings.getFramesPerSecond()
 	if(delta > interval) {
 		then = now - (delta % interval);
 		simulate();
