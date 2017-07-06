@@ -6,12 +6,12 @@ class Hive extends Collider {
 	draw(){
 		//console.log("Draw Hive!")
 		var lineWidth = 2;
-		this.context.beginPath();
-		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1], this.size - lineWidth, 0, 2 * Math.PI, false);
-		this.context.fillStyle = 'brown';
-		this.context.fill();
-		this.context.lineWidth = lineWidth;
-		this.context.strokeStyle = '#003300';
-		this.context.stroke();
+		this._context.beginPath();
+		this._context.arc(this.getPosition().valueOf()[0], this.getPosition().valueOf()[1], this.getSize() - lineWidth, 0, 2 * Math.PI, false);
+		this._context.fillStyle = 'brown';
+		this._context.fill();
+		this._context.lineWidth = lineWidth;
+		this._context.strokeStyle = '#003300';
+		this._context.stroke();
 	}
 }

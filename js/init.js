@@ -31,7 +31,7 @@ function init(){
 	collisionObjects.push(hive);
 	for (var i=0; i< 30; i++){
 		var antPos = math.add(math.matrix([rand(-50,50),rand(-50,50)]), hivePos);
-		var newAnt = new Ant(canvas, antPos, collisionObjects)
+		var newAnt = new AntCustom(canvas, antPos, collisionObjects)
 		ants.push(newAnt);
 		collisionObjects.push(newAnt);
 	}
@@ -40,8 +40,8 @@ function init(){
 function simulate(){
 	for (var i = 0; i < ants.length; i++) {
 		ants[i].setVisibleObjects(collisionObjects);
-		var newDirection = ants[i].getNewDirection();
-		ants[i].walkTo(newDirection, collisionObjects);
+		ants[i].iterate();
+		ants[i].move(collisionObjects);
 	}
 	
 	for (var i = 0; i < food.length; i++) {

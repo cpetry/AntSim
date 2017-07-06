@@ -1,49 +1,55 @@
+const _amount = Symbol('amount');
+
 class Food extends Collider {
 	constructor(canvas, position, amount, collisionObjs){
 		super(canvas, position, amount / 100.0, collisionObjs);
-		this.amount = amount;
+		this[_amount] = amount;
+	}
+	
+	getAmount(){
+		return this[_amount];
 	}
 	
 	decay(){
-		this.amount--;
+		this[_amount]--;
 	}
 	
 	isEmpty(){
-		return (this.amount <=0);
+		return (this.getAmount() <= 0);
 	}
 	
 	harvest(harvestAmount){
 		// if there is still enough amount
-		if (harvestAmount>this.amount){
-			this.amount -= harvestAmount;
+		if (harvestAmount>this.getAmount()){
+			this[_amount] -= harvestAmount;
 			return harvestAmount;
 		}
 		// take all that is left
 		else{
-			var rest = this.amount;
-			this.amount = 0;
+			var rest = this.getAmount();
+			this[_amount] = 0;
 			return rest;
 		}
 	}
 
 	draw(){
-		var pos = this.position.valueOf();
+		var pos = this.getPosition().valueOf();
 		var lineWidth = 2;
-		this.context.beginPath();
-		this.context.arc(pos[0], pos[1], this.size - lineWidth, 0, 2 * Math.PI, false);
-		this.context.fillStyle = 'green';
-		this.context.fill();
-		this.context.lineWidth = lineWidth;
-		this.context.strokeStyle = '#003300';
-		this.context.stroke();
+		this._context.beginPath();
+		this._context.arc(pos[0], pos[1], this.getSize() - lineWidth, 0, 2 * Math.PI, false);
+		this._context.fillStyle = 'green';
+		this._context.fill();
+		this._context.lineWidth = lineWidth;
+		this._context.strokeStyle = '#003300';
+		this._context.stroke();
 		if (Debug.getShowFoodAmount()){
-			this.context.font = "14px Arial";
-			this.context.textAlign = "center";
-			this.context.lineWidth = 1;
-			this.context.strokeStyle = '#FFFFFF';
-			this.context.strokeText(this.amount.toString(),pos[0],pos[1]); 
-			this.context.fillStyle = 'black';
-			this.context.fillText(this.amount.toString(),pos[0],pos[1]);
+			this._context.font = "14px Arial";
+			this._context.textAlign = "center";
+			this._context.lineWidth = 1;
+			this._context.strokeStyle = '#FFFFFF';
+			this._context.strokeText(this.getAmount().toString(),pos[0],pos[1]); 
+			this._context.fillStyle = 'black';
+			this._context.fillText(this.getAmount().toString(),pos[0],pos[1]);
 		}			
 	}
 }

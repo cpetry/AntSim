@@ -4,6 +4,7 @@
 	</head>
 	<body>
 		<canvas align="center" width="800" height="400" id="terrarium"></canvas>
+		
 		<div>Settings<br/>
 		<input type="number" id="fps" value="next" onchange="settings.setFramesPerSecond(document.getElementById('fps').value);" />
 		<input type="checkbox" id="autoFrame" onchange="settings.setAutoIterateFrames(document.getElementById('autoFrame').checked);requestAnimationFrame(draw);" checked /> AutoFrame <br/>
@@ -13,6 +14,7 @@
 		<input type="checkbox" id="debugVisibility" onchange="Debug.setVisibility(document.getElementById('debugVisibility').checked);" /> Show visibility <br/>
 		<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
 		</div>
+		<textarea id="customIterate" rows="12" cols="150"></textarea>
 		<script src="./js/external/mathjs_3.14.1.js"></script>
 		<script src="./js/settings.js"></script>
 		<script src="./js/debug.js"></script>
@@ -21,6 +23,8 @@
 		<script src="./js/hive.js"></script>
 		<script src="./js/food.js"></script>
 		<script src="./js/ant.js"></script>
+		<script src="./js/antSimple.js"></script>
+		<script src="./js/antCustom.js"></script>
 		<script src="./js/init.js"></script>
 	</body>
 </html>

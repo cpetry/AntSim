@@ -1,13 +1,78 @@
+var WalkDirection = {
+  FORWARD: 1,
+  BACKWARD: 2,
+  NONE: 3,
+};
+
+const _directionRad = Symbol('directionRad');
+const _speed = Symbol('speed');
+const _speedHeading = Symbol('speedHeading');
+const _visibilityDistance = Symbol('visibilityDistance');
+const _visibilityRangeRad = Symbol('visibilityRangeRad');
+
 class Ant extends Collider {
 	constructor(canvas, position, collisionObjs){
 		super(canvas, position, 2, collisionObjs);
-		this.directionRad = rand(0, 3.14*2);
-		this.speed = 2.5;
-		this.visibilityDistance = 35;
-		this.visibilityRangeRad = 1;
+		this[_directionRad] = rand(0, 3.14*2);
+		this[_speed] = 2.5;
+		this[_speedHeading] = 0.7; // radians
+		this[_visibilityDistance] = 35;
+		this[_visibilityRangeRad] = 1;
+
 		this.visibleObjs = [];
 	}
 	
+	iterate(){
+		
+	}
+	
+	getDirectionRad(){
+		return this[_directionRad];
+	}
+	
+	getSpeed(){
+		return this[_speed]
+	}
+	
+	getSpeedHeading(){
+		return this[_speedHeading];
+	}
+	
+	getVisibilityDistance(){
+		return this[_visibilityDistance];
+	}
+	
+	getVisibilityRangeRad(){
+		return this[_visibilityRangeRad];
+	}
+	
+	// checks and walks if possible
+	move(colObjs){
+		var newHeading = this.getDirectionVecFromAngle(this.getDirectionRad());
+		var walkingDirection = WalkDirection.FORWARD;
+
+		var newPos = this.getPosition();
+		if (walkingDirection == WalkDirection.FORWARD)
+			newPos = math.add(this.getPosition(), math.multiply(newHeading, this.getSpeed()));
+		
+		this.setPosition(newPos, colObjs);
+	}
+	
+	setNewHeading(newHeading){
+		//newHeading % (Math.PI*2);
+		if (Math.abs(this.getDirectionRad() - newHeading) > this.getSpeedHeading()){
+			console.log("new heading too much! Reducing according to attribute.")
+			if (newHeading > this.getDirectionRad())
+				this[_directionRad] += this.getSpeedHeading();
+			else 
+				this[_directionRad] -= this.getSpeedHeading();
+		}
+		else
+			this[_directionRad] = newHeading;
+		
+		this[_directionRad] = this.getDirectionRad() % (Math.PI*2);
+	}
+
 	setVisibleObjects(objects){
 		this.visibleObjs = [];
 		for (var i=0; i<objects.length; i++){
@@ -16,82 +81,51 @@ class Ant extends Collider {
 			
 			var distToObj = this.getDistanceToObject(objects[i]);
 			// check distance
-			if (distToObj < this.visibilityDistance){
+			if (distToObj < this.getVisibilityDistance()){
 				// TODO some error in calculating radians
 				var fromObjToDirRad = this.getAngleToObject(objects[i]);
 				// check inside cone
-				if (math.abs(fromObjToDirRad) < this.visibilityRangeRad){
+				if (math.abs(fromObjToDirRad) < this.getVisibilityRangeRad()){
 					//console.log("seeing sth!")
-					this.visibleObjs.push(objects[i]);	
+					this.visibleObjs.push(objects[i]);
 				}				
 			}
 		}
 	}
-	
-	// checks and walks if possible
-	walkTo(newDirection, colObjs){
-		var newPos = math.add(this.position, math.multiply(newDirection, this.speed));
-		
-		var collision = false;
-		collision = !inside(newPos, this.size, this.canvas);
-		for (var i=0; i < colObjs.length; i++)
-		{
-			if (this != colObjs[i]
-			&& this.collidesWith(colObjs[i], newPos))
-				collision = true;
-		}
-		if (!collision)
-			this.position = newPos;
-		else {
-			// ant is not allowed to walk into stuff! :C
-		}
+
+	getDirectionVecFromAngle(){
+		var direction = math.matrix([math.cos(this.getDirectionRad()), math.sin(this.getDirectionRad())]);
+		return direction;
 	}
-	
-	// One function the user should be able to write him/herself
-	// returns direction vector!
-	getNewDirection(){
-		var isFoodInSight = false;
-		var nearestFood;
-		for(var i=0; i<this.visibleObjs.length; i++){
-			if (this.visibleObjs[i] instanceof Food){
-				nearestFood = this.visibleObjs[i];
-				isFoodInSight = true;
-			}
-		}
-		if (isFoodInSight){
-			this.directionRad = this.directionRad % (Math.PI*2);
-			var fromObjToDirRad = this.getAngleToObject(nearestFood);
-			this.directionRad += fromObjToDirRad;
-			return this.getDirectionVecFromAngle(this.directionRad);
-		}
-		else{
-			this.directionRad += rand(-0.5,0.5);
-			this.directionRad = this.directionRad % (Math.PI*2);
-			return this.getDirectionVecFromAngle(this.directionRad);
-		}
+
+	getAngleToObject(obj){
+		var directionVec = math.matrix([math.cos(this.getDirectionRad()), math.sin(this.getDirectionRad())])
+		var toObjVec = math.subtract(obj.getPosition(), this.getPosition());
+		//console.log(directionVec);
+		return angleBetweenVectorsRad(directionVec, toObjVec);
 	}
 	
 	draw(){
 		//console.log("Draw Ant!")
 		if (Debug.getVisibility()){		
-			this.context.beginPath();
-			this.context.moveTo(this.position.valueOf()[0],this.position.valueOf()[1]);
-			this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1],
-					this.visibilityDistance, 
-					this.directionRad-this.visibilityRangeRad, 
-					this.directionRad+this.visibilityRangeRad, false);
-			this.context.lineTo(this.position.valueOf()[0],this.position.valueOf()[1]);
-			this.context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
-			this.context.fill();
-			this.context.strokeStyle = '#003300';
-			this.context.stroke();
+			this._context.beginPath();
+			this._context.moveTo(this.getPosition().valueOf()[0],this.getPosition().valueOf()[1]);
+			this._context.arc(this.getPosition().valueOf()[0], this.getPosition().valueOf()[1],
+					this.getVisibilityDistance(), 
+					this.getDirectionRad()-this.getVisibilityRangeRad(), 
+					this.getDirectionRad()+this.getVisibilityRangeRad(), false);
+			this._context.lineTo(this.getPosition().valueOf()[0],this.getPosition().valueOf()[1]);
+			this._context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
+			this._context.fill();
+			this._context.strokeStyle = '#003300';
+			this._context.stroke();
 		}
-		this.context.beginPath();
-		this.context.arc(this.position.valueOf()[0], this.position.valueOf()[1], this.size, 0, 2 * Math.PI, false);
-		this.context.fillStyle = '#000000';
-		this.context.fill();
-		this.context.lineWidth = 1;
-		this.context.strokeStyle = '#003300';
-		this.context.stroke();
+		this._context.beginPath();
+		this._context.arc(this.getPosition().valueOf()[0], this.getPosition().valueOf()[1], this.getSize(), 0, 2 * Math.PI, false);
+		this._context.fillStyle = '#000000';
+		this._context.fill();
+		this._context.lineWidth = 1;
+		this._context.strokeStyle = '#003300';
+		this._context.stroke();
 	}
 }
