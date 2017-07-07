@@ -1,4 +1,4 @@
-class Hive extends Collider {
+class Hive extends SmellableObject {
 	constructor(canvas, position, size, collisionObjs){
 		super(canvas, position, size, collisionObjs);
 	}

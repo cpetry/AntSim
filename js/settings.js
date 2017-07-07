@@ -1,30 +1,25 @@
 class Settings
 {
-	constructor(){
-		this.autoIterateFrames = true;
-		this.showDirection = false;
-		this.fps = 10;
-	}
-	setFramesPerSecond(fps){
+	static setFramesPerSecond(fps){
 		console.log(fps)
 		this.fps = fps;
 	}
 	
-	getFramesPerSecond(){
+	static getFramesPerSecond(){
 		return this.fps;
 	}
 	
-	setShowDirection(enabled){
+	static setShowDirection(enabled){
 		this.showDirection=enabled;
 	}
-	getShowDirection(){
+	static getShowDirection(){
 		return this.showDirection;
 	}
 
-	setAutoIterateFrames(enabled){
+	static setAutoIterateFrames(enabled){
 		this.autoIterateFrames=enabled;
 	}
-	getAutoIterateFrames(){
+	static getAutoIterateFrames(){
 		return this.autoIterateFrames;
 	}
 }

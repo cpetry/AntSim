@@ -1,6 +1,6 @@
 const _amount = Symbol('amount');
 
-class Food extends Collider {
+class Food extends SmellableObject {
 	constructor(canvas, position, amount, collisionObjs){
 		super(canvas, position, amount / 100.0, collisionObjs);
 		this[_amount] = amount;
@@ -35,6 +35,9 @@ class Food extends Collider {
 	draw(){
 		var pos = this.getPosition().valueOf();
 		var lineWidth = 2;
+		if (Debug.getShowSmellingDistance()){
+			super.draw();
+		}
 		this._context.beginPath();
 		this._context.arc(pos[0], pos[1], this.getSize() - lineWidth, 0, 2 * Math.PI, false);
 		this._context.fillStyle = 'green';
@@ -50,6 +53,6 @@ class Food extends Collider {
 			this._context.strokeText(this.getAmount().toString(),pos[0],pos[1]); 
 			this._context.fillStyle = 'black';
 			this._context.fillText(this.getAmount().toString(),pos[0],pos[1]);
-		}			
+		}
 	}
 }

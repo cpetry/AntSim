@@ -17,6 +17,18 @@ class Debug
 	static getShowFoodAmount(){
 		return this.showFoodAmount;
 	}
+	static setShowSmellingDistance(enabled){
+		this.showSmellingDistance = enabled;
+	}
+	static getShowSmellingDistance(){
+		return this.showSmellingDistance;
+	}
+	static setShowSmelledObjects(enabled){
+		this.showSmelledObjects = enabled;
+	}
+	static getShowSmelledObjects(){
+		return this.showSmelledObjects;
+	}
 }
 
 new Debug();

@@ -23,7 +23,14 @@ var collisionObjects = [];
 var hive;
 var ants = [];
 var food = [];
-var settings = new Settings();
+
+Settings.setFramesPerSecond(document.getElementById('fps').value);
+Settings.setAutoIterateFrames(document.getElementById('autoFrame').checked);
+
+Debug.setVisibility(document.getElementById('debugVisibility').checked);
+Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);
+Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);
+Debug.setShowSmelledObjects(document.getElementById('debugSmelledObjects').checked);
 
 function init(){
 	var hivePos = math.matrix([width/2,height/2]);
@@ -40,6 +47,7 @@ function init(){
 function simulate(){
 	for (var i = 0; i < ants.length; i++) {
 		ants[i].setVisibleObjects(collisionObjects);
+		ants[i].setSmelledObjects(collisionObjects);
 		ants[i].iterate();
 		ants[i].move(collisionObjects);
 	}
@@ -68,7 +76,7 @@ function simulate(){
 function draw(){
 	now = Date.now();
 	delta = now - then;
-	var interval = 1000/settings.getFramesPerSecond()
+	var interval = 1000/Settings.getFramesPerSecond()
 	if(delta > interval) {
 		then = now - (delta % interval);
 		simulate();
@@ -85,7 +93,7 @@ function draw(){
 		}
 	}
 	
-	if (settings.getAutoIterateFrames())
+	if (Settings.getAutoIterateFrames())
 		requestAnimationFrame(draw);
 }
 	
