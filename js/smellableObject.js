@@ -1,10 +1,11 @@
 class SmellableObject extends Collider {
-	constructor(canvas, position, size, collisionObjs){
+	constructor(canvas, position, size, sizeSmellingFactor, collisionObjs){
 		super(canvas, position, size, collisionObjs);
+		this.sizeSmellingFactor = sizeSmellingFactor;
 	}
 
 	getSmellingDistance(){
-		var smellingDistance = this.getSize() * Settings.getSizeSmellingFactor();
+		var smellingDistance = this.getSize() * this.sizeSmellingFactor;
 		return smellingDistance;
 	}
 	

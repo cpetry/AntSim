@@ -1,6 +1,6 @@
 class Hive extends SmellableObject {
-	constructor(canvas, position, size, collisionObjs){
-		super(canvas, position, size, collisionObjs);
+	constructor(canvas, position, settings, collisionObjs){
+		super(canvas, position, settings.getHiveSize(), settings, collisionObjs);
 	}
 
 	draw(){

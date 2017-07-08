@@ -1,6 +1,6 @@
 class AntCustom extends Ant{
-	constructor(canvas, position, collisionObjs){
-	    super(canvas, position, 2, collisionObjs);
+	constructor(canvas, position, settings, collisionObjs){
+	    super(canvas, position, settings, collisionObjs);
 	}
 	
 	iterate(){
