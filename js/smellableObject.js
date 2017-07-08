@@ -4,8 +4,7 @@ class SmellableObject extends Collider {
 	}
 
 	getSmellingDistance(){
-		var sizeSmellingFactor = 12;
-		var smellingDistance = this.getSize() * sizeSmellingFactor;
+		var smellingDistance = this.getSize() * Settings.getSizeSmellingFactor();
 		return smellingDistance;
 	}
 	

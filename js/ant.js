@@ -12,7 +12,7 @@ const _visibilityRangeRad = Symbol('visibilityRangeRad');
 
 class Ant extends Collider {
 	constructor(canvas, position, collisionObjs){
-		super(canvas, position, 2, collisionObjs);
+		super(canvas, position, Settings.getAntSize(), collisionObjs);
 		this[_directionRad] = rand(0, 3.14*2);
 		this[_speed] = 2.5;
 		this[_speedHeading] = 0.7; // radians

@@ -34,10 +34,12 @@ Debug.setShowSmelledObjects(document.getElementById('debugSmelledObjects').check
 
 function init(){
 	var hivePos = math.matrix([width/2,height/2]);
-	hive = new Hive(canvas, hivePos, 12, collisionObjects);
+	var hiveSize = Settings.getHiveSize();
+	hive = new Hive(canvas, hivePos, hiveSize, collisionObjects);
 	collisionObjects.push(hive);
-	for (var i=0; i< 30; i++){
-		var antPos = math.add(math.matrix([rand(-50,50),rand(-50,50)]), hivePos);
+	for (var i=0; i< Settings.getAntStartNumber(); i++){
+		var posDistace = Settings.getAntPositionDistance();
+		var antPos = math.add(math.matrix([rand(-posDistace,posDistace),rand(-posDistace,posDistace)]), hivePos);
 		var newAnt = new AntCustom(canvas, antPos, collisionObjects)
 		ants.push(newAnt);
 		collisionObjects.push(newAnt);
@@ -63,10 +65,11 @@ function simulate(){
 			food.splice(i, 1);
 		}
 	}
-	var createFood = Math.floor(rand(0,1.05));
-	if (createFood && food.length < 10){
+	var createFood = Math.floor(rand(0,1+Settings.getFoodCreationPropability()));
+	if (createFood && food.length < Settings.getFoodMaxSiteNumber()){
+		// food is positioned all over the ground
 		var foodPos = math.matrix([rand(0,canvas.width),rand(0,canvas.height)]);
-		var newFood = new Food(canvas, foodPos, 1000, collisionObjects)
+		var newFood = new Food(canvas, foodPos, Settings.getFoodAmount(), collisionObjects)
 		food.push(newFood);
 		collisionObjects.push(newFood);
 	}
@@ -76,7 +79,7 @@ function simulate(){
 function draw(){
 	now = Date.now();
 	delta = now - then;
-	var interval = 1000/Settings.getFramesPerSecond()
+	var interval = 1000/Settings.getFramesPerSecond();
 	if(delta > interval) {
 		then = now - (delta % interval);
 		simulate();
@@ -97,4 +100,8 @@ function draw(){
 		requestAnimationFrame(draw);
 }
 	
-window.onload = function(){init();draw();requestAnimationFrame(draw);}
+window.onload = function(){
+	init();
+	draw();
+	requestAnimationFrame(draw);
+}

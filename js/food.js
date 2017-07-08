@@ -2,7 +2,7 @@ const _amount = Symbol('amount');
 
 class Food extends SmellableObject {
 	constructor(canvas, position, amount, collisionObjs){
-		super(canvas, position, amount / 100.0, collisionObjs);
+		super(canvas, position, amount * Settings.getFoodSize(), collisionObjs);
 		this[_amount] = amount;
 	}
 	
