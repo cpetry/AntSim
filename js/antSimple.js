@@ -25,13 +25,13 @@ class AntSimple extends Ant{
 				// harvest food if possible
 				if(canBeHarvested && canHarvestMore){
 					var harvestAmount = this.getMaxFoodStorage() - this.getFoodStorage();
-					return [Action.HARVEST, nearestFood, harvestAmount];
+					return [ActionType.HARVEST, nearestFood, harvestAmount];
 				}
 				// walk towards food
 				else if (canHarvestMore){
 					var fromObjToDirRad = this.getAngleToObject(nearestFood);
 					var rotation = this.getRotation() + fromObjToDirRad;
-					return [Action.WALK, Direction.FORWARD, rotation];
+					return [ActionType.WALK, Direction.FORWARD, rotation];
 				}
 			}
 			else {
@@ -45,12 +45,12 @@ class AntSimple extends Ant{
 				if (nearestFood != false){
 					var fromObjToDirRad = this.getAngleToObject(nearestFood);
 					var rotation = this.getRotation() + fromObjToDirRad;
-					return [Action.WALK, Direction.FORWARD, rotation];
+					return [ActionType.WALK, Direction.FORWARD, rotation];
 				}
 				// search for food
 				else{
 					var rotation = this.getRotation() + rand(-0.5,0.5);
-					return [Action.WALK, Direction.FORWARD, rotation];
+					return [ActionType.WALK, Direction.FORWARD, rotation];
 				}
 			}
 		}
@@ -75,7 +75,7 @@ class AntSimple extends Ant{
 				else {
 					var fromObjToDirRad = this.getAngleToObject(hive);
 					var rotation = this.getRotation() + fromObjToDirRad;
-					return [Action.WALK, Direction.FORWARD, rotation];
+					return [ActionType.WALK, Direction.FORWARD, rotation];
 				}
 			}
 			else {
@@ -89,12 +89,12 @@ class AntSimple extends Ant{
 				if (hive != false){
 					var fromObjToDirRad = this.getAngleToObject(hive);
 					var rotation = this.getRotation() + fromObjToDirRad;
-					return [Action.WALK, Direction.FORWARD, rotation];
+					return [ActionType.WALK, Direction.FORWARD, rotation];
 				}
 				// search for hive
 				else{
 					var rotation = this.getRotation() + rand(-0.5,0.5);
-					return [Action.WALK, Direction.FORWARD, rotation];
+					return [ActionType.WALK, Direction.FORWARD, rotation];
 				}
 			}
 		}

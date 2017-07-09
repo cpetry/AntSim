@@ -4,13 +4,6 @@ var Direction = {
   NONE: 3,
 };
 
-var Action = {
-	WALK : 1,
-	HARVEST : 2,
-	ATTACK : 3,
-	GIVEFOOD: 4
-}
-
 const _rotation = Symbol('rotation');
 const _speed = Symbol('speed');
 const _speedHeading = Symbol('speedHeading');
