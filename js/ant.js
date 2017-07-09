@@ -4,7 +4,6 @@ var Direction = {
   NONE: 3,
 };
 
-const _rotation = Symbol('rotation');
 const _speed = Symbol('speed');
 const _speedHeading = Symbol('speedHeading');
 const _visibilityDistance = Symbol('visibilityDistance');
@@ -15,8 +14,8 @@ const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
 
 class Ant extends Collider {
 	constructor(canvas, position, settings, collisionObjs){
-		super(canvas, position, settings.getAntSize(), collisionObjs);
-		this[_rotation] = rand(0, 3.14*2);
+		var rotation = rand(0, 3.14*2);
+		super(canvas, position, Shape.CIRCLE, settings.getAntSize(), 0, collisionObjs);
 		this[_speed] = 2.5;
 		this[_speedHeading] = 0.7; // radians
 		this[_visibilityDistance] = 35;
@@ -33,7 +32,6 @@ class Ant extends Collider {
 	iterate(){}
 	
 	// getter
-	getRotation(){return this[_rotation];}	
 	getSpeed(){	return this[_speed];}	
 	getSpeedHeading(){return this[_speedHeading];}	
 	getVisibilityDistance(){return this[_visibilityDistance];}	
@@ -61,14 +59,12 @@ class Ant extends Collider {
 		if (Math.abs(this.getRotation() - newHeading) > this.getSpeedHeading()){
 			//console.log("new heading too much! Reducing according to attribute.")
 			if (newHeading > this.getRotation())
-				this[_rotation] += this.getSpeedHeading();
+				super.setNewHeading(this.getRotation()+this.getSpeedHeading());
 			else 
-				this[_rotation] -= this.getSpeedHeading();
+				super.setNewHeading(this.getRotation()-this.getSpeedHeading());
 		}
 		else
-			this[_rotation] = newHeading;
-		
-		this[_rotation] = this.getRotation() % (Math.PI*2);
+			super.setNewHeading(newHeading);
 	}
 
 	setVisibleObjects(objects){
@@ -159,18 +155,6 @@ class Ant extends Collider {
 			this._context.fill();
 			this._context.strokeStyle = '#003300';
 			this._context.stroke();
-		}
-		if(Debug.getShowSmelledObjects()){
-			for (var i=0; i<this.smelledObjs.length; i++){
-				var pos = this.smelledObjs[i].getPosition().valueOf();
-				this._context.beginPath();
-				this._context.arc(pos[0], pos[1], 3, 0, 2 * Math.PI, false);
-				this._context.fillStyle = '#ee0000';
-				this._context.fill();
-				this._context.lineWidth = 1;
-				this._context.strokeStyle = '#ee0000';
-				this._context.stroke();
-			}
 		}
 		this._context.beginPath();
 		this._context.arc(pos[0], pos[1], this.getSize(), 0, 2 * Math.PI, false);

@@ -1,33 +1,44 @@
 const _position = Symbol('position');
 const _size = Symbol('size');
+const _shape = Symbol('shape');
+const _rotation = Symbol('rotation');
+const _canvas = Symbol('canvas');
+
+var Shape = {
+	CIRCLE : 1,
+	SQUARE : 2,
+	RECTANGLE : 3
+}
 
 class Collider {
-	constructor(canvas, position, size, colObjs)
+	constructor(canvas, position, shape, size, rotation, colObjs)
 	{
-		this._canvas = canvas;
+		this[_canvas] = canvas;
 		this._context = canvas.getContext("2d");
+		this[_shape] = shape;
 		this[_size] = size;
+		this[_rotation] = rotation;
 		while(this.checkCollision(position, colObjs)){
 			position = math.add(math.matrix([rand(-10,10),rand(-10,10)]), position);
 		}
 		this[_position] = position;
 	}
 	
+	getCanvas(){return this[_canvas];}	
+	getSize(){return this[_size];}	
+	getPosition() {return this[_position];}	
+	getRotation(){return this[_rotation];}
+
 	canInteractWith(obj){
 		var distance = math.norm(math.subtract(obj.getPosition(),this.getPosition()), 2) - obj.getSize() - this.getSize();
 		return (distance < 10);
 	}
-	
-	getSize()
-	{
-		return this[_size];
+
+	setNewHeading(newHeading){
+		this[_rotation] = newHeading;
+		this[_rotation] = this.getRotation() % (Math.PI*2);
 	}
-	
-	getPosition()
-	{
-		return this[_position];
-	}
-	
+		
 	setPosition(newPos, colObjs)
 	{
 		var distance = math.norm(math.subtract(newPos, this.getPosition()),2);
@@ -51,7 +62,7 @@ class Collider {
 	checkCollision(newPos, colObjs)
 	{
 		var collision = false;
-		collision = !inside(newPos, this.getSize(), this._canvas);
+		collision = !this.inside(newPos);
 		for (var i=0; i < colObjs.length; i++)
 		{
 			if (this != colObjs[i]
@@ -76,6 +87,17 @@ class Collider {
 			return false;
 	}
 	
+	inside(pos){
+		//console.log(position.valueOf());
+		if (pos.valueOf()[0] + this.getSize() < this.getCanvas().width 
+		&& pos.valueOf()[1] + this.getSize() < this.getCanvas().height
+		&& pos.valueOf()[0] - this.getSize() > 0
+		&& pos.valueOf()[1] - this.getSize() > 0)
+			return true;
+		else
+			return false;
+	}
+
 	
 	getDistanceToObject(obj){
 		var fromTo = math.subtract(obj.getPosition(), this.getPosition());

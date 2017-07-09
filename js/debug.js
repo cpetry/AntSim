@@ -1,10 +1,5 @@
 class Debug
 {
-	constructor(){
-		this.visibility = false;
-		this.showFoodAmount = false;
-	}
-
 	static setVisibility(enabled){
 		this.visibility = enabled;
 	}
@@ -22,12 +17,6 @@ class Debug
 	}
 	static getShowSmellingDistance(){
 		return this.showSmellingDistance;
-	}
-	static setShowSmelledObjects(enabled){
-		this.showSmelledObjects = enabled;
-	}
-	static getShowSmelledObjects(){
-		return this.showSmelledObjects;
 	}
 }
 

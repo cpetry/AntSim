@@ -69,7 +69,7 @@ class AntSimple extends Ant{
 				
 				// harvest food if possible
 				if(canGiveFood){
-					return [Action.GIVEFOOD, hive, this.getFoodStorage()];
+					return [ActionType.GIVEFOOD, hive, this.getFoodStorage()];
 				}
 				// walk towards food
 				else {

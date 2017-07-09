@@ -16,7 +16,6 @@ SettingsGlobal.setAutoIterateFrames(document.getElementById('autoFrame').checked
 Debug.setVisibility(document.getElementById('debugVisibility').checked);
 Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);
 Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);
-Debug.setShowSmelledObjects(document.getElementById('debugSmelledObjects').checked);
 
 	
 window.onload = function(){
