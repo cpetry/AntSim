@@ -19,25 +19,19 @@ class Food extends SmellableObject {
 	}
 	
 	harvest(harvestAmount){
-		// if there is still enough amount
-		if (harvestAmount>this.getAmount()){
-			this[_amount] -= harvestAmount;
-			return harvestAmount;
-		}
-		// take all that is left
-		else{
-			var rest = this.getAmount();
+		if (harvestAmount > this.getAmount()){
+			console.log("Error! Harvest food amount not possible!");
 			this[_amount] = 0;
-			return rest;
+		}
+		else {
+			this[_amount] -= harvestAmount;
 		}
 	}
 
 	draw(){
+		super.draw();
 		var pos = this.getPosition().valueOf();
 		var lineWidth = 2;
-		if (Debug.getShowSmellingDistance()){
-			super.draw();
-		}
 		this._context.beginPath();
 		this._context.arc(pos[0], pos[1], this.getSize() - lineWidth, 0, 2 * Math.PI, false);
 		this._context.fillStyle = 'green';

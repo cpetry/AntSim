@@ -6,4 +6,9 @@ canvas#terrarium {
     display: block;
     width: 800px;
 	height: 400px;
+	
+	border-radius: 15px 15px 15px 15px;
+	-moz-border-radius: 15px 15px 15px 15px;
+	-webkit-border-radius: 15px 15px 15px 15px;
+	border: 3px solid #000000;
 }

@@ -13,6 +13,11 @@ class Collider {
 		this[_position] = position;
 	}
 	
+	canInteractWith(obj){
+		var distance = math.norm(math.subtract(obj.getPosition(),this.getPosition()), 2) - obj.getSize() - this.getSize();
+		return (distance < 10);
+	}
+	
 	getSize()
 	{
 		return this[_size];

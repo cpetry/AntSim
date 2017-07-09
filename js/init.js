@@ -49,8 +49,38 @@ class Simulation {
 		for (var i = 0; i < this.ants.length; i++) {
 			this.ants[i].setVisibleObjects(this.collisionObjects);
 			this.ants[i].setSmelledObjects(this.collisionObjects);
-			this.ants[i].iterate();
-			this.ants[i].move(this.collisionObjects);
+			
+			let [action, parameter1, parameter2] = this.ants[i].iterate();
+			
+			if (action == Action.WALK){
+				// check parameters
+				if (!isNaN(parameter2)){
+					this.ants[i].setNewHeading(parameter2);
+					this.ants[i].move(parameter1, this.collisionObjects);
+				}
+			}
+			else if (action == Action.HARVEST){
+				//console.log("harvesting")
+				if (parameter1 instanceof Food){
+					var foodToHarvest = parameter1;
+					var additionalFoodPossibleToCarry = this.ants[i].getMaxFoodStorage() - this.ants[i].getFoodStorage();
+					var foodPossibleToHarvest = foodToHarvest.getAmount();
+					var amountBeingHarvested = Math.min(Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest),parameter2);
+					foodToHarvest.harvest(amountBeingHarvested);
+					this.ants[i].receiveFood(amountBeingHarvested);
+				}
+			}
+			else if (action == Action.GIVEFOOD){
+				if (parameter1 instanceof Hive){
+					var receiver = parameter1;
+					var foodWantingToGiveAway = parameter2;
+					var foodPossibleToGive = this.ants[i].getFoodStorage();
+					var foodPossibleToReceive = receiver.getFoodMaxStorage() - receiver.getFoodStorage();
+					var amountBeingTransferred = Math.min(Math.min(foodWantingToGiveAway, foodPossibleToGive), foodPossibleToReceive);
+					receiver.receiveFood(amountBeingTransferred);
+					this.ants[i].giveAwayFood(amountBeingTransferred);
+				}
+			}
 		}
 		
 		for (var i = 0; i < this.food.length; i++) {

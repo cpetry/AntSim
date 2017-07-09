@@ -1,10 +1,15 @@
 class SmellableObjectProxy {
-	constructor(position){
+	constructor(position, type){
 		this.position = position;
+		this.type = type;
 	}
 
 	getPosition(){
 		return this.position;
+	}
+	
+	getType(){
+		return this.type;
 	}
 	
 	draw(){
