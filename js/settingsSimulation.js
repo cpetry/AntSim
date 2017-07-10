@@ -1,8 +1,8 @@
 class SettingsSimulation
 {
 	constructor(){
-		this.hiveSize = 12;
-		this.antSize = 2;
+		this.hiveSize = 14;
+		this.antSize = 5;
 		this.antStartNumber = 10;
 		this.antStartPositionDistance = 30;
 		this.foodAmount = 1000;

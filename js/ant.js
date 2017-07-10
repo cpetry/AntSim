@@ -13,11 +13,10 @@ const _foodMaxAnt = Symbol('foodMaxAnt');
 const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
 
 class Ant extends Collider {
-	constructor(canvas, position, settings, collisionObjs){
-		var rotation = rand(0, 3.14*2);
-		super(canvas, position, Shape.CIRCLE, settings.getAntSize(), 0, collisionObjs);
+	constructor(canvas, position, rotation, settings, collisionObjs){
+		super(canvas, position, ShapeType.CIRCLE, settings.getAntSize(), rotation, collisionObjs);
 		this[_speed] = 2.5;
-		this[_speedHeading] = 0.7; // radians
+		this[_speedHeading] = 0.2; // radians
 		this[_visibilityDistance] = 35;
 		this[_visibilityRangeRad] = 1;
 		this[_foodStorageAnt] = 0;
@@ -142,6 +141,9 @@ class Ant extends Collider {
 	
 	draw(){
 		var pos = this.getPosition().valueOf();
+		if (Debug.getColliderVisibility()){
+			super.draw();
+		}
 		//console.log("Draw Ant!")
 		if (Debug.getVisibility()){		
 			this._context.beginPath();
@@ -156,13 +158,26 @@ class Ant extends Collider {
 			this._context.strokeStyle = '#003300';
 			this._context.stroke();
 		}
+		// body
 		this._context.beginPath();
-		this._context.arc(pos[0], pos[1], this.getSize(), 0, 2 * Math.PI, false);
+		this._context.arc(pos[0], pos[1], this.getSize()*0.50, 0, 2 * Math.PI, false);
 		this._context.fillStyle = '#000000';
 		this._context.fill();
 		this._context.lineWidth = 1;
 		this._context.strokeStyle = '#003300';
 		this._context.stroke();
+
+		// head
+		var directionVec = math.matrix([math.cos(this.getRotation()), math.sin(this.getRotation())])
+		var headPos = math.add(this.getPosition(), math.multiply(directionVec, this.getSize()*0.65)).valueOf();
+		this._context.beginPath();
+		this._context.arc(headPos[0], headPos[1], this.getSize()*0.25, 0, 2 * Math.PI, false);
+		this._context.fillStyle = '#000000';
+		this._context.fill();
+		this._context.lineWidth = 1;
+		this._context.strokeStyle = '#003300';
+		this._context.stroke();
+
 		if (Debug.getShowFoodAmount()){
 			this._context.font = "14px Arial";
 			this._context.textAlign = "center";

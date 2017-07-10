@@ -1,6 +1,6 @@
 class SmellableObject extends Collider {
 	constructor(canvas, position, size, sizeSmellingFactor, collisionObjs){
-		super(canvas, position, Shape.CIRCLE, size, 0, collisionObjs);
+		super(canvas, position, ShapeType.CIRCLE, size, 0, collisionObjs);
 		this.sizeSmellingFactor = sizeSmellingFactor;
 	}
 
@@ -27,6 +27,9 @@ class SmellableObject extends Collider {
 	}
 	
 	draw(){
+		if (Debug.getColliderVisibility()){
+			super.draw();
+		}
 		if (Debug.getShowSmellingDistance()){
 			var pos = this.getPosition().valueOf();
 			this._context.beginPath();

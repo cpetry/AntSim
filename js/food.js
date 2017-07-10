@@ -1,15 +1,16 @@
 const _amount = Symbol('amount');
+const _foodSize = Symbol('foodSize');
 
 class Food extends SmellableObject {
 	constructor(canvas, position, settings, collisionObjs){
 		var size = settings.getFoodAmount() * settings.getFoodSize();
 		super(canvas, position, size, settings.getSizeSmellingFactor(), collisionObjs);
 		this[_amount] = settings.getFoodAmount();
+		this[_foodSize] = settings.getFoodSize();
 	}
 	
-	getAmount(){
-		return this[_amount];
-	}
+	getAmount()  {return this[_amount];}
+	getFoodSize(){return this[_foodSize];}
 	
 	decay(){
 		this[_amount]--;
@@ -32,10 +33,10 @@ class Food extends SmellableObject {
 	draw(){
 		super.draw();
 		var pos = this.getPosition().valueOf();
-		var lineWidth = 2;
+		var lineWidth = 1;
 		this._context.beginPath();
-		this._context.arc(pos[0], pos[1], this.getSize() - lineWidth, 0, 2 * Math.PI, false);
-		this._context.fillStyle = 'green';
+		this._context.arc(pos[0], pos[1], this.getAmount()*this.getFoodSize() + 2, 0, 2 * Math.PI, false);
+		this._context.fillStyle = '#22bb00';
 		this._context.fill();
 		this._context.lineWidth = lineWidth;
 		this._context.strokeStyle = '#003300';

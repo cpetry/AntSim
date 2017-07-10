@@ -6,6 +6,13 @@ class Debug
 	static getVisibility(){
 		return this.visibility;
 	}
+	static setColliderVisibility(enabled){
+		this.colliderVisibility = enabled;
+	}
+	static getColliderVisibility(){
+		return this.colliderVisibility;
+	}
+
 	static setShowFoodAmount(enabled){
 		this.showFoodAmount = enabled;
 	}

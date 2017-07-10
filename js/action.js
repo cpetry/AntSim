@@ -1,4 +1,5 @@
 var ActionType = {
+	NONE : 0,
 	WALK : 1,
 	HARVEST : 2,
 	ATTACK : 3,
@@ -22,7 +23,7 @@ class Action {
 	static walk(obj, direction, rotation, colObjs){
 		// check parameters
 		if (!isNaN(rotation)){
-			obj.setNewHeading(rotation);
+			obj.setNewHeading(obj.getRotation() + rotation);
 			obj.move(direction, colObjs);
 		}
 	}

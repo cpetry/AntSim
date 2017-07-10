@@ -8,6 +8,7 @@ class Simulation {
 		this.hive;
 		this.ants = [];
 		this.food = [];
+		this.environmentObjs = [];
 		this.settings = new SettingsSimulation();
 	}
 
@@ -19,7 +20,8 @@ class Simulation {
 		for (var i=0; i< this.settings.getAntStartNumber(); i++){
 			var posDistace = this.settings.getAntPositionDistance();
 			var antPos = math.add(math.matrix([rand(-posDistace,posDistace),rand(-posDistace,posDistace)]), hivePos);
-			var newAnt = new AntSimple(this.canvas, antPos, this.settings, this.collisionObjects)
+			var rotation = rand(0, 3.14*2);
+			var newAnt = new AntSimple(this.canvas, antPos, rotation, this.settings, this.collisionObjects);
 			this.ants.push(newAnt);
 			this.collisionObjects.push(newAnt);
 		}
@@ -64,30 +66,41 @@ class Simulation {
 			this.collisionObjects.push(newFood);
 		}
 	}
-
-	draw()
-	{
+	
+	clear(){
+		this.canvas.getContext("2d").clearRect(0, 0, this.canvas.width, this.canvas.height);
+	}
+	
+	loop(){
 		this.now = Date.now();
 		this.delta = this.now - this.then;
 		var interval = 1000/SettingsGlobal.getFramesPerSecond();
 		if(this.delta > interval) {
 			this.then = this.now - (this.delta % interval);
 			this.simulate();
+			this.draw();
+		}
 			
-			//Clear screen
-			this.canvas.getContext("2d").clearRect(0, 0, this.canvas.width, this.canvas.height);
+		if (SettingsGlobal.getAutoIterateFrames()){
+			requestID = requestAnimationFrame( this.loop.bind(this) );
+		}
+	}
+
+	draw()
+	{		
+		//Clear screen
+		this.canvas.getContext("2d").clearRect(0, 0, this.canvas.width, this.canvas.height);
+		for (var i = 0; i < this.environmentObjs.length; i++) {
+			this.environmentObjs[i].draw();
+		}
+		if (typeof(this.hive) !== "undefined")
 			this.hive.draw();
 
-			for (var i = 0; i < this.food.length; i++) {
-				this.food[i].draw();
-			}
-			for (var i = 0; i < this.ants.length; i++) {
-				this.ants[i].draw();
-			}
+		for (var i = 0; i < this.food.length; i++) {
+			this.food[i].draw();
 		}
-		
-		if (SettingsGlobal.getAutoIterateFrames()){
-			requestAnimationFrame( this.draw.bind(this) );
+		for (var i = 0; i < this.ants.length; i++) {
+			this.ants[i].draw();
 		}
 	}
 }
