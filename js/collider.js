@@ -120,15 +120,17 @@ class Collider {
 			}	
 		}
 
-		else if (colObj.getShapeType() == Shape.CIRCLE && this.getShapeType() == ShapeType.CIRCLE){
+		else if (colObj.getShapeType() == ShapeType.CIRCLE && this.getShapeType() == ShapeType.CIRCLE){
 			var distance = math.norm(math.subtract(pos, colPosition),2);
 			if (distance < this.getSize() + colSize)
 				return true;
 			else
 				return false;
 		}
-		else
+		else{
+			//console.log(colObj.getShapeType() + " " + this.getShapeType())
 			return false;
+		}
 	}
 	
 	inside(colObj, pos){
