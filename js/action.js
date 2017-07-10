@@ -32,7 +32,7 @@ class Action {
 		//console.log("harvesting")
 		if (harvestObj instanceof Food && harvester instanceof Ant){
 			var additionalFoodPossibleToCarry = harvester.getMaxFoodStorage() - harvester.getFoodStorage();
-			var foodPossibleToHarvest = harvestObj.getAmount();
+			var foodPossibleToHarvest = Math.min(harvestObj.getAmount(), harvester.getMaxHarvestAmount());
 			var amountBeingHarvested = Math.min(Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest),amount);
 			harvestObj.harvest(amountBeingHarvested);
 			harvester.receiveFood(amountBeingHarvested);
