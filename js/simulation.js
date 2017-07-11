@@ -78,7 +78,7 @@ class Simulation {
 				this.draw();
 			}
 				
-			if (SettingsGlobal.getAutoIterateFrames() && SettingsGlobal.getShowUI()){
+			if (SettingsGlobal.getAutoIterateFrames()){
 				requestID = requestAnimationFrame( this.loop.bind(this) );
 			}
 		}

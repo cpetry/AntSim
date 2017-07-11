@@ -14,8 +14,6 @@ window.requestAnimationFrame = function() {
         }
 }();
 
-Math.seedrandom(document.getElementById('seed').value);
-
 SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);
 SettingsGlobal.setAutoIterateFrames(document.getElementById('autoFrame').checked);
 SettingsGlobal.setShowUI(document.getElementById('showUI').checked);
@@ -31,22 +29,35 @@ var mode;
 var sim;
 var requestID;
 window.onload = function(){
-	sim = new Simulation();
-	sim.init();
-	sim.loop();
-	mode = Mode.TEASER;
+	setCustomContainerVisibility();
+	startSimulation();
+}
+function setCustomContainerVisibility(){
+	if (document.getElementById('AntType').value == 'Simple')
+		document.getElementById('customContainer').style.display = 'none';      // Hide
+	else
+		document.getElementById('customContainer').style.display = 'block';      // show
 }
 
-function run(){
-	SettingsGlobal.setAutoIterateFrames(true);
-	sim.loop();
-}
 
 function reset(){
 	startTutorial();
 	SettingsGlobal.setAutoIterateFrames(false);
 	sim.clear();
 	sim.draw();
+}
+
+function startSimulation(){
+	window.cancelAnimationFrame(requestID);
+	requestID = undefined;
+	SettingsGlobal.setAutoIterateFrames(true);
+	Math.seedrandom(document.getElementById('seed').value);
+	sim = new Simulation();
+	sim.init();
+	sim.clear();
+	sim.draw();
+	sim.loop();
+	mode = Mode.TEASER;
 }
 
 function startTutorial(){
