@@ -5,6 +5,7 @@
 	<head>
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="./js/external/jquery.fancybox.min.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="./js/external/vis.min.css" type="text/css" />
 	</head>
 	<body>
 		<div id="header">
@@ -15,11 +16,13 @@
 			<input type="button" value="Simulation" onclick="startSimulation()">
 			<input type="button" value="Tutorial" onclick="startTutorial()">
 			<input type="button" value="info" onclick="sim.showMessage()">
+			<input type="button" value="updateGraph" onclick="sim.updateGraph()">
 		</div>
 		<div style="height:10px;"></div>
 		<div id="all">
 			<div id="terrariumContainer">
 				<canvas align="center" width="600" height="300" id="terrarium"></canvas>
+				<div align="center" width="600" height="300" id="graphs" style="display:none"></div>
 			</div>
 			<div id="settings">Settings<br/>
 				AntType<select id="AntType" size="1" onchange="setCustomContainerVisibility()"> <option selected>Simple</option> <option>Custom</option> </select><br/>
@@ -54,8 +57,11 @@
 		<script src="./js/external/jquery.fancybox.min.js"></script>
 		<script src="./js/external/mathjs_3.14.1.js"></script>
 		<script src="./js/external/seedrandom.js"></script>
+		<script src="./js/external/vis.min.js"></script>
+
 		<script src="./js/settingsGlobal.js"></script>
 		<script src="./js/settingsSimulation.js"></script>
+		<script src="./js/graph.js"></script>
 		
 		<!-- undependant -->
 		<script src="./js/action.js"></script>

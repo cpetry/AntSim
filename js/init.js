@@ -39,7 +39,15 @@ function setCustomContainerVisibility(){
 		document.getElementById('customContainer').style.display = 'block';      // show
 }
 
+function showGraph(){
+	document.getElementById('terrarium').style.display = 'none';      // Hide
+	document.getElementById('graphs').style.display = 'block';      // show
+}
 
+function showSimulation(){
+	document.getElementById('terrarium').style.display = 'block';      // Hide
+	document.getElementById('graphs').style.display = 'none';      // show
+}
 function reset(){
 	startTutorial();
 	SettingsGlobal.setAutoIterateFrames(false);
@@ -48,6 +56,7 @@ function reset(){
 }
 
 function startSimulation(){
+	showSimulation();
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
 	SettingsGlobal.setAutoIterateFrames(true);

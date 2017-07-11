@@ -10,15 +10,15 @@ class SettingsSimulation
 		this.antStartNumber = 10;
 		this.antStartPositionDistance = 40;
 		this.antDecayProb = 0.05; // probability of "ageing" -> dying
-		this.antFoodBonusProb = -0.02; // bonus probability to reduce "ageing" when carrying food
+		this.antFoodBonusProb = -0.005; // bonus probability to reduce "ageing" when carrying food
 		this.foodAmount = 1000;
 		this.foodSize = 0.005; // percentage of food amount
-		this.foodCreationPropability = 0.03; // chance for each iteration to create food 
+		this.foodCreationPropability = 0.01; // chance for each iteration to create food 
 		this.foodMaxSiteNumber = 10; // maximum number of food sites 
-		this.foodMaxHive = 200; // food till next ant
-		this.foodMaxAnt = 20;
-		this.foodMaxHarvestAmountAnt = 2;
-		this.sizeSmellingFactor = 7;
+		this.foodMaxHive = 100; // food till next ant
+		this.foodMaxAnt = 35;
+		this.foodMaxHarvestAmountAnt = 1;
+		this.sizeSmellingFactor = 8;
 	}
 	// attribute related settings
 	getTerrariumWidth(){ return this.terrariumWidth; }

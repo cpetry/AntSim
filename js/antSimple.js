@@ -4,12 +4,12 @@ class AntSimple extends Ant{
 	}
 	
 	iterate(){
-		var isFull = (this.getFoodStorage() == this.getMaxFoodStorage());
+		var searchForFood = (this.getFoodStorage() > this.getMaxFoodStorage()*0.75);
 		var nearestFood = false;
 		var hive = false;
 
 		// search for food
-		if (!isFull){
+		if (!searchForFood){
 			// Check if ant can see food
 			for(var i=0; i<this.visibleObjs.length; i++){
 				if (this.visibleObjs[i] instanceof Food){
@@ -66,7 +66,7 @@ class AntSimple extends Ant{
 				
 				// harvest food if possible
 				if(canGiveFood){
-					return [ActionType.GIVEFOOD, hive, this.getFoodStorage()];
+					return [ActionType.GIVEFOOD, hive, this.getFoodStorage()*0.75];
 				}
 				// walk towards food
 				else {

@@ -10,6 +10,7 @@ class Simulation {
 		this.food = [];
 		this.environmentObjs = [];
 		this.settings = new SettingsSimulation();
+		this.graph = new Graph();
 	}
 
 	init(){
@@ -40,7 +41,7 @@ class Simulation {
 	
 	foodCreation(){
 		// food creation
-		var createFood = Math.floor(rand(0,1+this.settings.getFoodCreationPropability()));
+		var createFood = Math.floor(rand(0,1+this.settings.getFoodCreationPropability()-this.iteration/1000.0*0.002));
 		if (createFood && this.food.length < this.settings.getFoodMaxSiteNumber()){
 			// food is positioned all over the ground
 			var foodPos = { x: rand(0,this.canvas.width), y: rand(0,this.canvas.height) };
@@ -55,17 +56,16 @@ class Simulation {
 	}
 	
 	loop(){
+
 		// game ended
 		if (this.hive.getAnts().length == 0){
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
+			this.updateGraph();
+			showGraph();
 			return;
 		}
-		if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
-			document.getElementById('frame').value = this.iteration;
-		
-		this.iteration++;
 		
 		this.now = Date.now();
 		this.delta = this.now - this.then;
@@ -76,6 +76,7 @@ class Simulation {
 				this.simulate();
 				this.clear();
 				this.draw();
+				this.graph.addPoint(this.iteration, this.hive.getAnts().length);
 			}
 				
 			if (SettingsGlobal.getAutoIterateFrames()){
@@ -83,10 +84,14 @@ class Simulation {
 			}
 		}
 		else {
-			//this.clear();
 			this.simulate();
+			this.graph.addPoint(this.iteration, this.hive.getAnts().length);
 			window.setZeroTimeout(this.loop.bind(this));
 		}
+		
+		this.iteration++;
+		if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
+			document.getElementById('frame').value = this.iteration;
 	}
 
 	draw()
@@ -107,7 +112,7 @@ class Simulation {
 		}
 	}
 	
-	showMessage(){
-		
+	updateGraph(){
+		this.graph.updateView();
 	}
 }
