@@ -14,9 +14,11 @@ window.requestAnimationFrame = function() {
         }
 }();
 
+Math.seedrandom(document.getElementById('seed').value);
+
 SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);
 SettingsGlobal.setAutoIterateFrames(document.getElementById('autoFrame').checked);
-SettingsGlobal.setShowUI(document.getElementById('showUI').value);
+SettingsGlobal.setShowUI(document.getElementById('showUI').checked);
 
 Debug.setShowLife(document.getElementById('debugShowLife').checked);
 Debug.setVisibility(document.getElementById('debugVisibility').checked);

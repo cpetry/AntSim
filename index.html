@@ -12,11 +12,13 @@
 				<canvas align="center" width="600" height="300" id="terrarium"></canvas>
 			</div>
 			<div id="settings">Settings<br/>
-				<input type="button" value="Tutorial" onclick="startTutorial()"><br/><br/><br/>
+				<input type="button" value="Tutorial" onclick="startTutorial()"><br/>
 				<input type="button" value="info" onclick="sim.showMessage()"><br/><br/><br/>
+				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
 				<input type="number" id="fps" value="15" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
-				<input type="checkbox" id="showUI"    onchange="SettingsGlobal.setShowUI(document.getElementById('showUI').checked);" /> ShowUI <br/>
-				<input type="checkbox" id="autoFrame" onchange="SettingsGlobal.setAutoIterateFrames(document.getElementById('autoFrame').checked);requestAnimationFrame(sim.loop.bind(sim));" checked /> AutoFrame <br/>
+				<input type="checkbox" id="showUI"    onchange="SettingsGlobal.setShowUI(document.getElementById('showUI').checked);" checked /> ShowUI <br/>
+				<input type="checkbox" id="autoFrame" onchange="SettingsGlobal.setAutoIterateFrames(document.getElementById('autoFrame').checked);requestAnimationFrame(sim.loop.bind(sim));" checked /> AutoFrame 
+				<input type="number" id="frame" style="width:50px" value="0" /><br/>
 				<input type="button" id="nextFrame" value="next" onclick="requestAnimationFrame(sim.loop.bind(sim));" />
 				<div>Debug stuff<br/>
 					<input type="checkbox" id="debugShowLife" onchange="Debug.setShowLife(document.getElementById('debugShowLife').checked);" /> Show life <br/>
@@ -39,6 +41,7 @@
 		<script src="./js/external/jquery-3.2.1.min.js"></script>
 		<script src="./js/external/jquery.fancybox.min.js"></script>
 		<script src="./js/external/mathjs_3.14.1.js"></script>
+		<script src="./js/external/seedrandom.js"></script>
 		<script src="./js/settingsGlobal.js"></script>
 		<script src="./js/settingsSimulation.js"></script>
 		

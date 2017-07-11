@@ -4,6 +4,7 @@ class Simulation {
 		this.now;
 		this.then = Date.now();
 		this.delta;
+		this.iteration = 0;
 		this.collisionObjects = [];
 		this.hive;
 		this.food = [];
@@ -54,6 +55,18 @@ class Simulation {
 	}
 	
 	loop(){
+		// game ended
+		if (this.hive.getAnts().length == 0){
+			this.clear();
+			this.draw();
+			document.getElementById('frame').value = this.iteration;
+			return;
+		}
+		if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
+			document.getElementById('frame').value = this.iteration;
+		
+		this.iteration++;
+		
 		this.now = Date.now();
 		this.delta = this.now - this.then;
 		var interval = 1000/SettingsGlobal.getFramesPerSecond();
@@ -72,7 +85,7 @@ class Simulation {
 		else {
 			//this.clear();
 			this.simulate();
-			window.setTimeout(this.loop.bind(this),0.1);
+			window.setZeroTimeout(this.loop.bind(this));
 		}
 	}
 
