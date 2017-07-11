@@ -6,11 +6,17 @@ class Debug
 	static getVisibility(){
 		return this.visibility;
 	}
-	static setColliderVisibility(enabled){
-		this.colliderVisibility = enabled;
+	static setShowLife(enabled){
+		this.showLife = enabled;
 	}
-	static getColliderVisibility(){
-		return this.colliderVisibility;
+	static getShowLife(){
+		return this.showLife;
+	}
+	static setShowCollider(enabled){
+		this.collider = enabled;
+	}
+	static getShowCollider(){
+		return this.collider
 	}
 
 	static setShowFoodAmount(enabled){
@@ -25,6 +31,10 @@ class Debug
 	static getShowSmellingDistance(){
 		return this.showSmellingDistance;
 	}
+	static setShowSmelledObjects(enabled){
+		this.showSmelledObjects = enabled;
+	}
+	static getShowSmelledObjects(){
+		return this.showSmelledObjects;
+	}
 }
-
-new Debug();

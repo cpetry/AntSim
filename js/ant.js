@@ -1,10 +1,18 @@
 var Direction = {
   FORWARD: 1,
   BACKWARD: 2,
-  NONE: 3,
-};
+  NONE: 3
+}
+
+var AntType = {
+	SIMPLE: 0,
+	CUSTOM: 1
+}
 
 const _speed = Symbol('speed');
+const _life = Symbol('life');
+const _decayProb = Symbol('decayProb');
+const _foodBonusProb = Symbol('foodBonusProb');
 const _speedHeading = Symbol('speedHeading');
 const _visibilityDistance = Symbol('visibilityDistance');
 const _visibilityRangeRad = Symbol('visibilityRangeRad');
@@ -15,6 +23,9 @@ const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
 class Ant extends Collider {
 	constructor(canvas, position, rotation, settings, collisionObjs){
 		super(canvas, position, ShapeType.CIRCLE, settings.getAntSize(), rotation, collisionObjs);
+		this[_decayProb] = settings.getAntDecayProb();
+		this[_foodBonusProb] = settings.getAntFoodBonusProb();
+		this[_life] = 100;
 		this[_speed] = 2.5;
 		this[_speedHeading] = 0.2; // radians
 		this[_visibilityDistance] = 35;
@@ -31,7 +42,8 @@ class Ant extends Collider {
 	iterate(){}
 	
 	// getter
-	getSpeed(){	return this[_speed];}	
+	getLife(){	return this[_life];}	
+	getSpeed(){	return this[_speed];}
 	getSpeedHeading(){return this[_speedHeading];}	
 	getVisibilityDistance(){return this[_visibilityDistance];}	
 	getVisibilityRangeRad(){ return this[_visibilityRangeRad]; }	
@@ -39,17 +51,34 @@ class Ant extends Collider {
 	getMaxFoodStorage() { return this[_foodMaxAnt]; }
 	getMaxHarvestAmount() { return this[_foodMaxHarvestAmount]; }
 	
+	age(){
+		var bonus = 0;
+		if(this.getFoodStorage() > 0){
+			bonus = this[_foodBonusProb]; // negative
+		}
+		
+		if (rand(0,1.0 + this[_decayProb] + bonus) >= 1.0){
+			if (this.getFoodStorage() > 0)
+				this.consumeFood();
+			this[_life]-=1;
+		}
+	}
+	
+	consumeFood(){
+		this[_foodStorageAnt]-=1;
+	}
+	
 	// checks and walks if possible
 	move(walkingDirection, colObjs){
 		var newHeading = this.getDirectionVecFromAngle(this.getRotation());
 
-		var newPos = this.getPosition();
+		var newPos = this.getPositionMat();
 		if (walkingDirection == Direction.FORWARD)
-			newPos = math.add(this.getPosition(), math.multiply(newHeading, this.getSpeed()));
+			newPos = math.add(this.getPositionMat(), math.multiply(newHeading, this.getSpeed()));
 		else if (walkingDirection == Direction.BACKWARD)
-			newPos = math.add(this.getPosition(), -math.multiply(newHeading, this.getSpeed()));
+			newPos = math.add(this.getPositionMat(), -math.multiply(newHeading, this.getSpeed()));
 		else if (walkingDirection == Direction.NONE)
-			newPos = this.getPosition();
+			newPos = this.getPositionMat();
 		
 		this.setPosition(newPos, colObjs);
 	}
@@ -101,7 +130,7 @@ class Ant extends Collider {
 					type = "Hive";
 				else if (objects[i] instanceof Food)
 					type = "Food";					 
-				this.smelledObjs.push(new SmellableObjectProxy(pos,type));
+				this.smelledObjs.push(new SmellableObjectProxy(this.getCanvas(), pos,type));
 			}
 		}
 	}
@@ -112,8 +141,8 @@ class Ant extends Collider {
 	}
 
 	getAngleToObject(obj){
-		var directionVec = math.matrix([math.cos(this.getRotation()), math.sin(this.getRotation())])
-		var toObjVec = math.subtract(obj.getPosition(), this.getPosition());
+		var directionVec = { x: Math.cos(this.getRotation()), y: Math.sin(this.getRotation()) }
+		var toObjVec = {x: obj.getPosition().x - this.getPosition().x, y: obj.getPosition().y - this.getPosition().y};
 		//console.log(directionVec);
 		return angleBetweenVectorsRad(directionVec, toObjVec);
 	}
@@ -140,27 +169,31 @@ class Ant extends Collider {
 
 	
 	draw(){
-		var pos = this.getPosition().valueOf();
-		if (Debug.getColliderVisibility()){
-			super.draw();
-		}
+		var pos = this.getPosition();
+		super.draw();
 		//console.log("Draw Ant!")
 		if (Debug.getVisibility()){		
 			this._context.beginPath();
-			this._context.moveTo(pos[0], pos[1]);
-			this._context.arc(pos[0], pos[1],
+			this._context.moveTo(pos.x, pos.y);
+			this._context.arc(pos.x, pos.y,
 					this.getVisibilityDistance(), 
 					this.getRotation()-this.getVisibilityRangeRad(), 
 					this.getRotation()+this.getVisibilityRangeRad(), false);
-			this._context.lineTo(pos[0],this.getPosition().valueOf()[1]);
+			this._context.lineTo(pos.x,pos.y);
 			this._context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
 			this._context.fill();
 			this._context.strokeStyle = '#003300';
 			this._context.stroke();
 		}
+		if (Debug.getShowSmelledObjects()){
+			for (var i=0; i<this.smelledObjs.length; i++){
+				this.smelledObjs[i].draw();
+			}
+		}
+		
 		// body
 		this._context.beginPath();
-		this._context.arc(pos[0], pos[1], this.getSize()*0.50, 0, 2 * Math.PI, false);
+		this._context.arc(pos.x, pos.y, this.getSize()*0.50, 0, 2 * Math.PI, false);
 		this._context.fillStyle = '#000000';
 		this._context.fill();
 		this._context.lineWidth = 1;
@@ -169,7 +202,7 @@ class Ant extends Collider {
 
 		// head
 		var directionVec = math.matrix([math.cos(this.getRotation()), math.sin(this.getRotation())])
-		var headPos = math.add(this.getPosition(), math.multiply(directionVec, this.getSize()*0.65)).valueOf();
+		var headPos = math.add(this.getPositionMat(), math.multiply(directionVec, this.getSize()*0.65)).valueOf();
 		this._context.beginPath();
 		this._context.arc(headPos[0], headPos[1], this.getSize()*0.25, 0, 2 * Math.PI, false);
 		this._context.fillStyle = '#000000';
@@ -183,9 +216,18 @@ class Ant extends Collider {
 			this._context.textAlign = "center";
 			this._context.lineWidth = 1;
 			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getFoodStorage().toString(),pos[0],pos[1]); 
+			this._context.strokeText(this.getFoodStorage().toString(),pos.x,pos.y); 
 			this._context.fillStyle = 'black';
-			this._context.fillText(this.getFoodStorage().toString(),pos[0],pos[1]);
+			this._context.fillText(this.getFoodStorage().toString(),pos.x,pos.y);
+		}
+		if (Debug.getShowLife()){
+		this._context.font = "14px Arial";
+			this._context.textAlign = "center";
+			this._context.lineWidth = 1;
+			this._context.strokeStyle = '#FFFFFF';
+			this._context.strokeText(this.getLife().toString(),pos.x,pos.y-5); 
+			this._context.fillStyle = 'red';
+			this._context.fillText(this.getLife().toString(),pos.x,pos.y-5);
 		}
 	}
 }

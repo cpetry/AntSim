@@ -5,9 +5,9 @@ class ColliderStone extends Collider {
 	}
 	
 	draw(){
-		var pos = this.getPosition().valueOf();
+		var pos = this.getPosition();
 		this._context.beginPath();
-		this._context.arc(pos[0], pos[1], this.getSize(), 0, 2 * Math.PI, false);
+		this._context.arc(pos.x, pos.y, this.getSize(), 0, 2 * Math.PI, false);
 		this._context.fillStyle = '#dddddd';
 		this._context.fill();
 	}

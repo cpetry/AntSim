@@ -6,6 +6,7 @@ class SettingsGlobal
 
 	static setAutoIterateFrames(enabled){ this.autoIterateFrames=enabled; }
 	static getAutoIterateFrames(){ return this.autoIterateFrames; }
-}
 
-SettingsGlobal.setAutoIterateFrames(false);
+	static setShowUI(enabled){ this.showUI=enabled; }
+	static getShowUI(){ return this.showUI; }
+}

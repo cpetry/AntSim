@@ -11,7 +11,7 @@ class SmellableObject extends Collider {
 	
 	canBeSmelledFrom(position)
 	{
-		var distance = math.norm(math.subtract(this.getPosition(), position),2);
+		var distance = getDistance(this.getPosition(), position);
 		return (distance < this.getSmellingDistance());
 	}
 	
@@ -21,19 +21,18 @@ class SmellableObject extends Collider {
 			// should not be able to smell it.... did someone cheat here?!
 			return math.matrix([rand(-1000,1000), rand(-1000,1000)])
 			
-		var distance = math.norm(math.subtract(this.getPosition(), position),2);
+		var distance = math.norm(math.subtract(this.getPositionMat(), convertPointToMat(position)),2);
 		var smallPosDist = math.pow(distance/this.getSmellingDistance(),3) * distance;
-		return math.add(this.getPosition(), math.matrix([rand(-smallPosDist,smallPosDist), rand(-smallPosDist,smallPosDist)]));
+		var smellPosMat = math.add(this.getPositionMat(), math.matrix([rand(-smallPosDist,smallPosDist), rand(-smallPosDist,smallPosDist)]));
+		return convertMatToPoint(smellPosMat);
 	}
 	
 	draw(){
-		if (Debug.getColliderVisibility()){
-			super.draw();
-		}
+		super.draw();
 		if (Debug.getShowSmellingDistance()){
-			var pos = this.getPosition().valueOf();
+			var pos = this.getPosition()
 			this._context.beginPath();
-			this._context.arc(pos[0], pos[1], this.getSmellingDistance() - 2, 0, 2 * Math.PI, false);
+			this._context.arc(pos.x, pos.y, this.getSmellingDistance() - 2, 0, 2 * Math.PI, false);
 			this._context.fillStyle = '#ddaa99';
 			this._context.fill();
 			this._context.lineWidth = 2;

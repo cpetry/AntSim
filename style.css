@@ -7,10 +7,14 @@ div#main{
 }
 div#settings{
 	float:right;
-	width:150px;
+	width:200px;
 }
 div#cleared {
   clear: both;
+}
+
+.info{
+	width:30%;
 }
 canvas#terrarium {
 	margin-left: auto;
