@@ -70,15 +70,19 @@ class Ant extends Collider {
 	
 	// checks and walks if possible
 	move(walkingDirection, colObjs){
-		var newHeading = this.getDirectionVecFromAngle(this.getRotation());
+		
+		var newHeading = this.getDirectionVec();
 
-		var newPos = this.getPositionMat();
-		if (walkingDirection == Direction.FORWARD)
-			newPos = math.add(this.getPositionMat(), math.multiply(newHeading, this.getSpeed()));
-		else if (walkingDirection == Direction.BACKWARD)
-			newPos = math.add(this.getPositionMat(), -math.multiply(newHeading, this.getSpeed()));
-		else if (walkingDirection == Direction.NONE)
-			newPos = this.getPositionMat();
+		// attention: has to be copied!
+		var newPos = { x: this.getPosition().x, y: this.getPosition().y};
+		if (walkingDirection == Direction.FORWARD){
+			newPos.x += newHeading.x * this.getSpeed();
+			newPos.y += newHeading.y * this.getSpeed();
+		}
+		else if (walkingDirection == Direction.BACKWARD){
+			newPos.x -= newHeading.x * this.getSpeed();
+			newPos.y -= newHeading.y * this.getSpeed();
+		}
 		
 		this.setPosition(newPos, colObjs);
 	}
@@ -135,8 +139,8 @@ class Ant extends Collider {
 		}
 	}
 
-	getDirectionVecFromAngle(){
-		var direction = math.matrix([math.cos(this.getRotation()), math.sin(this.getRotation())]);
+	getDirectionVec(){
+		var direction = { x: Math.cos(this.getRotation()), y: Math.sin(this.getRotation()) };
 		return direction;
 	}
 

@@ -30,7 +30,7 @@ class Collider {
 	getShapeType(){return this[_shapeType]};
 	
 	canInteractWith(obj){
-		var distance = math.norm(math.subtract(obj.getPositionMat(),this.getPositionMat()), 2) - obj.getSize() - this.getSize();
+		var distance = getDistance(obj.getPosition(),this.getPosition()) - obj.getSize() - this.getSize();
 		return (distance < 10);
 	}
 
@@ -39,16 +39,16 @@ class Collider {
 		this[_rotation] = this.getRotation() % (Math.PI*2);
 	}
 		
-	setPosition(newPosMat, colObjs)
+	setPosition(newPos, colObjs)
 	{
-		var distance = math.norm(math.subtract(newPosMat, this.getPositionMat()),2);
+		var distance = getDistance(newPos, this.getPosition());
 		
 		if (distance > 10){
 			console.log("This is cheating! Please only use heading and direction!");
 		}
-		var newPos = convertMatToPoint(newPosMat);
 		
-		if (!this.checkCollision(newPos, colObjs)){
+		var collidesWithSth = this.checkCollision(newPos, colObjs);
+		if (collidesWithSth == false){
 			this[_position] = newPos;
 		}
 		else {
@@ -62,13 +62,17 @@ class Collider {
 		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, w: this.getCanvas().width-15, h: this.getCanvas().height-15 };
 		var canvasArea = new Shape(canvasRect, ShapeType.RECTANGLE, 0);
 		collision = !this.inside(canvasArea, newPos);
+		if (collision)
+			return true;
+		//console.log(newPos);
 		for (var i=0; i < colObjs.length; i++)
 		{
 			if (this != colObjs[i]
-			&& this.collidesWith(colObjs[i], newPos))
-				collision = true;
+			&& this.collidesWith(colObjs[i], newPos)){
+				return true;
+			}
 		}
-		return collision;
+		return false;
 	}
 	
 	collidesWith(colObj, pos)

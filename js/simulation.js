@@ -41,7 +41,11 @@ class Simulation {
 	
 	foodCreation(){
 		// food creation
-		var createFood = Math.floor(rand(0,1+this.settings.getFoodCreationPropability()-this.iteration/1000.0*0.002));
+		var maxFoodNmb = this.settings.getFoodMaxSiteNumber();
+		var reduceByTime = this.iteration/1000.0*this.settings.getFoodCreationPropability()/10;
+		var reduceBySiteNumber = (maxFoodNmb-this.food.length)/maxFoodNmb;
+		var probability = (this.settings.getFoodCreationPropability()-reduceByTime)*reduceBySiteNumber;
+		var createFood = Math.floor(rand(0,1+probability));
 		if (createFood && this.food.length < this.settings.getFoodMaxSiteNumber()){
 			// food is positioned all over the ground
 			var foodPos = { x: rand(0,this.canvas.width), y: rand(0,this.canvas.height) };
@@ -62,8 +66,8 @@ class Simulation {
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
-			this.updateGraph();
 			showGraph();
+			this.updateGraph();
 			return;
 		}
 		

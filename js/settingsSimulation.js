@@ -13,7 +13,7 @@ class SettingsSimulation
 		this.antFoodBonusProb = -0.005; // bonus probability to reduce "ageing" when carrying food
 		this.foodAmount = 1000;
 		this.foodSize = 0.005; // percentage of food amount
-		this.foodCreationPropability = 0.01; // chance for each iteration to create food 
+		this.foodCreationPropability = 0.02; // chance for each iteration to create food 
 		this.foodMaxSiteNumber = 10; // maximum number of food sites 
 		this.foodMaxHive = 100; // food till next ant
 		this.foodMaxAnt = 35;

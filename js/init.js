@@ -28,31 +28,60 @@ Debug.setShowSmelledObjects(document.getElementById('debugSmelledObjects').check
 var mode;
 var sim;
 var requestID;
+var customAntEditor = ace.edit("editor");
+customAntEditor.setTheme("ace/theme/chrome");
+customAntEditor.session.setMode("ace/mode/javascript");
+var userFunction;
+
 window.onload = function(){
-	setCustomContainerVisibility();
-	startSimulation();
+	switchAntType();
 }
-function setCustomContainerVisibility(){
-	if (document.getElementById('AntType').value == 'Simple')
-		document.getElementById('customContainer').style.display = 'none';      // Hide
-	else
-		document.getElementById('customContainer').style.display = 'block';      // show
+
+function switchAntType(){
+	if (document.getElementById('AntType').value == 'Simple'){
+		document.getElementById('customAntContainer').style.display = 'none';
+		document.getElementById('graphs').style.display = 'none';
+		document.getElementById('terrarium').style.display = 'block';
+		startSimulation();
+	}
+	else{
+		document.getElementById('graphs').style.display = 'none';
+		document.getElementById('terrarium').style.display = 'none';
+		document.getElementById('customAntContainer').style.display = 'block';
+		reset();
+	}
 }
 
 function showGraph(){
-	document.getElementById('terrarium').style.display = 'none';      // Hide
-	document.getElementById('graphs').style.display = 'block';      // show
+	document.getElementById('terrarium').style.display = 'none';
+	document.getElementById('graphs').style.display = 'block';
 }
 
 function showSimulation(){
-	document.getElementById('terrarium').style.display = 'block';      // Hide
-	document.getElementById('graphs').style.display = 'none';      // show
+	document.getElementById('terrarium').style.display = 'block';
+	document.getElementById('graphs').style.display = 'none';
 }
 function reset(){
-	startTutorial();
+	if (mode == Mode.TEASER)
+		sim = new Simulation();
+    else if(mode == Mode.TUTORIAL)
+		sim = new TutorialRunCircle();
+	else
+		sim = new Simulation();
+
 	SettingsGlobal.setAutoIterateFrames(false);
 	sim.clear();
 	sim.draw();
+}
+function run(){
+	userFunction = new Function(customAntEditor.getValue());
+
+	if (mode == Mode.TEASER)
+		startSimulation();
+    else if(mode == Mode.TUTORIAL)
+		startTutorial();
+	else
+		startSimulation();
 }
 
 function startSimulation(){

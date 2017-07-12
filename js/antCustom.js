@@ -7,10 +7,10 @@ class AntCustom extends Ant{
 		//eval('(' + document.getElementById("customIterate").value + ')');
 		var result = [ActionType.NONE, 0, 0];
 		try{
-			var userFunction = new Function(document.getElementById("customIterate").value).bind(this);
 			var newResult;
+			var func = userFunction.bind(this);
 			try{
-				newResult = userFunction();
+				newResult = func();
 			}
 			catch (runtimeError) {
 				console.error("legal code; unforeseen result: ", runtimeError);
