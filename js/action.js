@@ -13,13 +13,16 @@ class Action {
 			Action.walk(obj, parameter1, parameter2, colObjs);
 		}
 		else if (type == ActionType.HARVEST){
-			Action.harvest(obj, parameter1, parameter2);			
+			Action.harvest(obj, parameter1, parameter2);
 		}
 		else if (type == ActionType.GIVEFOOD){
 			Action.transferFood(obj, parameter1, parameter2);
 		}
+		else if (type == ActionType.ATTACK){
+			Action.attack(obj, parameter1);
+		}
 	}
-	
+
 	static walk(obj, direction, rotation, colObjs){
 		// check parameters
 		if (!isNaN(rotation)){
@@ -27,7 +30,7 @@ class Action {
 			obj.move(direction, colObjs);
 		}
 	}
-	
+
 	static harvest(harvester, harvestObj, amount){
 		//console.log("harvesting")
 		if (harvestObj instanceof Food && harvester instanceof Ant){
@@ -38,7 +41,7 @@ class Action {
 			harvester.receiveFood(amountBeingHarvested);
 		}
 	}
-	
+
 	static transferFood(sender, receiver, foodWantingToGiveAway){
 		if (receiver instanceof Hive || receiver instanceof Ant){
 			var foodPossibleToGive = sender.getFoodStorage();
@@ -48,4 +51,12 @@ class Action {
 			sender.giveAwayFood(amountBeingTransferred);
 		}
 	}
+
+	static attack(hunter, prey) {
+
+		if (prey instanceof Ant)
+			prey.receiveAttack();
+
+	}
+
 }

@@ -7,14 +7,14 @@ class SettingsSimulation
 		else
 			this.antType = AntType.CUSTOM;
 		this.antSize = 5;
-		this.antStartNumber = 10;
+		this.antStartNumber = 20;
 		this.antStartPositionDistance = 40;
 		this.antDecayProb = 0.05; // probability of "ageing" -> dying
 		this.antFoodBonusProb = -0.005; // bonus probability to reduce "ageing" when carrying food
 		this.foodAmount = 1000;
 		this.foodSize = 0.005; // percentage of food amount
-		this.foodCreationPropability = 0.02; // chance for each iteration to create food 
-		this.foodMaxSiteNumber = 10; // maximum number of food sites 
+		this.foodCreationPropability = 0.05; // chance for each iteration to create food
+		this.foodMaxSiteNumber = 10; // maximum number of food sites
 		this.foodMaxHive = 100; // food till next ant
 		this.foodMaxAnt = 35;
 		this.foodMaxHarvestAmountAnt = 1;
