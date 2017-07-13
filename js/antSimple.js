@@ -4,12 +4,34 @@ class AntSimple extends Ant{
 	}
 
 	iterate(){
-		var searchForFood = (this.getFoodStorage() > this.getMaxFoodStorage()*0.75);
+
+		var enoughFoodForKilling = (this.getFoodStorage() > this.getMaxFoodStorage() * 0.25)
+		var searchForFood = (this.getFoodStorage() <= this.getMaxFoodStorage()*0.75);
 		var nearestFood = false;
 		var hive = false;
 
+		// Check to kill some ants
+		if (enoughFoodForKilling) {
+			for(var i=0; i < this.visibleObjs.length; i++) {
+				if(this.visibleObjs[i] instanceof Ant) {
+					var nearAnt = this.visibleObjs[i];
+					if (nearAnt[_parentHive] != this[_parentHive]) {
+						if (nearAnt[_life] <= this[_life]*1.5) {
+							if (nearAnt.canInteractWith(this)) {
+								return [ActionType.ATTACK, this.visibleObjs[i]]
+							}
+							else {
+								var fromObjToDirRad = this.getAngleToObject(nearAnt);
+								return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+							}
+						}
+					}
+				}
+			}
+		}
+
 		// search for food
-		if (!searchForFood){
+		if (searchForFood){
 			// Check if ant can see food
 			for(var i=0; i<this.visibleObjs.length; i++){
 				if (this.visibleObjs[i] instanceof Food){
@@ -55,24 +77,6 @@ class AntSimple extends Ant{
 		// search for hive and return food
 		else{
 
-			// Check to kill some ants
-			for(var i=0; i<this.visibleObjs.length; i++) {
-				if(this.visibleObjs[i] instanceof Ant) {
-					var nearAnt = this.visibleObjs[i];
-					if (nearAnt[_parentHive] != this[_parentHive]) {
-						if (nearAnt[_life] <= this[_life]) {
-							if (nearAnt.canInteractWith(this)) {
-								return [ActionType.ATTACK, this.visibleObjs[i]]
-							}
-							else {
-								var fromObjToDirRad = this.getAngleToObject(nearAnt);
-								return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
-							}
-						}
-					}
-				}
-			}
-
 			// Check what can the ant see
 			for(var i=0; i<this.visibleObjs.length; i++)
 				if(this.visibleObjs[i] instanceof Hive) {
@@ -111,6 +115,7 @@ class AntSimple extends Ant{
 				else{
 					return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
 				}
+
 			}
 		}
 	}

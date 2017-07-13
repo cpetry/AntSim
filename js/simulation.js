@@ -136,7 +136,9 @@ class Simulation {
 			if (this.hives[i].getAnts().length > 0)
 				++numLivingHives;
 
-		if (numLivingHives == 0){
+		if (numLivingHives == 1 && this.hives.length > 1
+			  || numLivingHives == 0)
+		{
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
