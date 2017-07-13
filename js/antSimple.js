@@ -8,22 +8,6 @@ class AntSimple extends Ant{
 		var nearestFood = false;
 		var hive = false;
 
-		for(var i=0; i<this.visibleObjs.length; i++)
-			if(this.visibleObjs[i] instanceof Ant) {
-				var nearAnt = this.visibleObjs[i];
-				if (nearAnt[_parentHive] != this[_parentHive]) {
-					if (nearAnt[_life] <= this[_life]) {
-						if (nearAnt.canInteractWith(this)) {
-							return [ActionType.ATTACK, this.visibleObjs[i]]
-						}
-						else {
-							var fromObjToDirRad = this.getAngleToObject(nearAnt);
-							return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
-						}
-					}
-				}
-			}
-
 		// search for food
 		if (!searchForFood){
 			// Check if ant can see food
@@ -70,6 +54,25 @@ class AntSimple extends Ant{
 
 		// search for hive and return food
 		else{
+
+			// Check to kill some ants
+			for(var i=0; i<this.visibleObjs.length; i++) {
+				if(this.visibleObjs[i] instanceof Ant) {
+					var nearAnt = this.visibleObjs[i];
+					if (nearAnt[_parentHive] != this[_parentHive]) {
+						if (nearAnt[_life] <= this[_life]) {
+							if (nearAnt.canInteractWith(this)) {
+								return [ActionType.ATTACK, this.visibleObjs[i]]
+							}
+							else {
+								var fromObjToDirRad = this.getAngleToObject(nearAnt);
+								return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+							}
+						}
+					}
+				}
+			}
+
 			// Check what can the ant see
 			for(var i=0; i<this.visibleObjs.length; i++)
 				if(this.visibleObjs[i] instanceof Hive) {
