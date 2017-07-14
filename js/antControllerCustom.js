@@ -1,9 +1,9 @@
-class AntCustom extends Ant{
-	constructor(canvas, position, rotation, settings, collisionObjs){
-	    super(canvas, position, rotation, settings, collisionObjs);
+class AntControllerCustom extends AntController{
+	constructor(ant){
+	    super(ant);
 	}
 	
-	iterate(){
+	getAction(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
 		var result = [ActionType.NONE, 0, 0];
 		try{

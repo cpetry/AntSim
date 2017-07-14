@@ -65,6 +65,21 @@ class TutorialRunCircle extends Simulation {
 		}
 	}
 	
+	loop(){
+		this.now = Date.now();
+		this.delta = this.now - this.then;
+		var interval = 1000/SettingsGlobal.getFramesPerSecond();
+		if(this.delta > interval) {
+			this.then = this.now - (this.delta % interval);
+			this.simulate();
+			this.clear();
+			this.draw();
+		}
+		if (SettingsGlobal.getAutoIterateFrames()){
+			requestID = requestAnimationFrame( this.loop.bind(this) );
+		}		
+	}
+	
 	draw(){
 		if (Debug.getShowCollider()){
 			for (var i = 0; i < this.checkAreasBottom.length; i++) {

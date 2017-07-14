@@ -61,25 +61,36 @@ function showSimulation(){
 	document.getElementById('terrarium').style.display = 'block';
 	document.getElementById('graphs').style.display = 'none';
 }
+
 function reset(){
 	if (mode == Mode.TEASER)
 		sim = new Simulation();
-    else if(mode == Mode.TUTORIAL)
+    else if (mode == Mode.TUTORIAL)
 		sim = new TutorialRunCircle();
 	else
 		sim = new Simulation();
 
-	SettingsGlobal.setAutoIterateFrames(false);
+	SettingsGlobal.setAutoIterateFrames(true);
 	sim.clear();
 	sim.draw();
+	sim.loop();
 }
+
 function run(){
 	userFunction = new Function(customAntEditor.getValue());
 
 	if (mode == Mode.TEASER)
 		startSimulation();
-    else if(mode == Mode.TUTORIAL)
+    else if (mode == Mode.TUTORIAL){
+		showSimulation();
 		startTutorial();
+		SettingsGlobal.setAutoIterateFrames(true);
+		sim = new TutorialRunCircle();
+		sim.init();
+		sim.clear();
+		sim.draw();
+		sim.loop();
+	}
 	else
 		startSimulation();
 }
@@ -90,21 +101,17 @@ function startSimulation(){
 	requestID = undefined;
 	SettingsGlobal.setAutoIterateFrames(true);
 	Math.seedrandom(document.getElementById('seed').value);
+	mode = Mode.TEASER;
 	sim = new Simulation();
 	sim.init();
 	sim.clear();
 	sim.draw();
 	sim.loop();
-	mode = Mode.TEASER;
 }
 
 function startTutorial(){
+	document.getElementById('AntType').value = "Custom"
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
-	SettingsGlobal.setAutoIterateFrames(true);
-	sim = new TutorialRunCircle();
-	sim.init();
-	sim.clear();
-	sim.draw();
 	mode = Mode.TUTORIAL;
 }

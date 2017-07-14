@@ -1,48 +1,52 @@
-class AntSimple extends Ant{
-	constructor(canvas, position, rotation, settings, collisionObjs){
-	    super(canvas, position, rotation, settings, collisionObjs);
+class AntControllerSimple extends AntController{
+	constructor(ant){
+	    super(ant);
+		this.memory = { harvestedFood : false };
 	}
 	
-	iterate(){
-		var searchForFood = (this.getFoodStorage() > this.getMaxFoodStorage()*0.75);
+	getAction(){
+		var searchForFood = (this.getFood() < this.getFoodMax());
 		var nearestFood = false;
 		var hive = false;
 
 		// search for food
-		if (!searchForFood){
+		if (searchForFood && !this.memory.harvestedFood){
 			// Check if ant can see food
 			for(var i=0; i<this.visibleObjs.length; i++){
-				if (this.visibleObjs[i] instanceof Food){
+				if (this.visibleObjs[i].getType() == "Food"){
 					nearestFood = this.visibleObjs[i];
 				}
 			}
 			
 			// food can be seen
-			if (nearestFood instanceof Food){
-				var canBeHarvested = nearestFood.canInteractWith(this);
-				var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
+			if (nearestFood != false 
+			&& nearestFood.getType() == "Food"){
+				var canBeHarvested = nearestFood.canBeInteractedWith();
+				var canHarvestMore = (this.getFood() < this.getFoodMax());
+				
+				if (!canHarvestMore)
+					this.memory.harvestedFood = true;
 				
 				// harvest food if possible
 				if(canBeHarvested && canHarvestMore){
-					var harvestAmount = this.getMaxFoodStorage() - this.getFoodStorage();
+					var harvestAmount = this.getFoodMax() - this.getFood();
 					return [ActionType.HARVEST, nearestFood, harvestAmount];
 				}
 				// walk towards food
 				else if (canHarvestMore){
-					var fromObjToDirRad = this.getAngleToObject(nearestFood);
+					var fromObjToDirRad = nearestFood.getRotationToObj();
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
 			}
 			else {
 				// try to smell food and walk towards position
 				for (var i=0; i<this.smelledObjs.length; i++){
-					if (this.smelledObjs[i] instanceof SmellableObjectProxy
-					&& this.smelledObjs[i].getType() == "Food"){
+					if (this.smelledObjs[i].getType() == "Food"){
 						nearestFood = this.smelledObjs[i];
 					}
 				}
 				if (nearestFood != false){
-					var fromObjToDirRad = this.getAngleToObject(nearestFood);
+					var fromObjToDirRad = nearestFood.getRotationToObj();
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
 				// search for food
@@ -56,34 +60,34 @@ class AntSimple extends Ant{
 		else{
 			// Check what can the ant see
 			for(var i=0; i<this.visibleObjs.length; i++){
-				if(this.visibleObjs[i] instanceof Hive){
+				if(this.visibleObjs[i].getType() == "Hive"){
 					hive = this.visibleObjs[i];
 				}
 			}
 			// hive can be seen
-			if (hive instanceof Hive){
-				var canGiveFood = hive.canInteractWith(this);
+			if (hive != false){
+				console.log("see hive")
 				
 				// harvest food if possible
-				if(canGiveFood){
-					return [ActionType.GIVEFOOD, hive, this.getFoodStorage()*0.75];
+				if(hive.canBeInteractedWith()){
+					this.memory.harvestedFood = false;
+					return [ActionType.GIVEFOOD, hive, this.getFood()*0.85];
 				}
 				// walk towards food
 				else {
-					var fromObjToDirRad = this.getAngleToObject(hive);
+					var fromObjToDirRad = hive.getRotationToObj();
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
 			}
 			else {
 				// try to smell hive and walk towards position
 				for (var i=0; i<this.smelledObjs.length; i++){
-					if (this.smelledObjs[i] instanceof SmellableObjectProxy
-					&& this.smelledObjs[i].getType() == "Hive"){
+					if (this.smelledObjs[i].getType() == "Hive"){
 						hive = this.smelledObjs[i];
 					}
 				}
 				if (hive != false){
-					var fromObjToDirRad = this.getAngleToObject(hive);
+					var fromObjToDirRad = hive.getRotationToObj();
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
 				// search for hive

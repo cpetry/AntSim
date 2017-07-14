@@ -33,13 +33,19 @@ class Ant extends Collider {
 		this[_foodStorageAnt] = 0;
 		this[_foodMaxAnt] = settings.getFoodMaxAnt();
 		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt();
+		if (settings.getAntType() == AntType.SIMPLE)
+			this.controller = new AntControllerSimple(this);
+		else if (settings.getAntType() == AntType.CUSTOM)
+			this.controller = new AntControllerCustom(this);
 
 		this.visibleObjs = [];
 		this.smelledObjs = [];
 	}
 	
-	// gets overwritten by custom classes
-	iterate(){}
+	iterate(){
+		this.controller.setAttributes(this);
+		return this.controller.getAction();
+	}
 	
 	// getter
 	getLife(){	return this[_life];}	
@@ -109,11 +115,17 @@ class Ant extends Collider {
 			// check distance
 			if (distToObj < this.getVisibilityDistance()){
 				// TODO some error in calculating radians
-				var fromObjToDirRad = this.getAngleToObject(objects[i]);
+				var fromObjToDirRad = this.getAngleToPos(objects[i].getPosition());
 				// check inside cone
-				if (math.abs(fromObjToDirRad) < this.getVisibilityRangeRad()){
+				if (Math.abs(fromObjToDirRad) < this.getVisibilityRangeRad()){
 					//console.log("seeing sth!")
-					this.visibleObjs.push(objects[i]);
+					var type = "None";
+					if (objects[i] instanceof Hive)
+						type = "Hive";
+					else if (objects[i] instanceof Food)
+						type = "Food";					 
+					
+					this.visibleObjs.push(new VisibleObjectProxy(this.getCanvas(), objects[i].getID(), distToObj, fromObjToDirRad, objects[i].getSize(), type));
 				}				
 			}
 		}
@@ -129,12 +141,14 @@ class Ant extends Collider {
 			
 			if (objects[i].canBeSmelledFrom(this.getPosition())){
 				var pos = objects[i].smellPositionFrom(this.getPosition());
+				var distance = getDistance(pos, this.getPosition())
+				var rotation = this.getAngleToPos(pos);
 				var type = "None";
 				if (objects[i] instanceof Hive)
 					type = "Hive";
 				else if (objects[i] instanceof Food)
 					type = "Food";					 
-				this.smelledObjs.push(new SmellableObjectProxy(this.getCanvas(), pos,type));
+				this.smelledObjs.push(new SmellableObjectProxy(this.getCanvas(), distance, rotation, type));
 			}
 		}
 	}
@@ -144,9 +158,9 @@ class Ant extends Collider {
 		return direction;
 	}
 
-	getAngleToObject(obj){
+	getAngleToPos(pos){
 		var directionVec = { x: Math.cos(this.getRotation()), y: Math.sin(this.getRotation()) }
-		var toObjVec = {x: obj.getPosition().x - this.getPosition().x, y: obj.getPosition().y - this.getPosition().y};
+		var toObjVec = {x: pos.x - this.getPosition().x, y: pos.y - this.getPosition().y};
 		//console.log(directionVec);
 		return angleBetweenVectorsRad(directionVec, toObjVec);
 	}
@@ -189,11 +203,11 @@ class Ant extends Collider {
 			this._context.strokeStyle = '#003300';
 			this._context.stroke();
 		}
-		if (Debug.getShowSmelledObjects()){
+		/*if (Debug.getShowSmelledObjects()){
 			for (var i=0; i<this.smelledObjs.length; i++){
 				this.smelledObjs[i].draw();
 			}
-		}
+		}*/
 		
 		// body
 		this._context.beginPath();

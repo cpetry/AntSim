@@ -13,10 +13,10 @@ class Action {
 			Action.walk(obj, parameter1, parameter2, colObjs);
 		}
 		else if (type == ActionType.HARVEST){
-			Action.harvest(obj, parameter1, parameter2);			
+			Action.harvest(obj, parameter1, parameter2, colObjs);			
 		}
 		else if (type == ActionType.GIVEFOOD){
-			Action.transferFood(obj, parameter1, parameter2);
+			Action.transferFood(obj, parameter1, parameter2, colObjs);
 		}
 	}
 	
@@ -28,8 +28,18 @@ class Action {
 		}
 	}
 	
-	static harvest(harvester, harvestObj, amount){
-		//console.log("harvesting")
+	static harvest(harvester, harvestObjProxy, amount, colObjs){
+		
+		// first get real obj to proxy obj
+		var objID = harvestObjProxy.getRefID();
+		var harvestObj;
+		for (var i=0; i< colObjs.length; i++)
+			if (colObjs[i].getID() == objID){
+				harvestObj = colObjs[i];
+				break;
+			}
+		
+		// now check if it can be harvested and grab food
 		if (harvestObj instanceof Food && harvester instanceof Ant){
 			var additionalFoodPossibleToCarry = harvester.getMaxFoodStorage() - harvester.getFoodStorage();
 			var foodPossibleToHarvest = Math.min(harvestObj.getAmount(), harvester.getMaxHarvestAmount());
@@ -39,7 +49,15 @@ class Action {
 		}
 	}
 	
-	static transferFood(sender, receiver, foodWantingToGiveAway){
+	static transferFood(sender, receiverProxy, foodWantingToGiveAway, colObjs){
+		var objID = receiverProxy.getRefID();
+		var receiver;
+		for (var i=0; i< colObjs.length; i++)
+			if (colObjs[i].getID() == objID){
+				receiver = colObjs[i];
+				break;
+			}
+
 		if (receiver instanceof Hive || receiver instanceof Ant){
 			var foodPossibleToGive = sender.getFoodStorage();
 			var foodPossibleToReceive = receiver.getFoodMaxStorage() - receiver.getFoodStorage();

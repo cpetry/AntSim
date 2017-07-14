@@ -41,10 +41,7 @@ class Hive extends SmellableObject {
 		var antPos = { x: rand(-posDistace,posDistace) + this.getPosition().x , y: rand(-posDistace,posDistace) + this.getPosition().y };
 		var rotation = rand(0, 3.14*2);
 		var newAnt;
-		if (this.settings.getAntType() == AntType.SIMPLE)
-			newAnt = new AntSimple(this.getCanvas(), antPos, rotation, this.settings, this.collisionObjs);
-		if (this.settings.getAntType() == AntType.CUSTOM)
-			newAnt = new AntCustom(this.getCanvas(), antPos, rotation, this.settings, this.collisionObjs);
+		newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, this.collisionObjs);
 		this.ants.push(newAnt);
 		this.collisionObjs.push(newAnt);
 	}

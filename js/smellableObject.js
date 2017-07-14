@@ -21,10 +21,11 @@ class SmellableObject extends Collider {
 			// should not be able to smell it.... did someone cheat here?!
 			return math.matrix([rand(-1000,1000), rand(-1000,1000)])
 			
-		var distance = math.norm(math.subtract(this.getPositionMat(), convertPointToMat(position)),2);
-		var smallPosDist = math.pow(distance/this.getSmellingDistance(),3) * distance;
-		var smellPosMat = math.add(this.getPositionMat(), math.matrix([rand(-smallPosDist,smallPosDist), rand(-smallPosDist,smallPosDist)]));
-		return convertMatToPoint(smellPosMat);
+		var distance = getDistance(this.getPosition(), position);
+		var smallPosDist = Math.pow(distance/this.getSmellingDistance(),3) * distance;
+		var smellPos = { x: this.getPosition().x + rand(-smallPosDist,smallPosDist), 
+						 y: this.getPosition().y + rand(-smallPosDist,smallPosDist)};
+		return smellPos;
 	}
 	
 	draw(){

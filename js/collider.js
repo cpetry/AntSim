@@ -3,10 +3,12 @@ const _size = Symbol('size');
 const _shapeType = Symbol('shapeType');
 const _rotation = Symbol('rotation');
 const _canvas = Symbol('canvas');
+const _id = Symbol('id');
 
 class Collider {
 	constructor(canvas, position, shapeType, size, rotation, colObjs)
 	{
+		this[_id] = Collider.getNewID();
 		this[_canvas] = canvas;
 		this._context = canvas.getContext("2d");
 		this[_shapeType] = shapeType;
@@ -22,6 +24,15 @@ class Collider {
 		this[_position] = position;
 	}
 	
+	static getNewID(){ 
+		if (this.idCounter == null)
+			this.idCounter=0;
+		else
+			this.idCounter+=1;
+		return this.idCounter;
+	}
+	
+	getID(){return this[_id];}
 	getCanvas(){return this[_canvas];}	
 	getSize(){return this[_size];}	
 	getPosition() {return this[_position];}

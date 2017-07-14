@@ -11,6 +11,7 @@ class Simulation {
 		this.environmentObjs = [];
 		this.settings = new SettingsSimulation();
 		this.graph = new Graph();
+		this.mode = Mode.SIMULATION;
 	}
 
 	init(){
@@ -81,8 +82,10 @@ class Simulation {
 				this.clear();
 				this.draw();
 				this.graph.addPoint(this.iteration, this.hive.getAnts().length);
-			}
 				
+				this.iteration++;
+				document.getElementById('frame').value = this.iteration;
+			}
 			if (SettingsGlobal.getAutoIterateFrames()){
 				requestID = requestAnimationFrame( this.loop.bind(this) );
 			}
@@ -91,11 +94,12 @@ class Simulation {
 			this.simulate();
 			this.graph.addPoint(this.iteration, this.hive.getAnts().length);
 			window.setZeroTimeout(this.loop.bind(this));
+			
+			this.iteration++;
+			if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
+				document.getElementById('frame').value = this.iteration;
+			
 		}
-		
-		this.iteration++;
-		if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
-			document.getElementById('frame').value = this.iteration;
 	}
 
 	draw()
