@@ -1,8 +1,8 @@
 class AntCustom extends Ant{
-	constructor(canvas, position, rotation, settings, collisionObjs){
-	    super(canvas, position, rotation, settings, collisionObjs);
+	constructor(canvas, position, rotation, settings, collisionObjs, parentHive){
+	    super(canvas, position, rotation, settings, collisionObjs, parentHive);
 	}
-	
+
 	iterate(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
 		var result = [ActionType.NONE, 0, 0];

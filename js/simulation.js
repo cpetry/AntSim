@@ -1,44 +1,97 @@
 class Simulation {
 	constructor(){
+
 		this.canvas = document.getElementById("terrarium");
+
 		this.now;
-		this.then = Date.now();
 		this.delta;
+		this.then = Date.now();
+
 		this.iteration = 0;
-		this.collisionObjects = [];
-		this.hive;
+
+		this.numHives;
+		this.hives = [];
+
 		this.food = [];
+		this.collisionObjects = [];
 		this.environmentObjs = [];
+
 		this.settings = new SettingsSimulation();
 		this.graph = new Graph();
+
 	}
 
-	init(){
-		var context = this.canvas.getContext("2d");
-		var hivePos = { x: this.canvas.width/2, y: this.canvas.height/2 };
-		this.hive = new Hive(this.canvas, hivePos, this.settings, this.collisionObjects);
+	initHives(numHives) {
+
+		if (typeof(numHives) === 'undefined')
+			var numHives = 2
+
+		var hiveConfigurations = [
+						[{x: this.canvas.width / 2, y: this.canvas.height / 2}], // One hive
+						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}] // Two hives
+						// TODO ... to be continued, but actually there should be found a better way to do this.
+					];
+
+		/*
+		 * TODO As well, this code part has to adapted to only
+		 *      be thrown when there is no space left or something.
+		 */
+		if (hiveConfigurations.length < numHives)
+			throw "Number of hives selected is higher than possible!"
+
+		// Hive creation
+		for (var i = 0; i < numHives; ++i) {
+
+			// Get hive position (with regard to hive configuration)
+			var hivePos = hiveConfigurations[numHives-1][i];
+
+			// Create hive
+			this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects, i)); // i = hiveNumber
+
+		}
+
 	}
-	
+
+	init(numHives){
+
+		// Create drawing context
+		var context = this.canvas.getContext("2d");
+
+		// Init hives
+		this.initHives(numHives);
+
+	}
+
 	simulate(){
-		this.hive.iterate();
+
+		// Iterate through all hives
+		for (var i = 0; i < this.hives.length; ++i)
+			this.hives[i].iterate();
+
+		// Update food (and in case create new one)
 		this.foodDecay();
 		this.foodCreation();
+
 	}
-	
+
 	foodDecay(){
+
 		for (var i = 0; i < this.food.length; i++) {
+
 			this.food[i].decay();
+
 			// remove food if it is "empty"
 			if (this.food[i].isEmpty() && i > -1){
 				for (var a =0; a < this.collisionObjects.length; a++){
-					if (this.collisionObjects[a] == this.food[i])	
+					if (this.collisionObjects[a] == this.food[i])
 						this.collisionObjects.splice(a, 1);
 				}
 				this.food.splice(i, 1);
 			}
 		}
+
 	}
-	
+
 	foodCreation(){
 		// food creation
 		var maxFoodNmb = this.settings.getFoodMaxSiteNumber();
@@ -54,15 +107,38 @@ class Simulation {
 			this.collisionObjects.push(newFood);
 		}
 	}
-	
+
+	getNumAnts(hiveNumber) {
+
+		return this.hives[hiveNumber].getAnts().length;
+
+	}
+
+	getTotalNumAnts() {
+
+		var totalNumAnts = 0;
+		for (var i = 0; i < this.hives.length; ++i)
+			totalNumAnts += getNumAnts(i);
+
+		return totalNumAnts
+
+	}
+
 	clear(){
 		this.canvas.getContext("2d").clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
-	
+
 	loop(){
 
-		// game ended
-		if (this.hive.getAnts().length == 0){
+		// Check for game ended
+		var numLivingHives = 0
+		for (var i = 0; i < this.hives.length; ++i)
+			if (this.hives[i].getAnts().length > 0)
+				++numLivingHives;
+
+		if (numLivingHives == 1 && this.hives.length > 1
+			  || numLivingHives == 0)
+		{
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
@@ -70,7 +146,7 @@ class Simulation {
 			this.updateGraph();
 			return;
 		}
-		
+
 		this.now = Date.now();
 		this.delta = this.now - this.then;
 		var interval = 1000/SettingsGlobal.getFramesPerSecond();
@@ -80,43 +156,48 @@ class Simulation {
 				this.simulate();
 				this.clear();
 				this.draw();
-				this.graph.addPoint(this.iteration, this.hive.getAnts().length);
+				for (var i = 0; i < this.hives.length; ++i)
+					this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
 			}
-				
-			if (SettingsGlobal.getAutoIterateFrames()){
-				requestID = requestAnimationFrame( this.loop.bind(this) );
-			}
+
+			if (SettingsGlobal.getAutoIterateFrames())
+				requestID = requestAnimationFrame(this.loop.bind(this));
+
 		}
 		else {
 			this.simulate();
-			this.graph.addPoint(this.iteration, this.hive.getAnts().length);
+			for (var i = 0; i < this.hives.length; ++i)
+				this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
 			window.setZeroTimeout(this.loop.bind(this));
 		}
-		
+
 		this.iteration++;
 		if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
 			document.getElementById('frame').value = this.iteration;
 	}
 
 	draw()
-	{		
-		for (var i = 0; i < this.environmentObjs.length; i++) {
-			this.environmentObjs[i].draw();
-		}
-		if (typeof(this.hive) !== "undefined")
-			this.hive.draw();
+	{
 
-		for (var i = 0; i < this.food.length; i++) {
+		for (var i = 0; i < this.environmentObjs.length; i++)
+			this.environmentObjs[i].draw();
+
+		if (this.hives.length > 0)
+			for (var i = 0; i < this.hives.length; ++i)
+				this.hives[i].draw();
+
+		for (var i = 0; i < this.food.length; i++)
 			this.food[i].draw();
-		}
-		if (this.hive instanceof Hive){
-			for (var i = 0; i < this.hive.getAnts().length; i++) {
-				this.hive.getAnts()[i].draw();
-			}
-		}
+
+		for (var i = 0; i < this.hives.length; ++i)
+			if (this.hives[i] instanceof Hive)
+				for (var j = 0; j < this.hives[i].getAnts().length; j++)
+					this.hives[i].getAnts()[j].draw();
+
 	}
-	
+
 	updateGraph(){
 		this.graph.updateView();
 	}
+
 }

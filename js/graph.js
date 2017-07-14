@@ -5,6 +5,7 @@ class Graph {
 		// Second data series:
 		// A couple flotr configuration options:
 		this.options = {
+			colors: ['#000000','#ff0000','#00ff00','#0000ff'],
 		  xaxis: {
 			minorTickFreq: 4
 		  },
@@ -30,13 +31,16 @@ class Graph {
 		});*/
 
 	}
-	
-	addPoint(iteration, nmbAnts){
-		this.d1.push([ iteration, nmbAnts ]);
+
+	addPoint(iteration, hive, nmbAnts){
+		if (this.d1.length <= hive)
+			this.d1.push([])
+		this.d1[hive].push([ iteration, nmbAnts ]);
 	}
-	
+
 	updateView(){
+		console.log(this.d1)
 		if (this.container.style.display == "block")
-			this.g = Flotr.draw(this.container, [this.d1], this.options);
+			this.g = Flotr.draw(this.container, this.d1, this.options);
 	}
 }
