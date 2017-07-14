@@ -19,9 +19,12 @@ const _visibilityRangeRad = Symbol('visibilityRangeRad');
 const _foodStorageAnt = Symbol('foodStorageAnt');
 const _foodMaxAnt = Symbol('foodMaxAnt');
 const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
+const _parentID = Symbol('parentID');
+
+const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
 class Ant extends Collider {
-	constructor(canvas, position, rotation, settings, collisionObjs){
+	constructor(canvas, position, rotation, settings, collisionObjs, parentID){
 		super(canvas, position, ShapeType.CIRCLE, settings.getAntSize(), rotation, collisionObjs);
 		this[_decayProb] = settings.getAntDecayProb();
 		this[_foodBonusProb] = settings.getAntFoodBonusProb();
@@ -33,6 +36,8 @@ class Ant extends Collider {
 		this[_foodStorageAnt] = 0;
 		this[_foodMaxAnt] = settings.getFoodMaxAnt();
 		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt();
+		this[_parentID] = parentID;
+
 		if (settings.getAntType() == AntType.SIMPLE)
 			this.controller = new AntControllerSimple(this);
 		else if (settings.getAntType() == AntType.CUSTOM)
@@ -46,17 +51,18 @@ class Ant extends Collider {
 		this.controller.setAttributes(this);
 		return this.controller.getAction();
 	}
-	
+
 	// getter
-	getLife(){	return this[_life];}	
+	getParentID() {return this[_parentID]; }
+	getLife(){	return this[_life];}
 	getSpeed(){	return this[_speed];}
-	getSpeedHeading(){return this[_speedHeading];}	
-	getVisibilityDistance(){return this[_visibilityDistance];}	
-	getVisibilityRangeRad(){ return this[_visibilityRangeRad]; }	
+	getSpeedHeading(){return this[_speedHeading];}
+	getVisibilityDistance(){return this[_visibilityDistance];}
+	getVisibilityRangeRad(){ return this[_visibilityRangeRad]; }
 	getFoodStorage() { return this[_foodStorageAnt]; }
 	getMaxFoodStorage() { return this[_foodMaxAnt]; }
 	getMaxHarvestAmount() { return this[_foodMaxHarvestAmount]; }
-	
+
 	age(){
 		var bonus = 0;
 		if(this.getFoodStorage() > 0){
@@ -98,7 +104,7 @@ class Ant extends Collider {
 			//console.log("new heading too much! Reducing according to attribute.")
 			if (newHeading > this.getRotation())
 				super.setNewHeading(this.getRotation()+this.getSpeedHeading());
-			else 
+			else
 				super.setNewHeading(this.getRotation()-this.getSpeedHeading());
 		}
 		else
@@ -110,7 +116,7 @@ class Ant extends Collider {
 		for (var i=0; i<objects.length; i++){
 			if (this == objects[i])
 				continue;
-			
+
 			var distToObj = this.getDistanceToObject(objects[i]);
 			// check distance
 			if (distToObj < this.getVisibilityDistance()){
@@ -120,13 +126,19 @@ class Ant extends Collider {
 				if (Math.abs(fromObjToDirRad) < this.getVisibilityRangeRad()){
 					//console.log("seeing sth!")
 					var type = "None";
-					if (objects[i] instanceof Hive)
+					var parentID = null;
+					if (objects[i] instanceof Hive){
 						type = "Hive";
+						parentID = objects[i].getID();
+					}
 					else if (objects[i] instanceof Food)
-						type = "Food";					 
-					
-					this.visibleObjs.push(new VisibleObjectProxy(this.getCanvas(), objects[i].getID(), distToObj, fromObjToDirRad, objects[i].getSize(), type));
-				}				
+						type = "Food";
+					else if (objects[i] instanceof Ant){
+						type = "Ant";
+						parentID = objects[i].getParentID();
+					}
+					this.visibleObjs.push(new VisibleObjectProxy(this.getCanvas(), parentID, objects[i].getID(), distToObj, fromObjToDirRad, objects[i].getSize(), type));
+				}
 			}
 		}
 	}
@@ -138,17 +150,22 @@ class Ant extends Collider {
 			|| !(objects[i].canBeSmelledFrom) // can be smelled
 			|| this.visibleObjs.indexOf(objects[i]) > -1) // is not already visible
 				continue;
-			
+
 			if (objects[i].canBeSmelledFrom(this.getPosition())){
 				var pos = objects[i].smellPositionFrom(this.getPosition());
 				var distance = getDistance(pos, this.getPosition())
 				var rotation = this.getAngleToPos(pos);
 				var type = "None";
+				var parentID = null;
 				if (objects[i] instanceof Hive)
 					type = "Hive";
 				else if (objects[i] instanceof Food)
-					type = "Food";					 
-				this.smelledObjs.push(new SmellableObjectProxy(this.getCanvas(), distance, rotation, type));
+					type = "Food";
+				else if (objects[i] instanceof Ant){
+					parentID = objects[i].getParentID();
+					type = "Ant";
+				}
+				this.smelledObjs.push(new SmellableObjectProxy(this.getCanvas(), parentID, distance, rotation, type));
 			}
 		}
 	}
@@ -164,7 +181,7 @@ class Ant extends Collider {
 		//console.log(directionVec);
 		return angleBetweenVectorsRad(directionVec, toObjVec);
 	}
-	
+
 	giveAwayFood(amount){
 		if (amount > this.getFoodStorage()){
 			// should not happen!
@@ -173,7 +190,7 @@ class Ant extends Collider {
 		}
 		this[_foodStorageAnt] -= amount;
 	}
-	
+
 	receiveFood(amount){
 		var additionalFood = amount;
 		if (amount + this.getFoodStorage() > this.getMaxFoodStorage()){
@@ -185,17 +202,24 @@ class Ant extends Collider {
 		this[_foodStorageAnt] += additionalFood;
 	}
 
-	
+  receiveAttack(){
+    this[_life] -= 1;
+  }
+
+
 	draw(){
-		var pos = this.getPosition();
-		super.draw();
-		//console.log("Draw Ant!")
-		if (Debug.getVisibility()){		
+
+    super.draw();
+
+    var pos = this.getPosition();
+
+    //console.log("Draw Ant!")
+		if (Debug.getVisibility()){
 			this._context.beginPath();
 			this._context.moveTo(pos.x, pos.y);
 			this._context.arc(pos.x, pos.y,
-					this.getVisibilityDistance(), 
-					this.getRotation()-this.getVisibilityRangeRad(), 
+					this.getVisibilityDistance(),
+					this.getRotation()-this.getVisibilityRangeRad(),
 					this.getRotation()+this.getVisibilityRangeRad(), false);
 			this._context.lineTo(pos.x,pos.y);
 			this._context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
@@ -203,16 +227,20 @@ class Ant extends Collider {
 			this._context.strokeStyle = '#003300';
 			this._context.stroke();
 		}
-		/*if (Debug.getShowSmelledObjects()){
+
+		if (Debug.getShowSmelledObjects())
 			for (var i=0; i<this.smelledObjs.length; i++){
 				this.smelledObjs[i].draw();
 			}
-		}*/
-		
+
+
+		// Decide ant color
+		var fillStyle = _FILL_STYLE_TABLE[this.getParentID()];
+
 		// body
 		this._context.beginPath();
 		this._context.arc(pos.x, pos.y, this.getSize()*0.50, 0, 2 * Math.PI, false);
-		this._context.fillStyle = '#000000';
+		this._context.fillStyle = fillStyle;
 		this._context.fill();
 		this._context.lineWidth = 1;
 		this._context.strokeStyle = '#003300';
@@ -223,7 +251,7 @@ class Ant extends Collider {
 		var headPos = math.add(this.getPositionMat(), math.multiply(directionVec, this.getSize()*0.65)).valueOf();
 		this._context.beginPath();
 		this._context.arc(headPos[0], headPos[1], this.getSize()*0.25, 0, 2 * Math.PI, false);
-		this._context.fillStyle = '#000000';
+		this._context.fillStyle = fillStyle;
 		this._context.fill();
 		this._context.lineWidth = 1;
 		this._context.strokeStyle = '#003300';
@@ -234,7 +262,7 @@ class Ant extends Collider {
 			this._context.textAlign = "center";
 			this._context.lineWidth = 1;
 			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getFoodStorage().toString(),pos.x,pos.y); 
+			this._context.strokeText(this.getFoodStorage().toString(),pos.x,pos.y);
 			this._context.fillStyle = 'black';
 			this._context.fillText(this.getFoodStorage().toString(),pos.x,pos.y);
 		}
@@ -243,7 +271,7 @@ class Ant extends Collider {
 			this._context.textAlign = "center";
 			this._context.lineWidth = 1;
 			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getLife().toString(),pos.x,pos.y-5); 
+			this._context.strokeText(this.getLife().toString(),pos.x,pos.y-5);
 			this._context.fillStyle = 'red';
 			this._context.fillText(this.getLife().toString(),pos.x,pos.y-5);
 		}

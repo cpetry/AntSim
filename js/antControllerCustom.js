@@ -2,7 +2,7 @@ class AntControllerCustom extends AntController{
 	constructor(ant){
 	    super(ant);
 	}
-	
+
 	getAction(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
 		var result = [ActionType.NONE, 0, 0];

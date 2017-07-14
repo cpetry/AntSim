@@ -13,13 +13,16 @@ class Action {
 			Action.walk(obj, parameter1, parameter2, colObjs);
 		}
 		else if (type == ActionType.HARVEST){
-			Action.harvest(obj, parameter1, parameter2, colObjs);			
+			Action.harvest(obj, parameter1, parameter2, colObjs);
 		}
 		else if (type == ActionType.GIVEFOOD){
 			Action.transferFood(obj, parameter1, parameter2, colObjs);
 		}
+		else if (type == ActionType.ATTACK){
+			Action.attack(obj, parameter1, colObjs);
+		}
 	}
-	
+
 	static walk(obj, direction, rotation, colObjs){
 		// check parameters
 		if (!isNaN(rotation)){
@@ -27,7 +30,7 @@ class Action {
 			obj.move(direction, colObjs);
 		}
 	}
-	
+
 	static harvest(harvester, harvestObjProxy, amount, colObjs){
 		
 		// first get real obj to proxy obj
@@ -66,4 +69,20 @@ class Action {
 			sender.giveAwayFood(amountBeingTransferred);
 		}
 	}
+
+	static attack(hunter, preyProxy, colObjs) {
+		// first get real obj to proxy obj
+		var objID = preyProxy.getRefID();
+		var prey;
+		for (var i=0; i< colObjs.length; i++)
+			if (colObjs[i].getID() == objID){
+				prey = colObjs[i];
+				break;
+			}
+
+		if (prey instanceof Ant)
+			prey.receiveAttack();
+
+	}
+
 }

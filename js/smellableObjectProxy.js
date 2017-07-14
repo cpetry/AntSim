@@ -1,11 +1,13 @@
 class SmellableObjectProxy {
-	constructor(canvas, distance, rotation, type){
+	constructor(canvas, parentID, distance, rotation, type){
 		this._context = canvas.getContext("2d");
+		this.parentID = parentID;
 		this.distance = distance;
 		this.rotation = rotation;
 		this.type = type;
 	}
 	
+	getParentID(){ return this.parentID; }
 	getDistanceToObj(){ return this.distance; }
 	getRotationToObj() { return this.rotation; }
 	getType(){ return this.type; }
