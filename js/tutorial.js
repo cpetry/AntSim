@@ -13,8 +13,8 @@ class Tutorial extends Simulation {
 		this.settings.sizeSmellingFactor = 100;
 
 		var hivePos = {x: this.canvas.width / 4, y: this.canvas.height / 2};
-		this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects, 1));
-
+		this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects));
+		this.hives[0].initAnts(1);
 		var foodPos = {x: this.canvas.width / 4*3, y: this.canvas.height / 2};
 		var newFood = new Food(this.canvas, foodPos, this.settings, this.collisionObjects);
 		this.food.push(newFood);

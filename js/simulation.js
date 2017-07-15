@@ -21,11 +21,7 @@ class Simulation {
 		this.mode = Mode.SIMULATION;
 	}
 
-	init(numHives) {
-
-		if (typeof(numHives) === 'undefined')
-			var numHives = 2
-
+	init(numHives=2) {
 		var hiveConfigurations = [
 						[{x: this.canvas.width / 2, y: this.canvas.height / 2}], // One hive
 						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}] // Two hives
@@ -47,9 +43,12 @@ class Simulation {
 
 			// Create hive
 			this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects)); // i = hiveNumber
-
 		}
-
+		
+		// first hives need their ids, then ants can be created
+		for (var i = 0; i < this.hives.length; ++i) {
+			this.hives[i].initAnts();
+		}
 	}
 
 	simulate(){
