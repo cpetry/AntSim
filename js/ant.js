@@ -112,7 +112,7 @@ class Ant extends Collider {
 	}
 
 	setVisibleObjects(objects){
-		this.visibleObjs = [];
+		this.visibleObjs.length = 0;
 		for (var i=0; i<objects.length; i++){
 			if (this == objects[i])
 				continue;
@@ -125,16 +125,16 @@ class Ant extends Collider {
 				// check inside cone
 				if (Math.abs(fromObjToDirRad) < this.getVisibilityRangeRad()){
 					//console.log("seeing sth!")
-					var type = "None";
+					var type = ObjectType.NONE;
 					var parentID = null;
 					if (objects[i] instanceof Hive){
-						type = "Hive";
+						type = ObjectType.HIVE;
 						parentID = objects[i].getID();
 					}
 					else if (objects[i] instanceof Food)
-						type = "Food";
+						type = ObjectType.FOOD;
 					else if (objects[i] instanceof Ant){
-						type = "Ant";
+						type = ObjectType.ANT;
 						parentID = objects[i].getParentID();
 					}
 					this.visibleObjs.push(new VisibleObjectProxy(this.getCanvas(), parentID, objects[i].getID(), distToObj, fromObjToDirRad, objects[i].getSize(), type));
@@ -144,7 +144,7 @@ class Ant extends Collider {
 	}
 	
 	setSmelledObjects(objects){
-		this.smelledObjs = [];
+		this.smelledObjs.length = 0;
 		for (var i=0; i<objects.length; i++){
 			if (this == objects[i]  // is not the ant itself
 			|| !(objects[i].canBeSmelledFrom) // can be smelled
@@ -155,15 +155,17 @@ class Ant extends Collider {
 				var pos = objects[i].smellPositionFrom(this.getPosition());
 				var distance = getDistance(pos, this.getPosition())
 				var rotation = this.getAngleToPos(pos);
-				var type = "None";
+				var type = ObjectType.NONE;
 				var parentID = null;
-				if (objects[i] instanceof Hive)
-					type = "Hive";
+				if (objects[i] instanceof Hive){
+					type = ObjectType.HIVE;
+					parentID = objects[i].getID();
+				}
 				else if (objects[i] instanceof Food)
-					type = "Food";
+					type = ObjectType.FOOD;
 				else if (objects[i] instanceof Ant){
 					parentID = objects[i].getParentID();
-					type = "Ant";
+					type = ObjectType.ANT;
 				}
 				this.smelledObjs.push(new SmellableObjectProxy(this.getCanvas(), parentID, distance, rotation, type));
 			}
@@ -228,12 +230,6 @@ class Ant extends Collider {
 			this._context.stroke();
 		}
 
-		if (Debug.getShowSmelledObjects())
-			for (var i=0; i<this.smelledObjs.length; i++){
-				this.smelledObjs[i].draw();
-			}
-
-
 		// Decide ant color
 		var fillStyle = _FILL_STYLE_TABLE[this.getParentID()];
 
@@ -258,22 +254,18 @@ class Ant extends Collider {
 		this._context.stroke();
 
 		if (Debug.getShowFoodAmount()){
-			this._context.font = "14px Arial";
-			this._context.textAlign = "center";
+			this._context.beginPath();
 			this._context.lineWidth = 1;
-			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getFoodStorage().toString(),pos.x,pos.y);
-			this._context.fillStyle = 'black';
-			this._context.fillText(this.getFoodStorage().toString(),pos.x,pos.y);
+			this._context.fillStyle = 'green';
+			this._context.rect(pos.x-10, pos.y+8, 3, -this.getFoodStorage() / this.getMaxFoodStorage() * 20)
+			this._context.fill();
 		}
 		if (Debug.getShowLife()){
-		this._context.font = "14px Arial";
-			this._context.textAlign = "center";
+			this._context.beginPath();
+			this._context.rect(pos.x-10, pos.y+8, 20*this.getLife()/100, 5)
 			this._context.lineWidth = 1;
-			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getLife().toString(),pos.x,pos.y-5);
 			this._context.fillStyle = 'red';
-			this._context.fillText(this.getLife().toString(),pos.x,pos.y-5);
+			this._context.fill();
 		}
 	}
 }

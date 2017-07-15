@@ -21,12 +21,11 @@
 		<div style="height:10px;"></div>
 		<div id="all">
 			<div id="terrariumContainer">
+				<input type="button" value="Run" onclick="run()">
 				<div align="center" id="graphs" style="display:none;"></div>
 				<canvas align="center" width="600" height="350" id="terrarium"></canvas>
 				<div id="customAntContainer" style="display:none;">
 					<pre id="editor">return [1,1,-0.1];</pre>
-					<input type="button" value="Run" onclick="run()">
-					<input type="button" value="Reset" onclick="reset()">
 				</div>
 				<div id="cleared"></div>
 			</div>
@@ -46,7 +45,6 @@
 					<input type="checkbox" id="debugCollider" onchange="Debug.setShowCollider(document.getElementById('debugCollider').checked);" /> Show collider <br/>
 					<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
 					<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
-					<input type="checkbox" id="debugSmelledObjects" onchange="Debug.setShowSmelledObjects(document.getElementById('debugSmelledObjects').checked);" /> Show smelled objects <br/>
 				</div>
 			</div>
 			<div id="cleared"></div>			

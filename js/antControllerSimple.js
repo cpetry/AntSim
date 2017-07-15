@@ -7,14 +7,14 @@ class AntControllerSimple extends AntController{
 	getAction(){
 		//console.log(this);
 		var enoughFoodForKilling = (this.getFoodStorage() > this.getMaxFoodStorage() * 0.25)
-		var searchForFood = (this.getFoodStorage() < this.getMaxFoodStorage()*0.85);
+		var searchForFood = (this.getFoodStorage() < this.getMaxFoodStorage()*0.15);
 		var nearestFood = false;
 		var hive = false;
 
 		// Check to kill some ants
 		if (enoughFoodForKilling) {
 			for(var i=0; i < this.visibleObjs.length; i++) {
-				if(this.visibleObjs[i].getType() == "Ant") {
+				if(this.visibleObjs[i].getType() == ObjectType.ANT) {
 					var nearAnt = this.visibleObjs[i];
 					if (nearAnt.getParentID() != this.getParentID()) {
 						if (this.getLife() > 50) {
@@ -32,23 +32,24 @@ class AntControllerSimple extends AntController{
 		}
 
 		// search for food
-		if (searchForFood && !this.memory.harvestedFood){
+		if (searchForFood || !this.memory.harvestedFood){
+			this.memory.harvestedFood = false;
+				
 			// Check if ant can see food
 			for(var i=0; i<this.visibleObjs.length; i++){
-				if (this.visibleObjs[i].getType() == "Food"){
+				if (this.visibleObjs[i].getType() == ObjectType.FOOD){
 					nearestFood = this.visibleObjs[i];
 				}
 			}
 
 			// food can be seen
-			if (nearestFood != false 
-			&& nearestFood.getType() == "Food"){
+			if (nearestFood != false ){
 				var canBeHarvested = nearestFood.canBeInteractedWith();
 				var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
 
 				if (!canHarvestMore)
 					this.memory.harvestedFood = true;
-				
+					
 				// harvest food if possible
 				if(canBeHarvested && canHarvestMore){
 					var harvestAmount = this.getMaxFoodStorage() - this.getFoodStorage();
@@ -63,7 +64,7 @@ class AntControllerSimple extends AntController{
 			else {
 				// try to smell food and walk towards position
 				for (var i=0; i<this.smelledObjs.length; i++){
-					if (this.smelledObjs[i].getType() == "Food"){
+					if (this.smelledObjs[i].getType() == ObjectType.FOOD){
 						nearestFood = this.smelledObjs[i];
 					}
 				}
@@ -83,20 +84,17 @@ class AntControllerSimple extends AntController{
 
 			// Check what can the ant see
 			for(var i=0; i<this.visibleObjs.length; i++){
-				if(this.visibleObjs[i].getType() == "Hive"
+				if(this.visibleObjs[i].getType() == ObjectType.HIVE
 				&& this.visibleObjs[i].getParentID() == this.getParentID()){
 						hive = this.visibleObjs[i];
-						console.log("ownHive!")
 				}
 			}
 
 			// hive can be seen
 			if (hive != false){
-
 				// harvest food if possible
 				if(hive.canBeInteractedWith()){
 					this.memory.harvestedFood = false;
-					console.log("giveFood!")
 					return [ActionType.GIVEFOOD, hive, this.getFoodStorage()*0.85];
 				}
 				// walk towards food
@@ -108,14 +106,12 @@ class AntControllerSimple extends AntController{
 			else {
 				// try to smell hive and walk towards position
 				for (var i=0; i<this.smelledObjs.length; i++){
-					if (this.smelledObjs[i].getType() == "Hive"
+					if (this.smelledObjs[i].getType() == ObjectType.HIVE
 					&& this.smelledObjs[i].getParentID() == this.getParentID()){
-						console.log("smelled own hive")
 						hive = this.smelledObjs[i];
 					}
 				}
 				if (hive != false){
-					console.log("walk to hive!" + hive.getRotationToObj())
 					var fromObjToDirRad = hive.getRotationToObj();
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
@@ -125,6 +121,8 @@ class AntControllerSimple extends AntController{
 				}
 
 			}
+			
 		}
+		return [ActionType.WALK, Direction.NONE, rand(-0.5,0.5)];
 	}
 }

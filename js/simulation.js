@@ -21,7 +21,7 @@ class Simulation {
 		this.mode = Mode.SIMULATION;
 	}
 
-	initHives(numHives) {
+	init(numHives) {
 
 		if (typeof(numHives) === 'undefined')
 			var numHives = 2
@@ -46,19 +46,9 @@ class Simulation {
 			var hivePos = hiveConfigurations[numHives-1][i];
 
 			// Create hive
-			this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects, i)); // i = hiveNumber
+			this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects)); // i = hiveNumber
 
 		}
-
-	}
-
-	init(numHives){
-
-		// Create drawing context
-		var context = this.canvas.getContext("2d");
-
-		// Init hives
-		this.initHives(numHives);
 
 	}
 

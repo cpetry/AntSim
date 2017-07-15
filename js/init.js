@@ -23,7 +23,6 @@ Debug.setVisibility(document.getElementById('debugVisibility').checked);
 Debug.setShowCollider(document.getElementById('debugCollider').checked);
 Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);
 Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);
-Debug.setShowSmelledObjects(document.getElementById('debugSmelledObjects').checked);
 
 var mode;
 var sim;
