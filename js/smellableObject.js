@@ -34,10 +34,8 @@ class SmellableObject extends Collider {
 			var pos = this.getPosition()
 			this._context.beginPath();
 			this._context.arc(pos.x, pos.y, this.getSmellingDistance() - 2, 0, 2 * Math.PI, false);
-			this._context.fillStyle = '#ddaa99';
-			this._context.fill();
+			this._context.strokeStyle = '#ddaa99';
 			this._context.lineWidth = 2;
-			this._context.strokeStyle = '#886644';
 			this._context.stroke();
 		}
 	}

@@ -2,7 +2,7 @@ const _foodStorageHive = Symbol('foodStorageHive');
 const _foodMaxHive = Symbol('foodMaxHive');
 
 class Hive extends SmellableObject {
-	constructor(canvas, position, settings, collisionObjs){
+	constructor(canvas, position, settings, collisionObjs, antStartNumber = settings.getAntStartNumber()){
 
 		// Super constructor
 		super(canvas, position, settings.getHiveSize(), settings.getSizeSmellingFactor(), collisionObjs);
@@ -19,7 +19,7 @@ class Hive extends SmellableObject {
 		this.settings = settings;
 
 		// Ant creation
-		for (var i=0; i < this.settings.getAntStartNumber(); i++)
+		for (var i=0; i < antStartNumber; i++)
 			this.createAnt();
 
 	}
@@ -40,6 +40,7 @@ class Hive extends SmellableObject {
 
 			// set decay
 			this.ants[i].age();
+			
 			if (this.ants[i].getLife() <= 0)
 				this.removeAnt(this.ants[i], i);
 		}

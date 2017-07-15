@@ -86,7 +86,7 @@ class Collider {
 		return false;
 	}
 	
-	collidesWith(colObj, pos)
+	collidesWith(colObj, pos = this.getPosition())
 	{
 		var colSize = colObj.getSize();
 		var colPosition = colObj.getPosition();

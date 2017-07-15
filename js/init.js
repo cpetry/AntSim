@@ -33,21 +33,16 @@ customAntEditor.session.setMode("ace/mode/javascript");
 var userFunction;
 
 window.onload = function(){
-	switchAntType();
+	startSimulation();
 }
 
 function switchAntType(){
+	reset();
 	if (document.getElementById('AntType').value == 'Simple'){
-		document.getElementById('customAntContainer').style.display = 'none';
-		document.getElementById('graphs').style.display = 'none';
-		document.getElementById('terrarium').style.display = 'block';
 		startSimulation();
 	}
 	else{
-		document.getElementById('graphs').style.display = 'none';
-		document.getElementById('terrarium').style.display = 'none';
-		document.getElementById('customAntContainer').style.display = 'block';
-		reset();
+		showEditor();
 	}
 }
 
@@ -59,13 +54,20 @@ function showGraph(){
 function showSimulation(){
 	document.getElementById('terrarium').style.display = 'block';
 	document.getElementById('graphs').style.display = 'none';
+	document.getElementById('customAntContainer').style.display = 'none';
+}
+
+function showEditor(){
+	document.getElementById('graphs').style.display = 'none';
+	document.getElementById('terrarium').style.display = 'none';
+	document.getElementById('customAntContainer').style.display = 'block';
 }
 
 function reset(){
 	if (mode == Mode.TEASER)
 		sim = new Simulation();
     else if (mode == Mode.TUTORIAL)
-		sim = new TutorialRunCircle();
+		sim = new Tutorial();
 	else
 		sim = new Simulation();
 
@@ -82,9 +84,10 @@ function run(){
 		startSimulation();
     else if (mode == Mode.TUTORIAL){
 		showSimulation();
-		startTutorial();
+		window.cancelAnimationFrame(requestID);
+		requestID = undefined;
 		SettingsGlobal.setAutoIterateFrames(true);
-		sim = new TutorialRunCircle();
+		sim = new Tutorial();
 		sim.init();
 		sim.clear();
 		sim.draw();
@@ -113,4 +116,5 @@ function startTutorial(){
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
 	mode = Mode.TUTORIAL;
+	switchAntType();
 }
