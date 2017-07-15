@@ -11,6 +11,7 @@ class SettingsSimulation
 		this.antStartPositionDistance = 40;
 		this.antDecayProb = 0.05; // probability of "ageing" -> dying
 		this.antFoodBonusProb = -0.005; // bonus probability to reduce "ageing" when carrying food
+		this.antDefaultSmellingDistance = 10;
 		this.foodAmount = 1000;
 		this.foodSize = 0.005; // percentage of food amount
 		this.foodCreationPropability = 0.05; // chance for each iteration to create food
@@ -30,6 +31,7 @@ class SettingsSimulation
 	getAntSize(){ return this.antSize; }
 	getAntStartNumber(){ return this.antStartNumber; }
 	getAntPositionDistance(){ return this.antStartPositionDistance; }
+	getAntDefaultSmellingDistance() { return this.antDefaultSmellingDistance; }
 	getFoodSize(){ return this.foodSize; }
 	getFoodAmount(){ return this.foodAmount; }
 	getFoodCreationPropability(){ return this.foodCreationPropability; }

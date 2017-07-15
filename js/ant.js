@@ -11,6 +11,7 @@ var AntType = {
 
 const _speed = Symbol('speed');
 const _life = Symbol('life');
+const _smellingDistance = Symbol('smellingDistance'); 
 const _decayProb = Symbol('decayProb');
 const _foodBonusProb = Symbol('foodBonusProb');
 const _speedHeading = Symbol('speedHeading');
@@ -29,6 +30,7 @@ class Ant extends Collider {
 		this[_decayProb] = settings.getAntDecayProb();
 		this[_foodBonusProb] = settings.getAntFoodBonusProb();
 		this[_life] = 100;
+		this[_smellingDistance] = settings.getAntDefaultSmellingDistance();
 		this[_speed] = 2.5;
 		this[_speedHeading] = 0.2; // radians
 		this[_visibilityDistance] = 35;
@@ -55,6 +57,7 @@ class Ant extends Collider {
 	// getter
 	getParentID() {return this[_parentID]; }
 	getLife(){	return this[_life];}
+	getSmellingDistance(){	return this[_smellingDistance];}
 	getSpeed(){	return this[_speed];}
 	getSpeedHeading(){return this[_speedHeading];}
 	getVisibilityDistance(){return this[_visibilityDistance];}
@@ -147,12 +150,12 @@ class Ant extends Collider {
 		this.smelledObjs.length = 0;
 		for (var i=0; i<objects.length; i++){
 			if (this == objects[i]  // is not the ant itself
-			|| !(objects[i].canBeSmelledFrom) // can be smelled
+			|| !(objects[i].canBeSmelledBy) // can this object be smelled? !! No parameter!
 			|| this.visibleObjs.indexOf(objects[i]) > -1) // is not already visible
 				continue;
 
-			if (objects[i].canBeSmelledFrom(this.getPosition())){
-				var pos = objects[i].smellPositionFrom(this.getPosition());
+			if (objects[i].canBeSmelledBy(this)){
+				var pos = objects[i].smellPositionFrom(this);
 				var distance = getDistance(pos, this.getPosition())
 				var rotation = this.getAngleToPos(pos);
 				var type = ObjectType.NONE;
