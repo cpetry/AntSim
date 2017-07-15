@@ -39,7 +39,7 @@ class Graph {
 	}
 
 	updateView(){
-		console.log(this.d1)
+		//console.log(this.d1)
 		if (this.container.style.display == "block")
 			this.g = Flotr.draw(this.container, this.d1, this.options);
 	}

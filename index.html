@@ -14,11 +14,17 @@
 		<div style="height:50px;"></div>
 		<div id="options">
 			<input type="button" value="Simulation" onclick="startSimulation()">
-			<input type="button" value="Tutorial" onclick="startTutorial()">
+			<input type="button" value="Tutorial" onclick="setupTutorialPart(0)">
 			<input type="button" value="info" onclick="sim.showMessage()">
 			<input type="button" value="updateGraph" onclick="sim.updateGraph()">
 		</div>
 		<div style="height:10px;"></div>
+		<div id="tutorial">
+			<input type="radio" name="tutorialPart" value="0" onclick="setupTutorialPart(0)">
+			<input type="radio" name="tutorialPart" value="1" onclick="setupTutorialPart(1)">
+			<input type="radio" name="tutorialPart" value="2" onclick="setupTutorialPart(2)">
+			<input type="radio" name="tutorialPart" value="3" onclick="setupTutorialPart(3)">
+		</div>
 		<div id="all">
 			<div id="terrariumContainer">
 				<input type="button" value="Run" onclick="run()">
@@ -57,6 +63,7 @@
 		<script src="./js/external/seedrandom.js"></script>
 		<script src="./js/external/flotr2.min.js"></script>
 		<script src="./js/external/ace_min_noconflict/ace.js"></script>
+		<script src="./js/external/ace_min_noconflict/ext-language_tools.js"></script>
 
 		<script src="./js/settingsGlobal.js"></script>
 		<script src="./js/settingsSimulation.js"></script>

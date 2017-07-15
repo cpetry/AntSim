@@ -27,12 +27,44 @@ Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').c
 var mode;
 var sim;
 var requestID;
+var lang = ace.require("ace/ext/language_tools");
+lang.setCompleters();
+var antControllerWordCompleter = {
+    getCompletions: function(editor, session, pos, prefix, callback) {
+		var wordList = AntController.getAutoCompletionWordList();
+		callback(null, wordList.map(function(word) {
+			return {
+				caption: word,
+				value: word,
+				meta: "This ant"
+			};
+		}));
+    }
+}
+var globalWordCompleter = {
+    getCompletions: function(editor, session, pos, prefix, callback) {
+		var wordList = ["this."];
+		callback(null, wordList.map(function(word) {
+			return {
+				caption: word,
+				value: word,
+				meta: "global"
+			};
+		}));
+    }
+}
 var customAntEditor = ace.edit("editor");
 customAntEditor.setTheme("ace/theme/chrome");
 customAntEditor.session.setMode("ace/mode/javascript");
-var userFunction;
+customAntEditor.setOptions({
+    enableBasicAutocompletion: true,
+});
+customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
 
+var userFunction;
+var selectedTutorialPart = 0;
 window.onload = function(){
+	document.getElementById('AntType').value = 'Simple'
 	startSimulation();
 }
 
@@ -63,6 +95,7 @@ function showEditor(){
 	document.getElementById('customAntContainer').style.display = 'block';
 }
 
+
 function reset(){
 	if (mode == Mode.TEASER)
 		sim = new Simulation();
@@ -82,22 +115,34 @@ function run(){
 
 	if (mode == Mode.TEASER)
 		startSimulation();
-    else if (mode == Mode.TUTORIAL){
-		showSimulation();
-		window.cancelAnimationFrame(requestID);
-		requestID = undefined;
-		SettingsGlobal.setAutoIterateFrames(true);
-		sim = new Tutorial();
-		sim.init();
-		sim.clear();
-		sim.draw();
-		sim.loop();
-	}
+    else if (mode == Mode.TUTORIAL)
+		startTutorialPart(selectedTutorialPart);
 	else
 		startSimulation();
 }
 
+function setupTutorialPart(part){
+	document.getElementById('tutorial').style.display = 'block';
+	selectedTutorialPart = part;
+	document.getElementById('AntType').value = "Custom"
+	window.cancelAnimationFrame(requestID);
+	requestID = undefined;
+	mode = Mode.TUTORIAL;
+	switchAntType();
+}
+
+function startTutorialPart(part){
+	showSimulation();
+	SettingsGlobal.setAutoIterateFrames(true);
+	sim = new Tutorial(part);
+	sim.init();
+	sim.clear();
+	sim.draw();
+	sim.loop();	
+}
+
 function startSimulation(){
+	document.getElementById('tutorial').style.display = 'none';
 	showSimulation();
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
@@ -109,12 +154,4 @@ function startSimulation(){
 	sim.clear();
 	sim.draw();
 	sim.loop();
-}
-
-function startTutorial(){
-	document.getElementById('AntType').value = "Custom"
-	window.cancelAnimationFrame(requestID);
-	requestID = undefined;
-	mode = Mode.TUTORIAL;
-	switchAntType();
 }

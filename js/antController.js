@@ -8,8 +8,18 @@ class AntController {
 		this.foodMax = 0;
 		this.visibleObjs = [];
 		this.smelledObjs = [];
+		this.memory = { };
 		
 		this.setAttributes(ant);
+	}
+	
+	static getAutoCompletionWordList(){
+		return ["getParentID()",
+				"getLife()", 
+				"getFoodStorage()", 
+				"getMaxFoodStorage()",
+				"getVisibleObjs()", 
+				"getSmelledObjs()"];
 	}
 	
 	setAttributes(ant){

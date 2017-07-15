@@ -1,11 +1,15 @@
 class Tutorial extends Simulation {
-	constructor(){
+	constructor(part=0){
 		super();
+		// defines the part of the tutorial
+		this.part = part;
+		
 		// first check if ant has reached food location
 		this.checkAreaFood;
 		
 		// then check if ant has reached hive location with food
 		this.checkAreaHive;
+		
 	}
 	
 	init(){
@@ -29,13 +33,16 @@ class Tutorial extends Simulation {
 			this.hives[i].iterate();
 		if (this.hives.length>0){
 			var firstAnt = this.hives[0].getAnts()[0];
-			if (firstAnt.collidesWith(this.checkAreaFood)){
-				console.log("Yeah! you found food.")
+			if (firstAnt.collidesWith(this.checkAreaFood) && this.part == 0){
+				StartTutorialPart(this.part++);
 			}
 		}
 	}
 	
 	loop(){
+		if (this.endTutorial){
+			
+		}
 		this.now = Date.now();
 		this.delta = this.now - this.then;
 		var interval = 1000/SettingsGlobal.getFramesPerSecond();
