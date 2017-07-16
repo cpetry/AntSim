@@ -37,6 +37,7 @@
 			</div>
 			<div id="settings">Settings<br/>
 				AntType<select id="AntType" size="1" onchange="switchAntType()"> <option selected>Simple</option> <option>Custom</option> </select><br/>
+				HiveType<select id="HiveType" size="1" <!--onchange="switchAntType()"-->> <option selected>Default</option> <option>Custom</option> </select><br/>
 				
 				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
 				<input type="checkbox" id="showUI"    onchange="SettingsGlobal.setShowUI(document.getElementById('showUI').checked);" checked /> ShowUI <br/>
@@ -83,6 +84,8 @@
 		<script src="./js/smellableObject.js"></script>
 
 		<script src="./js/hive.js"></script>
+		<script src="./js/hiveController.js"></script>
+		<script src="./js/hiveControllerCustom.js"></script>
 		<script src="./js/food.js"></script>
 		<script src="./js/ant.js"></script>
 		<script src="./js/antController.js"></script>

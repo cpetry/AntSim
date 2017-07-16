@@ -8,7 +8,9 @@ var AntType = {
 	SIMPLE: 0,
 	CUSTOM: 1
 }
-
+const _strength = Symbol('strength');
+const _agility = Symbol('agility');
+const _sensitivity = Symbol('sensitivity');
 const _speed = Symbol('speed');
 const _life = Symbol('life');
 const _smellingDistance = Symbol('smellingDistance'); 
@@ -25,21 +27,38 @@ const _parentID = Symbol('parentID');
 const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
 class Ant extends Collider {
-	constructor(canvas, position, rotation, settings, collisionObjs, parentID){
+	constructor(canvas, position, rotation, settings, newGenes, collisionObjs, parentID){
 		super(canvas, position, ShapeType.CIRCLE, settings.getAntSize(), rotation, collisionObjs);
-		this[_decayProb] = settings.getAntDecayProb();
-		this[_foodBonusProb] = settings.getAntFoodBonusProb();
-		this[_life] = 100;
-		this[_smellingDistance] = settings.getAntDefaultSmellingDistance();
-		this[_speed] = 2.5;
-		this[_speedHeading] = 0.2; // radians
-		this[_visibilityDistance] = 35;
-		this[_visibilityRangeRad] = 1;
-		this[_foodStorageAnt] = 0;
-		this[_foodMaxAnt] = settings.getFoodMaxAnt();
-		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt();
-		this[_parentID] = parentID;
+		
+		// Genes / attributes
+		// Test if genes are chosen correctly and fair. Correct if not.
+		// If all are equally chosen -> Str = Agi = Sen = 1 !
+		var aThird = 1.0/3.0;
+		var total = newGenes[0] + newGenes[1] + newGenes[2];
+		var genes = [newGenes[0]/total/aThird, newGenes[1]/total/aThird, newGenes[2]/total/aThird]
 
+		this[_strength] = genes[0];    // [0.0 - 3.0]
+		this[_agility] = genes[1];     // [0.0 - 3.0]
+		this[_sensitivity] = genes[2]; // [0.0 - 3.0]
+		
+		// Abilities
+		// Strength type
+		this[_decayProb]     = settings.getAntDecayProb()     * (1/this[_strength]);
+		this[_foodBonusProb] = settings.getAntFoodBonusProb() * (1/this[_strength]); // less life loss when carrying food
+		this[_foodMaxAnt] = settings.getFoodMaxAnt() * this[_strength];
+		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt() * this[_strength];
+		// Agility type
+		this[_speed] = 2.5 * this[_agility];
+		this[_speedHeading] = 0.2 * this[_agility]; // radians
+		// Sensitivity type
+		this[_smellingDistance] = settings.getAntSmellingDistance() * this[_sensitivity];
+		this[_visibilityDistance] = settings.getAntVisibilityDistance() * this[_sensitivity];
+		this[_visibilityRangeRad] = settings.getAntVisibilityRange() * this[_sensitivity];
+
+		this[_life] = 100;
+		this[_foodStorageAnt] = 0;
+		this[_parentID] = parentID;
+		
 		if (settings.getAntType() == AntType.SIMPLE)
 			this.controller = new AntControllerSimple(this);
 		else if (settings.getAntType() == AntType.CUSTOM)
@@ -214,11 +233,9 @@ class Ant extends Collider {
 
 	draw(){
 
-    super.draw();
+		super.draw();
+		var pos = this.getPosition();
 
-    var pos = this.getPosition();
-
-    //console.log("Draw Ant!")
 		if (Debug.getVisibility()){
 			this._context.beginPath();
 			this._context.moveTo(pos.x, pos.y);
@@ -227,11 +244,18 @@ class Ant extends Collider {
 					this.getRotation()-this.getVisibilityRangeRad(),
 					this.getRotation()+this.getVisibilityRangeRad(), false);
 			this._context.lineTo(pos.x,pos.y);
-			this._context.fillStyle = '#' + (this.visibleObjs.length*11).toString() + "" + (this.visibleObjs.length*11).toString() + '00';
-			this._context.fill();
 			this._context.strokeStyle = '#003300';
 			this._context.stroke();
 		}
+		
+		if (Debug.getShowSmellingDistance()){
+			this._context.beginPath();
+			this._context.arc(pos.x, pos.y, this.getSmellingDistance() - 2, 0, 2 * Math.PI, false);
+			this._context.strokeStyle = '#2277dd';
+			this._context.lineWidth = 2;
+			this._context.stroke();
+		}
+
 
 		// Decide ant color
 		var fillStyle = _FILL_STYLE_TABLE[this.getParentID()];
@@ -246,10 +270,10 @@ class Ant extends Collider {
 		this._context.stroke();
 
 		// head
-		var directionVec = math.matrix([math.cos(this.getRotation()), math.sin(this.getRotation())])
-		var headPos = math.add(this.getPositionMat(), math.multiply(directionVec, this.getSize()*0.65)).valueOf();
+		var dir = { x: Math.cos(this.getRotation()), y:  Math.sin(this.getRotation()) };
+		var headPos = { x: pos.x + dir.x*this.getSize()*0.65, y: pos.y + dir.y*this.getSize()*0.65 };
 		this._context.beginPath();
-		this._context.arc(headPos[0], headPos[1], this.getSize()*0.25, 0, 2 * Math.PI, false);
+		this._context.arc(headPos.x, headPos.y, this.getSize()*0.25, 0, 2 * Math.PI, false);
 		this._context.fillStyle = fillStyle;
 		this._context.fill();
 		this._context.lineWidth = 1;

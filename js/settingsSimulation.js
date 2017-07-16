@@ -2,16 +2,22 @@ class SettingsSimulation
 {
 	constructor(){
 		this.hiveSize = 14;
-		if (document.getElementById('AntType').value == 'Simple')
-			this.antType = AntType.SIMPLE;
-		else
+		if (document.getElementById('AntType').value == 'Custom')
 			this.antType = AntType.CUSTOM;
+		else
+			this.antType = AntType.SIMPLE;
+		if (document.getElementById('HiveType').value == 'Custom')
+			this.hiveType = HiveType.CUSTOM;
+		else
+			this.hiveType = HiveType.DEFAULT;
 		this.antSize = 5;
 		this.antStartNumber = 20;
 		this.antStartPositionDistance = 40;
 		this.antDecayProb = 0.05; // probability of "ageing" -> dying
 		this.antFoodBonusProb = -0.005; // bonus probability to reduce "ageing" when carrying food
-		this.antDefaultSmellingDistance = 10;
+		this.antSmellingDistance = 50;
+		this.antVisibilityDistance = 30;
+		this.antVisibilityRange = 0.8;
 		this.foodAmount = 1000;
 		this.foodSize = 0.005; // percentage of food amount
 		this.foodCreationPropability = 0.05; // chance for each iteration to create food
@@ -24,6 +30,7 @@ class SettingsSimulation
 	// attribute related settings
 	getTerrariumWidth(){ return this.terrariumWidth; }
 	getTerrariumHeight(){ return this.terrariumHeight; }
+	getHiveType(){ return this.hiveType; }
 	getHiveSize(){ return this.hiveSize; }
 	getAntType(){ return this.antType; }
 	getAntDecayProb(){ return this.antDecayProb; }
@@ -31,7 +38,9 @@ class SettingsSimulation
 	getAntSize(){ return this.antSize; }
 	getAntStartNumber(){ return this.antStartNumber; }
 	getAntPositionDistance(){ return this.antStartPositionDistance; }
-	getAntDefaultSmellingDistance() { return this.antDefaultSmellingDistance; }
+	getAntSmellingDistance() { return this.antSmellingDistance; }
+	getAntVisibilityDistance() { return this.antVisibilityDistance; }
+	getAntVisibilityRange() { return this.antVisibilityRange; }
 	getFoodSize(){ return this.foodSize; }
 	getFoodAmount(){ return this.foodAmount; }
 	getFoodCreationPropability(){ return this.foodCreationPropability; }

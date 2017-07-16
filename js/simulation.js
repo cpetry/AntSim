@@ -18,7 +18,6 @@ class Simulation {
 
 		this.settings = new SettingsSimulation();
 		this.graph = new Graph();
-		this.mode = Mode.SIMULATION;
 	}
 
 	init(numHives=2) {

@@ -61,7 +61,8 @@ customAntEditor.setOptions({
 });
 customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
 
-var userFunction;
+var userAntFunction;
+var userHiveFunction;
 var selectedTutorialPart = 0;
 window.onload = function(){
 	document.getElementById('AntType').value = 'Simple'
@@ -111,7 +112,7 @@ function reset(){
 }
 
 function run(){
-	userFunction = new Function(customAntEditor.getValue());
+	userAntFunction = new Function(customAntEditor.getValue());
 
 	if (mode == Mode.TEASER)
 		startSimulation();
@@ -128,12 +129,15 @@ function setupTutorialPart(part){
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
 	mode = Mode.TUTORIAL;
-	switchAntType();
+	showEditor();
 }
 
 function startTutorialPart(part){
 	showSimulation();
+	window.cancelAnimationFrame(requestID);
+	requestID = undefined;
 	SettingsGlobal.setAutoIterateFrames(true);
+	Math.seedrandom(document.getElementById('seed').value);
 	sim = new Tutorial(part);
 	sim.init();
 	sim.clear();

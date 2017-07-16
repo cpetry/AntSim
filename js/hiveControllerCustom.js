@@ -1,14 +1,14 @@
-class AntControllerCustom extends AntController{
-	constructor(ant){
-	    super(ant);
+// a class to contain all attributes the user has !readable! access to.
+// changing these attributes while running won't do anything
+class HiveControllerCustom {
+	constructor(/*ants ?!*/){
 	}
-
-	getAction(){
-		//eval('(' + document.getElementById("customIterate").value + ')');
-		var result = [ActionType.NONE, 0, 0];
+	
+	getNewGeneCombination(){
+		var result = [0.33, 0.33, 0.33];
 		try{
 			var newResult;
-			var func = userAntFunction.bind(this);
+			var func = userHiveFunction.bind(this);
 			try{
 				newResult = func();
 			}
@@ -21,8 +21,6 @@ class AntControllerCustom extends AntController{
 			if (newResult == null) {throw "no result value given!"; }
 			if (newResult.length != 3){throw "User input incorrect - return value needs 3 elements!"; }
 			if (newResult[0] < 0 || newResult[0] > 4){throw "User input incorrect - First element has to be a ActionType!"; }
-			else
-				result = newResult;
 		}
 		catch (syntaxError) {
 			console.error("illegal code; syntax errors: ", syntaxError);

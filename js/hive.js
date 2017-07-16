@@ -1,3 +1,8 @@
+var HiveType = {
+	DEFAULT : 0,
+	CUSTOM : 1
+}
+
 const _foodStorageHive = Symbol('foodStorageHive');
 const _foodMaxHive = Symbol('foodMaxHive');
 
@@ -15,6 +20,11 @@ class Hive extends SmellableObject {
 		this.collisionObjs = collisionObjs;
 		this.collisionObjs.push(this);
 		this.settings = settings;
+		
+		if (settings.getHiveType() == HiveType.DEFAULT)
+			this.controller = new HiveController();
+		else if (settings.getHiveType() == HiveType.CUSTOM)
+			this.controller = new HiveControllerCustom();
 	}
 	
 	initAnts(antStartNumber = this.settings.getAntStartNumber()){
@@ -44,7 +54,7 @@ class Hive extends SmellableObject {
 				this.removeAnt(this.ants[i], i);
 		}
 	}
-
+	
 	createAnt(){
 
 		var posDistace = this.settings.getAntPositionDistance();
@@ -52,7 +62,8 @@ class Hive extends SmellableObject {
 		var rotation = rand(0, 3.14*2);
 
 		var newAnt;
-		newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, this.collisionObjs, this.getID());
+		var newGenes = this.controller.getNewGeneCombination();
+		newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, newGenes, this.collisionObjs, this.getID());
 		this.ants.push(newAnt);
 		this.collisionObjs.push(newAnt);
 

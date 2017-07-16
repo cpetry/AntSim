@@ -12,7 +12,7 @@ class SmellableObject extends Collider {
 	canBeSmelledBy(ant)
 	{
 		var distance = getDistance(this.getPosition(), ant.getPosition());
-		return (distance - this.getSmellDistance() - ant.getSmellingDistance() < 0);
+		return (distance - this.getSmellDistance() - ant.getSmellingDistance() <= 0);
 	}
 	
 	smellPositionFrom(ant)
