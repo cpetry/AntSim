@@ -16,3 +16,9 @@ There are two ways you can influence the outcome:
 
 When enough food is gathered, the queen inside the hive can give birth to more ants. 
 She has to decide who is worthy for mating and therefor which kind of genes the new offspring shall have.
+
+#### Third party libs used (licenses)
+- ACE (BSD)
+- flotr2 (MIT)
+- qunit (MIT)
+- seedrandom (MIT)
