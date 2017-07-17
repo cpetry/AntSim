@@ -47,7 +47,7 @@ function normalize(vec){
 }
 
 // setZeroTimeout
-(function() {
+/*(function() {
 	var timeouts = [];
 	var messageName = "zero-timeout-message";
 
@@ -73,4 +73,4 @@ function normalize(vec){
 
 	// Add the one thing we want added to the window object.
 	window.setZeroTimeout = setZeroTimeout;
-})();
+})();*/

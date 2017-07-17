@@ -13,8 +13,8 @@
 		</div>
 		<div style="height:50px;"></div>
 		<div id="options">
-			<input type="button" value="Simulation" onclick="startSimulation()">
-			<input type="button" value="Tutorial" onclick="setupTutorialPart(0)">
+			<input type="button" value="Simulation" onclick="simulationClicked()">
+			<input type="button" value="Tutorial" onclick="tutorialClicked()">
 			<input type="button" value="info" onclick="sim.showMessage()">
 			<input type="button" value="updateGraph" onclick="sim.updateGraph()">
 		</div>
@@ -33,6 +33,7 @@
 				<div id="customAntContainer" style="display:none;">
 					<pre id="editor">return [1,1,-0.1];</pre>
 				</div>
+				<div id="NoUI" style="display:none;">...Simulating...</div>
 				<div id="cleared"></div>
 			</div>
 			<div id="settings">Settings<br/>
@@ -40,11 +41,8 @@
 				HiveType<select id="HiveType" size="1" <!--onchange="switchAntType()"-->> <option selected>Default</option> <option>Custom</option> </select><br/>
 				
 				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
-				<input type="checkbox" id="showUI"    onchange="SettingsGlobal.setShowUI(document.getElementById('showUI').checked);" checked /> ShowUI <br/>
-				
-					<input type="checkbox" id="autoFrame" onchange="SettingsGlobal.setAutoIterateFrames(document.getElementById('autoFrame').checked);requestAnimationFrame(sim.loop.bind(sim));" checked /> AutoFrame 
-					<input type="number" id="frame" style="width:50px" value="0" readonly/>
-					<input type="button" id="nextFrame" value="next" onclick="requestAnimationFrame(sim.loop.bind(sim));" /><br/>
+				<input type="checkbox" id="showUI"  onchange="setNoUI()" checked /> ShowUI <br/>
+				Frame<input type="number" id="frame" style="width:50px" value="0" readonly/><br/>
 				FPS<input type="number" id="fps" style="width:50px" value="15" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
 				<div>Debug stuff<br/>
 					<input type="checkbox" id="debugShowLife" onchange="Debug.setShowLife(document.getElementById('debugShowLife').checked);" /> Show life <br/>
@@ -64,6 +62,7 @@
 		<script src="./js/external/flotr2/flotr2.min.js"></script>
 		<script src="./js/external/ace_min_noconflict/ace.js"></script>
 		<script src="./js/external/ace_min_noconflict/ext-language_tools.js"></script>
+		<script src="./js/external/setImmediate/setImmediate.js"></script>
 
 		<script src="./js/settingsGlobal.js"></script>
 		<script src="./js/settingsSimulation.js"></script>

@@ -15,8 +15,7 @@ window.requestAnimationFrame = function() {
 }();
 
 SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);
-SettingsGlobal.setAutoIterateFrames(document.getElementById('autoFrame').checked);
-SettingsGlobal.setShowUI(document.getElementById('showUI').checked);
+setNoUI();
 
 Debug.setShowLife(document.getElementById('debugShowLife').checked);
 Debug.setVisibility(document.getElementById('debugVisibility').checked);
@@ -82,20 +81,39 @@ function switchAntType(){
 function showGraph(){
 	document.getElementById('terrarium').style.display = 'none';
 	document.getElementById('graphs').style.display = 'block';
+	document.getElementById('customAntContainer').style.display = 'none';
+	document.getElementById('NoUI').style.display = 'none';
 }
 
 function showSimulation(){
 	document.getElementById('terrarium').style.display = 'block';
 	document.getElementById('graphs').style.display = 'none';
 	document.getElementById('customAntContainer').style.display = 'none';
+	document.getElementById('NoUI').style.display = 'none';
 }
 
 function showEditor(){
 	document.getElementById('graphs').style.display = 'none';
 	document.getElementById('terrarium').style.display = 'none';
 	document.getElementById('customAntContainer').style.display = 'block';
+	document.getElementById('NoUI').style.display = 'none';
 }
 
+function showNoUI(){
+	document.getElementById('graphs').style.display = 'none';
+	document.getElementById('terrarium').style.display = 'none';
+	document.getElementById('customAntContainer').style.display = 'none';
+	document.getElementById('NoUI').style.display = 'block';
+}
+
+function setNoUI(){
+	var show = document.getElementById('showUI').checked;
+	SettingsGlobal.setShowUI(show);
+	if (show)
+		showSimulation();
+	else
+		showNoUI();
+}
 
 function reset(){
 	if (mode == Mode.TEASER)
@@ -105,7 +123,6 @@ function reset(){
 	else
 		sim = new Simulation();
 
-	SettingsGlobal.setAutoIterateFrames(true);
 	sim.clear();
 	sim.draw();
 	sim.loop();
@@ -133,10 +150,10 @@ function setupTutorialPart(part){
 }
 
 function startTutorialPart(part){
+	document.getElementById('showUI').checked = true;
 	showSimulation();
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
-	SettingsGlobal.setAutoIterateFrames(true);
 	Math.seedrandom(document.getElementById('seed').value);
 	sim = new Tutorial(part);
 	sim.init();
@@ -147,10 +164,8 @@ function startTutorialPart(part){
 
 function startSimulation(){
 	document.getElementById('tutorial').style.display = 'none';
-	showSimulation();
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
-	SettingsGlobal.setAutoIterateFrames(true);
 	Math.seedrandom(document.getElementById('seed').value);
 	mode = Mode.TEASER;
 	sim = new Simulation();
@@ -158,4 +173,13 @@ function startSimulation(){
 	sim.clear();
 	sim.draw();
 	sim.loop();
+}
+
+function simulationClicked(){
+	setNoUI();
+	startSimulation();
+}
+
+function tutorialClicked(){
+	setupTutorialPart(0);
 }

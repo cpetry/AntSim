@@ -90,11 +90,14 @@ class Collider {
 	{
 		var colSize = colObj.getSize();
 		var colPosition = colObj.getPosition();
-		if (colObj.getShapeType() == ShapeType.RECTANGLE && this.getShapeType() == ShapeType.RECTANGLE){
+		var colShape = colObj.getShapeType();
+		var thisShape = this.getShapeType();
+		var thisSize = this.getSize();
+		if (colShape == ShapeType.RECTANGLE && thisShape == ShapeType.RECTANGLE){
 			try{
 				if (!('w' in colSize)        || !('h' in colSize))        throw "rectangle size has to have two sizes!";
-				if (!('w' in this.getSize()) || !('h' in this.getSize())) throw "rectangle size has to have two sizes!";
-				var polyA = Collider.convertRectToPoly(pos, this.getSize(), this.getRotation());
+				if (!('w' in thisSize) || !('h' in thisSize)) throw "rectangle size has to have two sizes!";
+				var polyA = Collider.convertRectToPoly(pos, thisSize, this.getRotation());
 				var polyB = Collider.convertRectToPoly(colPosition, colSize, colObj.getRotation());
 				return Collider.checkPolygonCollition(polyA, polyB);
 				
@@ -102,13 +105,13 @@ class Collider {
 				console.log(err);
 			}	
 		}
-		else if (colObj.getShapeType() == ShapeType.RECTANGLE && this.getShapeType() == ShapeType.CIRCLE){
+		else if (colShape == ShapeType.RECTANGLE && thisShape == ShapeType.CIRCLE){
 			try{
 				if (!('w' in colSize) || (!'h' in colSize)) throw "rectangle size has to have two sizes!";
-				if (pos.x + this.getSize() > colPosition.x - colSize.w/2
-				&&  pos.y + this.getSize() > colPosition.y - colSize.h/2
-				&&  pos.x - this.getSize() < colPosition.x + colSize.w/2
-				&&  pos.y - this.getSize() < colPosition.y + colSize.h/2){
+				if (pos.x + thisSize > colPosition.x - colSize.w/2
+				&&  pos.y + thisSize > colPosition.y - colSize.h/2
+				&&  pos.x - thisSize < colPosition.x + colSize.w/2
+				&&  pos.y - thisSize < colPosition.y + colSize.h/2){
 					return true;
 				}
 				else
@@ -117,13 +120,13 @@ class Collider {
 				console.log("Input is " + err);
 			}	
 		}
-		else if (colObj.getShapeType() == ShapeType.CIRCLE && this.getShapeType() == ShapeType.RECTANGLE){
+		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.RECTANGLE){
 			try{
-				if (!('x' in this.getSize()) || !('x' in this.getSize())) throw "rectangle size has to have two sizes!";
-				if (pos.x + this.getSize().w/2 > colPosition.x - colSize
-				&&  pos.y + this.getSize().h/2 > colPosition.y - colSize
-				&&  pos.x - this.getSize().w/2 < colPosition.x + colSize
-				&&  pos.y - this.getSize().h/2 < colPosition.y + colSize){
+				if (!('x' in thisSize) || !('x' in thisSize)) throw "rectangle size has to have two sizes!";
+				if (pos.x + thisSize.w/2 > colPosition.x - colSize
+				&&  pos.y + thisSize.h/2 > colPosition.y - colSize
+				&&  pos.x - thisSize.w/2 < colPosition.x + colSize
+				&&  pos.y - thisSize.h/2 < colPosition.y + colSize){
 					return true;
 				}
 				else
@@ -133,9 +136,9 @@ class Collider {
 			}	
 		}
 
-		else if (colObj.getShapeType() == ShapeType.CIRCLE && this.getShapeType() == ShapeType.CIRCLE){
+		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.CIRCLE){
 			var distance = getDistance(pos,colPosition);
-			if (distance < this.getSize() + colSize)
+			if (distance < thisSize + colSize)
 				return true;
 			else
 				return false;
@@ -246,10 +249,10 @@ class Collider {
 			var pos = this.getPosition();
 			this._context.beginPath();
 			if (this.getShapeType() == ShapeType.CIRCLE){
-				this._context.arc(pos.x, pos.y, this.getSize(), 0, 2 * Math.PI, false);
+				this._context.arc(pos.x, pos.y, thisSize, 0, 2 * Math.PI, false);
 			}
 			else if (this.getShapeType() == ShapeType.RECTANGLE){
-				var size = this.getSize().valueOf();
+				var size = thisSize.valueOf();
 				this._context.rect(pos.x-size.w/2, pos.y-size.h/2, size.w, size.h)
 			}
 			this._context.fillStyle = '#eeaaaa';

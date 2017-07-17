@@ -32,6 +32,11 @@ div#customAntContainer{
 	margin: 10px;
 	height:90%;
 }
+div#NoUI{
+	text-align: center;
+	vertical-align: middle;
+	line-height: 350px;       /* the same as your div height*/
+}
 pre#editor {
 	height:95%;
 }

@@ -148,25 +148,20 @@ class Simulation {
 				document.getElementById('frame').value = this.iteration;
 			}
 
-			if (SettingsGlobal.getAutoIterateFrames())
-				requestID = requestAnimationFrame(this.loop.bind(this));
+			requestID = requestAnimationFrame(this.loop.bind(this));
 
 		}
 		else {
 			this.simulate();
 			for (var i = 0; i < this.hives.length; ++i)
 				this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
-			window.setZeroTimeout(this.loop.bind(this));
 			
 			this.iteration++;
 			if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
 				document.getElementById('frame').value = this.iteration;
 			
+			window.setImmediate(this.loop.bind(this));
 		}
-
-		this.iteration++;
-		if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
-			document.getElementById('frame').value = this.iteration;
 	}
 
 	draw()
