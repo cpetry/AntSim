@@ -1,17 +1,14 @@
 class Simulation {
 	constructor(){
-
 		this.canvas = document.getElementById("terrarium");
 
 		this.now;
 		this.delta;
 		this.then = Date.now();
-
 		this.iteration = 0;
-
-		this.numHives;
+		
+		Collider.idCounter = null; 		// reset id counter
 		this.hives = [];
-
 		this.food = [];
 		this.collisionObjects = [];
 		this.environmentObjs = [];
