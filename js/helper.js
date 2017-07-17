@@ -11,32 +11,26 @@ function radToDeg(radians){
 	return radians * 180 / Math.PI;
 }
 
-function convertPointToMat(p){
-	return math.matrix([ p.x, p.y ]);
-}
-
-function convertMatToPoint(mat){
-	return { x: mat.valueOf()[0], y: mat.valueOf()[1] };
-}
-
 function getDistance(a, b){
 	var dx = (a.x-b.x);
 	var dy = (a.y-b.y);
 	return Math.sqrt(dx*dx+dy*dy);
 }
 
+// reference to math behind this: http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/issues/index.htm
 function angleBetweenVectorsRad(fromVec, toVec){
-	var fromVecLength = getDistance(fromVec,{x:0,y:0});
-	fromVec.x /= fromVecLength;
-	fromVec.y /= fromVecLength;
-	var toVecLength = getDistance(toVec,{x:0,y:0});
-	toVec.x /= toVecLength;
-	toVec.y /= toVecLength;
-	return Math.atan2(toVec.y,toVec.x) - Math.atan2(fromVec.y,fromVec.x);
+	var nFromVec = normalize(fromVec);
+	var nToVec = normalize(toVec);
+	var angle = Math.atan2(nToVec.y,nToVec.x) - Math.atan2(nFromVec.y,nFromVec.x);
+	if (angle >= Math.PI)
+		angle -= Math.PI*2;
+	else if (angle <= -Math.PI)
+		angle += Math.PI*2;
+	return angle;
 }
 
 function angleBetweenVectorsDeg(fromVec, toVec){
-	return radToDeg(angleBetweenVectorsRad());
+	return radToDeg(angleBetweenVectorsRad(fromVec,toVec));
 }
 
 function rotateVector(vec, radians)
@@ -46,8 +40,13 @@ function rotateVector(vec, radians)
     return { x: xNew, y: yNew };
 }
 
+function normalize(vec){
+	var length = getDistance({x:0,y:0}, vec);
+	var normalizedVec = {x: vec.x/length, y: vec.y/length};
+	return normalizedVec;
+}
 
-
+// setZeroTimeout
 (function() {
 	var timeouts = [];
 	var messageName = "zero-timeout-message";
