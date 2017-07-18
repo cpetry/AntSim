@@ -64,8 +64,8 @@ class Ant extends Collider {
 		else if (settings.getAntType() == AntType.CUSTOM)
 			this.controller = new AntControllerCustom(this);
 
-		this.visibleObjs = [];
-		this.smelledObjs = [];
+		this.visibleObjs = {};
+		this.smelledObjs = {};
 	}
 	
 	iterate(){
@@ -134,16 +134,17 @@ class Ant extends Collider {
 	}
 
 	setVisibleObjects(objects){
-		this.visibleObjs.length = 0;
-		for (var i=0; i<objects.length; i++){
+		this.visibleObjs = {}
+		
+		for (var i=0, l=objects.length; i<l; i++){
 			if (this == objects[i])
 				continue;
-
-			var distToObj = this.getDistanceToObject(objects[i]);
+			var objPos = objects[i].getPosition();
+			var distToObj = getDistance(objPos, this.getPosition());
 			// check distance
 			if (distToObj < this.getVisibilityDistance()){
 				// TODO some error in calculating radians
-				var fromObjToDirRad = this.getAngleToPos(objects[i].getPosition());
+				var fromObjToDirRad = this.getAngleToPos(objPos);
 				// check inside cone
 				if (Math.abs(fromObjToDirRad) < this.getVisibilityRangeRad()){
 					//console.log("seeing sth!")
@@ -159,18 +160,18 @@ class Ant extends Collider {
 						type = ObjectType.ANT;
 						parentID = objects[i].getParentID();
 					}
-					this.visibleObjs.push(new VisibleObjectProxy(this.getCanvas(), parentID, objects[i].getID(), distToObj, fromObjToDirRad, objects[i].getSize(), type));
+					this.visibleObjs[objects[i].getID()] = new VisibleObjectProxy(this.getCanvas(), parentID, objects[i].getID(), distToObj, fromObjToDirRad, objects[i].getSize(), type);
 				}
 			}
 		}
 	}
 	
 	setSmelledObjects(objects){
-		this.smelledObjs.length = 0;
-		for (var i=0; i<objects.length; i++){
+		this.smelledObjs = {}
+		
+		for (var i=0, l=objects.length; i<l; i++){
 			if (this == objects[i]  // is not the ant itself
-			|| !(objects[i].canBeSmelledBy) // can this object be smelled? !! No parameter!
-			|| this.visibleObjs.indexOf(objects[i]) > -1) // is not already visible
+			|| !(objects[i].canBeSmelledBy)) // can this object be smelled? !! No parameter!
 				continue;
 
 			if (objects[i].canBeSmelledBy(this)){
@@ -189,7 +190,7 @@ class Ant extends Collider {
 					parentID = objects[i].getParentID();
 					type = ObjectType.ANT;
 				}
-				this.smelledObjs.push(new SmellableObjectProxy(this.getCanvas(), parentID, distance, rotation, type));
+				this.smelledObjs[objects[i].getID()] = new SmellableObjectProxy(this.getCanvas(), parentID, distance, rotation, type);
 			}
 		}
 	}

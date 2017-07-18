@@ -6,8 +6,8 @@ class AntController {
 		this.life = 0;
 		this.food = 0;
 		this.foodMax = 0;
-		this.visibleObjs = [];
-		this.smelledObjs = [];
+		this.visibleObjs = {};
+		this.smelledObjs = {};
 		this.memory = { };
 		
 		this.setAttributes(ant);

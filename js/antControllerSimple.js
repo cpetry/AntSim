@@ -13,16 +13,16 @@ class AntControllerSimple extends AntController{
 
 		// Check to kill some ants
 		if (enoughFoodForKilling) {
-			for(var i=0; i < this.visibleObjs.length; i++) {
-				if(this.visibleObjs[i].getType() == ObjectType.ANT) {
-					var nearAnt = this.visibleObjs[i];
-					if (nearAnt.getParentID() != this.getParentID()) {
+			for (var id in this.visibleObjs){
+				if(this.visibleObjs[id].getType() == ObjectType.ANT) {
+					if (this.visibleObjs[id].getParentID() != this.getParentID()) {
+						var prey = this.visibleObjs[id];
 						if (this.getLife() > 50) {
-							if (nearAnt.canBeInteractedWith()) {
-								return [ActionType.ATTACK, this.visibleObjs[i]]
+							if (prey.canBeInteractedWith()) {
+								return [ActionType.ATTACK, prey]
 							}
 							else {
-								var fromObjToDirRad = nearAnt.getRotationToObj();
+								var fromObjToDirRad = prey.getRotationToObj();
 								return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 							}
 						}
@@ -36,9 +36,10 @@ class AntControllerSimple extends AntController{
 			this.memory.harvestedFood = false;
 				
 			// Check if ant can see food
-			for(var i=0; i<this.visibleObjs.length; i++){
-				if (this.visibleObjs[i].getType() == ObjectType.FOOD){
-					nearestFood = this.visibleObjs[i];
+			//console.log(this.visibleObjs)
+			for (var id in this.visibleObjs){
+				if (this.visibleObjs[id].getType() == ObjectType.FOOD){
+					nearestFood = this.visibleObjs[id];
 				}
 			}
 
@@ -63,9 +64,9 @@ class AntControllerSimple extends AntController{
 			}
 			else {
 				// try to smell food and walk towards position
-				for (var i=0; i<this.smelledObjs.length; i++){
-					if (this.smelledObjs[i].getType() == ObjectType.FOOD){
-						nearestFood = this.smelledObjs[i];
+				for (var id in this.smelledObjs){
+					if (this.smelledObjs[id].getType() == ObjectType.FOOD){
+						nearestFood = this.smelledObjs[id];
 					}
 				}
 				if (nearestFood != false){
@@ -83,10 +84,10 @@ class AntControllerSimple extends AntController{
 		else{
 
 			// Check what can the ant see
-			for(var i=0; i<this.visibleObjs.length; i++){
-				if(this.visibleObjs[i].getType() == ObjectType.HIVE
-				&& this.visibleObjs[i].getParentID() == this.getParentID()){
-						hive = this.visibleObjs[i];
+			for (var id in this.visibleObjs){
+				if(this.visibleObjs[id].getType() == ObjectType.HIVE
+				&& this.visibleObjs[id].getParentID() == this.getParentID()){
+						hive = this.visibleObjs[id];
 				}
 			}
 
@@ -105,10 +106,10 @@ class AntControllerSimple extends AntController{
 			}
 			else {
 				// try to smell hive and walk towards position
-				for (var i=0; i<this.smelledObjs.length; i++){
-					if (this.smelledObjs[i].getType() == ObjectType.HIVE
-					&& this.smelledObjs[i].getParentID() == this.getParentID()){
-						hive = this.smelledObjs[i];
+				for (var id in this.smelledObjs){
+					if (this.smelledObjs[id].getType() == ObjectType.HIVE
+					&& this.smelledObjs[id].getParentID() == this.getParentID()){
+						hive = this.smelledObjs[id];
 					}
 				}
 				if (hive != false){
