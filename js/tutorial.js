@@ -95,9 +95,7 @@ class Tutorial extends Simulation {
 			this.clear();
 			this.draw();
 		}
-		if (SettingsGlobal.getAutoIterateFrames()){
-			requestID = requestAnimationFrame( this.loop.bind(this) );
-		}		
+		requestID = requestAnimationFrame( this.loop.bind(this) );		
 	}
 	
 	draw(){

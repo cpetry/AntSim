@@ -23,6 +23,7 @@ const _foodStorageAnt = Symbol('foodStorageAnt');
 const _foodMaxAnt = Symbol('foodMaxAnt');
 const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
 const _parentID = Symbol('parentID');
+const _collidedWithSth = Symbol('collidedWithSth');
 
 const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
@@ -58,6 +59,7 @@ class Ant extends SmellableObject {
 		this[_life] = 100;
 		this[_foodStorageAnt] = 0;
 		this[_parentID] = parentID;
+		this[_collidedWithSth] = null;
 		
 		if (settings.getAntType() == AntType.SIMPLE)
 			this.controller = new AntControllerSimple(this);
@@ -84,6 +86,8 @@ class Ant extends SmellableObject {
 	getFoodStorage() { return this[_foodStorageAnt]; }
 	getMaxFoodStorage() { return this[_foodMaxAnt]; }
 	getMaxHarvestAmount() { return this[_foodMaxHarvestAmount]; }
+	
+	hasCollidedWith(){ return this[_collidedWithSth];}
 
 	age(){
 		var bonus = 0;
@@ -118,7 +122,8 @@ class Ant extends SmellableObject {
 			newPos.y -= newHeading.y * this.getSpeed();
 		}
 		
-		this.setPosition(newPos, colObjs);
+		var collider = this.setPosition(newPos, colObjs);
+		this[_collidedWithSth] = collider;
 	}
 	
 	setNewHeading(newHeading){

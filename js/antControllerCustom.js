@@ -15,7 +15,8 @@ class AntControllerCustom extends AntController{
 			catch (runtimeError) {
 				console.error("legal code; unforeseen result: ", runtimeError);
 				console.info(runtimeError.name ,"-", runtimeError.message);
-				SettingsGlobal.setAutoIterateFrames(false);
+				window.cancelAnimationFrame(requestID);
+				requestID = undefined;
 			}
 			//console.log(result);
 			if (newResult == null) {throw "no result value given!"; }
@@ -27,7 +28,8 @@ class AntControllerCustom extends AntController{
 		catch (syntaxError) {
 			console.error("illegal code; syntax errors: ", syntaxError);
 			console.info(syntaxError.name ,"-", syntaxError.message);
-			SettingsGlobal.setAutoIterateFrames(false);
+			window.cancelAnimationFrame(requestID);
+			requestID = undefined;
 		}
 		return result;
 	}

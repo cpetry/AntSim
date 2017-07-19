@@ -59,6 +59,7 @@ customAntEditor.setOptions({
     enableBasicAutocompletion: true,
 });
 customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
+customAntEditor.setValue("return [Action.WALK, Direction.FORWARD, rand(-0.5,0.5)];");
 
 var userAntFunction;
 var userHiveFunction;

@@ -15,7 +15,7 @@ class Collider {
 		this[_size] = size;
 		this[_rotation] = rotation;
 		var tests = 0;
-		while(this.checkCollision(position, colObjs) && tests < 100){
+		while(this.checkCollision(position, colObjs) != null && tests < 100){
 			position = { x: position.x + rand(-20,20), y: position.y + rand(-20,20) };
 			tests +=1;
 		}
@@ -58,32 +58,34 @@ class Collider {
 			console.log("This is cheating! Please only use heading and direction!");
 		}
 		
-		var collidesWithSth = this.checkCollision(newPos, colObjs);
-		if (collidesWithSth == false){
+		var collider = this.checkCollision(newPos, colObjs);
+		if (collider == null){
 			this[_position] = newPos;
+			return null;
 		}
 		else {
+			return collider;
 			// object is not allowed to walk into stuff! :C
 		}
 	}
 	
 	checkCollision(newPos, colObjs)
 	{
-		var collision = false;
 		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, w: this.getCanvas().width-15, h: this.getCanvas().height-15 };
 		var canvasArea = new Shape(canvasRect, ShapeType.RECTANGLE, 0);
-		collision = !this.inside(canvasArea, newPos);
-		if (collision)
-			return true;
+		var collider = this.collidesWith(canvasArea, newPos);
+		if (collider == null)
+			return { getID(){ return -2;} };
 		//console.log(newPos);
 		for (var i=0; i < colObjs.length; i++)
 		{
-			if (this != colObjs[i]
-			&& this.collidesWith(colObjs[i], newPos)){
-				return true;
+			if (this != colObjs[i]){
+				collider = this.collidesWith(colObjs[i], newPos);
+				if (collider != null)
+					return collider;
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	collidesWith(colObj, pos = this.getPosition())
@@ -99,7 +101,10 @@ class Collider {
 				if (!('w' in thisSize) || !('h' in thisSize)) throw "rectangle size has to have two sizes!";
 				var polyA = Collider.convertRectToPoly(pos, thisSize, this.getRotation());
 				var polyB = Collider.convertRectToPoly(colPosition, colSize, colObj.getRotation());
-				return Collider.checkPolygonCollition(polyA, polyB);
+				if (Collider.checkPolygonCollition(polyA, polyB))
+					return colObj;
+				else
+					return null;
 				
 			}catch(err) {
 				console.log(err);
@@ -112,10 +117,10 @@ class Collider {
 				&&  pos.y + thisSize > colPosition.y - colSize.h/2
 				&&  pos.x - thisSize < colPosition.x + colSize.w/2
 				&&  pos.y - thisSize < colPosition.y + colSize.h/2){
-					return true;
+					return colObj;
 				}
 				else
-					return false;
+					return null;
 			}catch(err) {
 				console.log("Input is " + err);
 			}	
@@ -127,10 +132,10 @@ class Collider {
 				&&  pos.y + thisSize.h/2 > colPosition.y - colSize
 				&&  pos.x - thisSize.w/2 < colPosition.x + colSize
 				&&  pos.y - thisSize.h/2 < colPosition.y + colSize){
-					return true;
+					return colObj;
 				}
 				else
-					return false;
+					return null;
 			}catch(err) {
 				console.log(err);
 			}	
@@ -139,18 +144,14 @@ class Collider {
 		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.CIRCLE){
 			var distance = getDistance(pos,colPosition);
 			if (distance < thisSize + colSize)
-				return true;
+				return colObj;
 			else
-				return false;
+				return null;
 		}
 		else{
 			//console.log(colObj.getShapeType() + " " + this.getShapeType())
-			return false;
+			return null;
 		}
-	}
-	
-	inside(colObj, pos){
-		return this.collidesWith(colObj, pos);
 	}
 	
 	getDistanceToObject(obj){
@@ -249,10 +250,10 @@ class Collider {
 			var pos = this.getPosition();
 			this._context.beginPath();
 			if (this.getShapeType() == ShapeType.CIRCLE){
-				this._context.arc(pos.x, pos.y, thisSize, 0, 2 * Math.PI, false);
+				this._context.arc(pos.x, pos.y, this.getSize(), 0, 2 * Math.PI, false);
 			}
 			else if (this.getShapeType() == ShapeType.RECTANGLE){
-				var size = thisSize.valueOf();
+				var size = this.getSize();
 				this._context.rect(pos.x-size.w/2, pos.y-size.h/2, size.w, size.h)
 			}
 			this._context.fillStyle = '#eeaaaa';

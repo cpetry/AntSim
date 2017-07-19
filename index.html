@@ -31,7 +31,7 @@
 				<div align="center" id="graphs" style="display:none;"></div>
 				<canvas align="center" width="600" height="350" id="terrarium"></canvas>
 				<div id="customAntContainer" style="display:none;">
-					<pre id="editor">return [1,1,-0.1];</pre>
+					<pre id="editor"></pre>
 				</div>
 				<div id="NoUI" style="display:none;">...Simulating...</div>
 				<div id="cleared"></div>
@@ -43,7 +43,7 @@
 				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
 				<input type="checkbox" id="showUI"  onchange="setNoUI()" checked /> ShowUI <br/>
 				Frame<input type="number" id="frame" style="width:50px" value="0" readonly/><br/>
-				FPS<input type="number" id="fps" style="width:50px" value="15" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
+				FPS<input type="number" id="fps" style="width:50px" value="15" max="60" min="1" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
 				<div>Debug stuff<br/>
 					<input type="checkbox" id="debugShowLife" onchange="Debug.setShowLife(document.getElementById('debugShowLife').checked);" /> Show life <br/>
 					<input type="checkbox" id="debugVisibility" onchange="Debug.setVisibility(document.getElementById('debugVisibility').checked);" /> Show visibility <br/>

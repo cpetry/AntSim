@@ -6,6 +6,7 @@ class AntController {
 		this.life = 0;
 		this.food = 0;
 		this.foodMax = 0;
+		this.collidedWithID = -1;
 		this.visibleObjs = {};
 		this.smelledObjs = {};
 		this.memory = { };
@@ -34,6 +35,7 @@ class AntController {
 		this.foodMax = ant.getMaxFoodStorage();
 		this.visibleObjs = ant.visibleObjs;
 		this.smelledObjs = ant.smelledObjs;
+		this.collidedWithID = (ant.hasCollidedWith() != null ? ant.hasCollidedWith().getID() : -1);
 	}
 	
 	getParentID(){return this.parentID;}
@@ -42,6 +44,8 @@ class AntController {
 	getMaxFoodStorage(){return this.foodMax;}
 	getVisibleObjs(){return this.visibleObjs;}
 	getSmelledObjs(){return this.smelledObjs;}
+	
+	hasCollidedWithID() {return this.collidedWithID;}
 	
 	getAction(){
 		

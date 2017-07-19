@@ -48,11 +48,17 @@ class AntControllerSimple extends AntController{
 				// walk towards food
 				else if (canHarvestMore){
 					var fromObjToDirRad = nearestFood.getRotationToObj();
+					if (this.hasCollidedWithID() != -1){
+						return [ActionType.WALK, Direction.FORWARD, 1];
+					}
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
 			}
 			// search for food
 			else{
+				if (this.hasCollidedWithID() != -1){
+					return [ActionType.WALK, Direction.FORWARD, 1];
+				}
 				return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
 			}
 		}
@@ -71,10 +77,16 @@ class AntControllerSimple extends AntController{
 				// walk towards food
 				else {
 					var fromObjToDirRad = hive.getRotationToObj();
+					if (this.hasCollidedWithID() != -1){
+						return [ActionType.WALK, Direction.FORWARD, 1];
+					}
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
 			}
 			else{ 
+				if (this.hasCollidedWithID() != -1){
+					return [ActionType.WALK, Direction.FORWARD, 1];
+				}
 				return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
 			}
 			
