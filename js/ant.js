@@ -26,9 +26,9 @@ const _parentID = Symbol('parentID');
 
 const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
-class Ant extends Collider {
+class Ant extends SmellableObject {
 	constructor(canvas, position, rotation, settings, newGenes, collisionObjs, parentID){
-		super(canvas, position, ShapeType.CIRCLE, settings.getAntSize(), rotation, collisionObjs);
+		super(canvas, position, settings.getAntSize(), settings.getSizeSmellingFactor(), collisionObjs, rotation);
 		
 		// Genes / attributes
 		// Test if genes are chosen correctly and fair. Correct if not.
@@ -290,7 +290,7 @@ class Ant extends Collider {
 		}
 		if (Debug.getShowLife()){
 			this._context.beginPath();
-			this._context.rect(pos.x-10, pos.y+8, 20*this.getLife()/100, 5)
+			this._context.rect(pos.x-10, pos.y+8, 20*this.getLife()/100, 3)
 			this._context.lineWidth = 1;
 			this._context.fillStyle = 'red';
 			this._context.fill();

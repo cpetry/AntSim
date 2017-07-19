@@ -1,6 +1,6 @@
 class SmellableObject extends Collider {
-	constructor(canvas, position, size, sizeSmellingFactor, collisionObjs){
-		super(canvas, position, ShapeType.CIRCLE, size, 0, collisionObjs);
+	constructor(canvas, position, size, sizeSmellingFactor, collisionObjs, rotation = 0){
+		super(canvas, position, ShapeType.CIRCLE, size, rotation, collisionObjs);
 		this.sizeSmellingFactor = sizeSmellingFactor;
 	}
 
