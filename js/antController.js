@@ -14,12 +14,17 @@ class AntController {
 	}
 	
 	static getAutoCompletionWordList(){
-		return ["getParentID()",
+		return ["getFoodStorage()",
 				"getLife()", 
-				"getFoodStorage()", 
 				"getMaxFoodStorage()",
+				"getNearestEnemyAnt()",
+				"getNearestObjectType()",
+				"getObjectOfID()",
+				"getOwnHive()",
+				"getParentID()",
+				"getSmelledObjs()",
 				"getVisibleObjs()", 
-				"getSmelledObjs()"];
+				];
 	}
 	
 	setAttributes(ant){
