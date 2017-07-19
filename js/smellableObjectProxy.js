@@ -17,4 +17,7 @@ class SmellableObjectProxy {
 	getDistanceToObj(){ return this.distance; }
 	getRotationToObj() { return this.rotation; }
 	getType(){ return this.type; }
+	
+	// has to be visible to be interactive
+	canBeInteractedWith() { return false; }
 }

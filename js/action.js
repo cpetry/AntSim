@@ -34,7 +34,7 @@ class Action {
 	static harvest(harvester, harvestObjProxy, amount, colObjs){
 		
 		// first get real obj to proxy obj
-		var objID = harvestObjProxy.getRefID();
+		var objID = harvestObjProxy.getID();
 		var harvestObj;
 		for (var i=0; i< colObjs.length; i++)
 			if (colObjs[i].getID() == objID){
@@ -53,7 +53,7 @@ class Action {
 	}
 	
 	static transferFood(sender, receiverProxy, foodWantingToGiveAway, colObjs){
-		var objID = receiverProxy.getRefID();
+		var objID = receiverProxy.getID();
 		var receiver;
 		for (var i=0; i< colObjs.length; i++)
 			if (colObjs[i].getID() == objID){
@@ -72,7 +72,7 @@ class Action {
 
 	static attack(hunter, preyProxy, colObjs) {
 		// first get real obj to proxy obj
-		var objID = preyProxy.getRefID();
+		var objID = preyProxy.getID();
 		var prey;
 		for (var i=0; i< colObjs.length; i++)
 			if (colObjs[i].getID() == objID){

@@ -9,5 +9,5 @@ class VisibleObjectProxy extends SmellableObjectProxy{
 		return (this.distance - this.size < 10);
 	}
 	
-	getRefID(){ return this.refID; }
+	getID(){ return this.refID; }
 }
