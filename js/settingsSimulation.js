@@ -1,11 +1,8 @@
 class SettingsSimulation
 {
-	constructor(){
+	constructor(antType){
 		this.hiveSize = 14;
-		if (document.getElementById('AntType').value == 'Custom')
-			this.antType = AntType.CUSTOM;
-		else
-			this.antType = AntType.SIMPLE;
+		this.antType = antType;
 		if (document.getElementById('HiveType').value == 'Custom')
 			this.hiveType = HiveType.CUSTOM;
 		else
@@ -25,7 +22,7 @@ class SettingsSimulation
 		this.foodMaxHive = 100; // food till next ant
 		this.foodMaxAnt = 35;
 		this.foodMaxHarvestAmountAnt = 1;
-		this.sizeSmellingFactor = 8;
+		this.sizeSmellingFactor = 6;
 	}
 	// attribute related settings
 	getTerrariumWidth(){ return this.terrariumWidth; }

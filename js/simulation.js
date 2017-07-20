@@ -1,5 +1,5 @@
 class Simulation {
-	constructor(){
+	constructor(antType){
 		this.canvas = document.getElementById("terrarium");
 
 		this.now;
@@ -13,8 +13,13 @@ class Simulation {
 		this.collisionObjects = [];
 		this.environmentObjs = [];
 
-		this.settings = new SettingsSimulation();
+		this.settings = new SettingsSimulation(antType);
 		this.graph = new Graph();
+		
+		this.init();
+		this.clear();
+		this.draw();
+		this.loop();	
 	}
 
 	init(numHives=2) {
@@ -89,7 +94,6 @@ class Simulation {
 			var foodPos = { x: rand(0,this.canvas.width), y: rand(0,this.canvas.height) };
 			var newFood = new Food(this.canvas, foodPos, this.settings, this.collisionObjects);
 			this.food.push(newFood);
-			this.collisionObjects.push(newFood);
 		}
 	}
 

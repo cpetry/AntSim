@@ -17,12 +17,13 @@ class SmellableObject extends Collider {
 	
 	smellPositionFrom(ant)
 	{
-		if (!this.canBeSmelledBy(ant))
+		if (!this.canBeSmelledBy(ant)){
 			// should not be able to smell it.... did someone cheat here?!
 			return math.matrix([rand(-1000,1000), rand(-1000,1000)])
-			
+		}
+		
 		var distance = getDistance(this.getPosition(), ant.getPosition());
-		var smallPosDist = Math.pow(distance/this.getSmellDistance(),3) * distance;
+		var smallPosDist = Math.pow(distance/(this.getSmellDistance()+ant.getSmellingDistance()),3) * distance;
 		var smellPos = { x: this.getPosition().x + rand(-smallPosDist,smallPosDist), 
 						 y: this.getPosition().y + rand(-smallPosDist,smallPosDist)};
 		return smellPos;

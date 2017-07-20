@@ -46,7 +46,7 @@ class Action {
 		if (harvestObj instanceof Food && harvester instanceof Ant){
 			var additionalFoodPossibleToCarry = harvester.getMaxFoodStorage() - harvester.getFoodStorage();
 			var foodPossibleToHarvest = Math.min(harvestObj.getAmount(), harvester.getMaxHarvestAmount());
-			var amountBeingHarvested = Math.min(Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest),Math.floor(amount));
+			var amountBeingHarvested = Math.min(Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest),amount);
 			harvestObj.harvest(amountBeingHarvested);
 			harvester.receiveFood(amountBeingHarvested);
 		}
@@ -64,7 +64,7 @@ class Action {
 		if (receiver instanceof Hive || receiver instanceof Ant){
 			var foodPossibleToGive = sender.getFoodStorage();
 			var foodPossibleToReceive = receiver.getFoodMaxStorage() - receiver.getFoodStorage();
-			var amountBeingTransferred = Math.min(Math.min(Math.floor(foodWantingToGiveAway), foodPossibleToGive), foodPossibleToReceive);
+			var amountBeingTransferred = Math.min(Math.min(foodWantingToGiveAway, foodPossibleToGive), foodPossibleToReceive);
 			receiver.receiveFood(amountBeingTransferred);
 			sender.giveAwayFood(amountBeingTransferred);
 		}

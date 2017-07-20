@@ -71,7 +71,7 @@ class Hive extends SmellableObject {
 
 	removeAnt(ant, index){
 		for (var a =0; a < this.collisionObjs.length; a++){
-			if (this.collisionObjs[a] == ant[index])
+			if (this.collisionObjs[a] == this.ants[index])
 				this.collisionObjs.splice(a, 1);
 		}
 		this.ants.splice(index, 1);

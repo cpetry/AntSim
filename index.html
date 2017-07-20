@@ -13,12 +13,11 @@
 		</div>
 		<div style="height:50px;"></div>
 		<div id="options">
-			<input type="button" value="Simulation" onclick="simulationClicked()">
+			<input type="button" value="About" onclick="Message.about()">
 			<input type="button" value="Tutorial" onclick="tutorialClicked()">
-			<input type="button" value="info" onclick="sim.showMessage()">
-			<input type="button" value="updateGraph" onclick="sim.updateGraph()">
+			<input type="button" value="Teaser" onclick="teaserClicked()">
+			<input type="button" value="Simulation" onclick="simulationClicked()">
 		</div>
-		<div style="height:10px;"></div>
 		<div id="tutorial">
 			<input type="radio" name="tutorialPart" value="0" onclick="setupTutorialPart(0)">
 			<input type="radio" name="tutorialPart" value="1" onclick="setupTutorialPart(1)">
@@ -27,7 +26,10 @@
 		</div>
 		<div id="all">
 			<div id="terrariumContainer">
-				<input type="button" value="Run" onclick="run()">
+				<div id="editorButtons">
+					<input type="button" value="Run" onclick="run()">
+					<input type="button" value="Editor" onclick="editorClicked()">
+				</div>
 				<div align="center" id="graphs" style="display:none;"></div>
 				<canvas align="center" width="600" height="350" id="terrarium"></canvas>
 				<div id="customAntContainer" style="display:none;">
@@ -41,7 +43,7 @@
 				HiveType<select id="HiveType" size="1" <!--onchange="switchAntType()"-->> <option selected>Default</option> <option>Custom</option> </select><br/>
 				
 				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
-				<input type="checkbox" id="showUI"  onchange="setNoUI()" checked /> ShowUI <br/>
+				<input type="checkbox" id="showUI"  onchange="setUI()" checked /> ShowUI <br/>
 				Frame<input type="number" id="frame" style="width:50px" value="0" readonly/><br/>
 				FPS<input type="number" id="fps" style="width:50px" value="15" max="60" min="1" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
 				<div>Debug stuff<br/>
@@ -52,9 +54,13 @@
 					<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
 				</div>
 			</div>
-			<div id="cleared"></div>			
+			<div id="cleared"></div>
+			<div id="floatingContainer">
+				<div id="message">
+					<!-- Content is created and selected dynamically by user interaction. See messages.js for details. -->
+				</div>
+			</div>
 		</div>
-		
 		
 		<script src="./js/external/jquery/jquery-3.2.1.min.js"></script>
 		<script src="./js/external/jquery.fancybox.min.js"></script>
@@ -72,6 +78,7 @@
 		<script src="./js/action.js"></script>
 		<script src="./js/debug.js"></script>
 		<script src="./js/helper.js"></script>
+		<script src="./js/message.js"></script>
 		<script src="./js/shape.js"></script>
 		<script src="./js/smellableObjectProxy.js"></script>
 		<script src="./js/visibleObjectProxy.js"></script>

@@ -7,7 +7,9 @@ class AntControllerSimple extends AntController{
 	getAction(){
 		//console.log(this);
 		var enoughFoodForKilling = (this.getFoodStorage() > this.getMaxFoodStorage() * 0.25)
-		var searchForFood = (this.getFoodStorage() < this.getMaxFoodStorage()*0.15);
+		var foodThresholdToSearch = this.getMaxFoodStorage()*0.15;
+		var searchForFood = (this.getFoodStorage() < foodThresholdToSearch);
+		var foodGivingToHive = Math.max(this.getFoodStorage() - this.getMaxFoodStorage()*0.14,0);
 		var nearestFood = false;
 		var hive = false;
 
@@ -35,10 +37,8 @@ class AntControllerSimple extends AntController{
 			
 			if (nearestFood != null ){
 				var canBeHarvested = nearestFood.canBeInteractedWith();
+				var isFull = (this.getFoodStorage() == this.getMaxFoodStorage());
 				var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
-
-				if (!canHarvestMore)
-					this.memory.harvestedFood = true;
 					
 				// harvest food if possible
 				if(canBeHarvested && canHarvestMore){
@@ -53,6 +53,9 @@ class AntControllerSimple extends AntController{
 					}
 					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
 				}
+				else
+					this.memory.harvestedFood = true;
+
 			}
 			// search for food
 			else{
@@ -71,10 +74,9 @@ class AntControllerSimple extends AntController{
 			if (hive != null){
 				// harvest food if possible
 				if(hive.canBeInteractedWith()){
-					this.memory.harvestedFood = false;
-					return [ActionType.GIVEFOOD, hive, this.getFoodStorage()*0.85];
+					return [ActionType.GIVEFOOD, hive, foodGivingToHive];
 				}
-				// walk towards food
+				// walk towards hive
 				else {
 					var fromObjToDirRad = hive.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
