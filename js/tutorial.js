@@ -1,6 +1,6 @@
 class Tutorial extends Simulation {
 	constructor(part=0){
-		super(AntType.SIMPLE);
+		super(AntType.CUSTOM);
 		// defines the part of the tutorial
 		this.part = part;
 		
