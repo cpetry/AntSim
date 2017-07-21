@@ -103,29 +103,5 @@ class Tutorial extends Simulation {
 	}
 	
 	showMessage(){
-		$.fancybox.open([`<div class="info" style="overflow:hidden;font-family:Georgia" align="left">		
-				<h1>Tutorial 1</h1>
-				<p>
-					Goal of this first tutorial is to understand handling ants.
-					
-					Ants can do each iteration exactly one of the following things:
-					- Walk
-					- Harvest
-					- Give food (to another ant or the queen)
-					
-					So lets learn about that one at a time...
-				</p>`, 
-				`<div style="overflow:hidden;font-family:Georgia" align="left">		
-				<h1>Tutorial 1</h1>
-				<p>
-					Goal of this first tutorial is to understand handling ants.
-					
-					Ants can do each iteration exactly one of the following things:
-					- Walk
-					- Harvest
-					- Give food (to another ant or the queen)
-					
-					So lets learn about that one at a time...
-				</p>`]);
 	}
 }

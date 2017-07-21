@@ -169,6 +169,7 @@ function tutorialClicked(){
 	selectedTutorialPart = 0;
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
+	Message.tutorial0();
 	showEditor();
 }
 

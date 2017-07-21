@@ -75,6 +75,18 @@ div#message {
 	margin: 20px;
 	height: 100%;
 }
+div#message_bottom {
+	margin:10px;
+	width:100%;
+}
+div#message_content {
+	width:100%;
+	height:70%;
+	margin:auto;
+}
+h2#message_header {
+	margin-top:0;
+}
 p {
 	text-align: left;
 }
