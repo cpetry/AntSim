@@ -55,8 +55,17 @@ class Simulation {
 	simulate(){
 
 		// Iterate through all hives
-		for (var i = 0; i < this.hives.length; ++i)
+		for (var i = 0; i < this.hives.length; ++i){
 			this.hives[i].iterate();
+			
+			for (var a = 0; a < this.hives[i].getAnts().length; a++) {
+				if (this.hives[i].getAnts()[a].getLife() <= 0){
+					var pos = this.hives[i].getAnts()[a].getPosition();
+					this.hives[i].removeAnt(this.hives[i].getAnts()[a], a);
+					this.food.push(new AntDead(this.canvas, pos, this.settings, this.collisionObjects));
+				}
+			}
+		}
 
 		// Update food (and in case create new one)
 		this.foodDecay();
@@ -71,7 +80,7 @@ class Simulation {
 			this.food[i].decay();
 
 			// remove food if it is "empty"
-			if (this.food[i].isEmpty() && i > -1){
+			if (this.food[i].isEmpty()){
 				for (var a =0; a < this.collisionObjects.length; a++){
 					if (this.collisionObjects[a] == this.food[i])
 						this.collisionObjects.splice(a, 1);
@@ -92,7 +101,8 @@ class Simulation {
 		if (createFood && this.food.length < this.settings.getFoodMaxSiteNumber()){
 			// food is positioned all over the ground
 			var foodPos = { x: rand(0,this.canvas.width), y: rand(0,this.canvas.height) };
-			var newFood = new Food(this.canvas, foodPos, this.settings, this.collisionObjects);
+			var size = this.settings.getFoodAmount() * this.settings.getFoodSize();
+			var newFood = new Food(this.canvas, foodPos, size, this.settings, this.collisionObjects);
 			this.food.push(newFood);
 		}
 	}

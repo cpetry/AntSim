@@ -2,8 +2,7 @@ const _amount = Symbol('amount');
 const _foodSize = Symbol('foodSize');
 
 class Food extends SmellableObject {
-	constructor(canvas, position, settings, collisionObjs){
-		var size = settings.getFoodAmount() * settings.getFoodSize();
+	constructor(canvas, position, size, settings, collisionObjs){
 		super(canvas, position, size, settings.getSizeSmellingFactor(), collisionObjs);
 		this[_amount] = settings.getFoodAmount();
 		this[_foodSize] = settings.getFoodSize();

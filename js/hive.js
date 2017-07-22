@@ -49,9 +49,6 @@ class Hive extends SmellableObject {
 
 			// set decay
 			this.ants[i].age();
-			
-			if (this.ants[i].getLife() <= 0)
-				this.removeAnt(this.ants[i], i);
 		}
 	}
 	
