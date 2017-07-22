@@ -26,7 +26,7 @@ class Message {
 				</p>
 			</div>
 			<!-- insert cool image here -->
-			<img src="./images/overview.png" style="height:270px;float:right;margin:auto;" />
+			<img src="images/overview.png" style="height:270px;float:right;margin:auto;" />
 			
 		</div>`;
 		this.container.innerHTML = text + "<div id='message_bottom'>" + this.startTutorialButton() + this.closeButton() + "</div>";
@@ -39,12 +39,17 @@ class Message {
 				<p>Goal of this first tutorial is to understand programming ants.</p>
 					
 					Ants can do each iteration exactly one of the following things:<br/>
+				<div style="width:50%;float:left;margin:auto;">
 					<ul><li>Walk</li>
 					<li>Harvest</li>
 					<li>Give food (to another ant or the queen)</li>
 					<li>Use pheromones</li>
 					<li>Attack</li>
 					</ul>
+				</div>
+				<div style="width:40%;float:right;margin:auto;">
+					<
+				</div>
 				<p>	 
 					Key to survival is using these action commands the best way possible.<br/>
 					So lets learn about each of them step by step...
