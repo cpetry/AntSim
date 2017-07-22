@@ -8,9 +8,7 @@ var AntType = {
 	SIMPLE: 0,
 	CUSTOM: 1
 }
-const _strength = Symbol('strength');
-const _agility = Symbol('agility');
-const _sensitivity = Symbol('sensitivity');
+
 const _speed = Symbol('speed');
 const _life = Symbol('life');
 const _smellingDistance = Symbol('smellingDistance'); 
@@ -28,33 +26,19 @@ const _collidedWithSth = Symbol('collidedWithSth');
 const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
 class Ant extends SmellableObject {
-	constructor(canvas, position, rotation, settings, newGenes, collisionObjs, parentID){
+	constructor(canvas, position, rotation, settings, collisionObjs, parentID){
 		super(canvas, position, settings.getAntSize(), settings.getSizeSmellingFactor(), collisionObjs, rotation);
 		
-		// Genes / attributes
-		// Test if genes are chosen correctly and fair. Correct if not.
-		// If all are equally chosen -> Str = Agi = Sen = 1 !
-		var aThird = 1.0/3.0;
-		var total = newGenes[0] + newGenes[1] + newGenes[2];
-		var genes = [newGenes[0]/total/aThird, newGenes[1]/total/aThird, newGenes[2]/total/aThird]
-
-		this[_strength] = genes[0];    // [0.0 - 3.0]
-		this[_agility] = genes[1];     // [0.0 - 3.0]
-		this[_sensitivity] = genes[2]; // [0.0 - 3.0]
-		
 		// Abilities
-		// Strength type
-		this[_decayProb]     = settings.getAntDecayProb()     * (1/this[_strength]);
-		this[_foodBonusProb] = settings.getAntFoodBonusProb() * (1/this[_strength]); // less life loss when carrying food
-		this[_foodMaxAnt] = settings.getFoodMaxAnt() * this[_strength];
-		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt() * this[_strength];
-		// Agility type
-		this[_speed] = 2.5 * this[_agility];
-		this[_speedHeading] = 0.2 * this[_agility]; // radians
-		// Sensitivity type
-		this[_smellingDistance] = settings.getAntSmellingDistance() * this[_sensitivity];
-		this[_visibilityDistance] = settings.getAntVisibilityDistance() * this[_sensitivity];
-		this[_visibilityRangeRad] = settings.getAntVisibilityRange() * this[_sensitivity];
+		this[_decayProb]     = settings.getAntDecayProb();
+		this[_foodBonusProb] = settings.getAntFoodBonusProb(); // less life loss when carrying food
+		this[_foodMaxAnt] = settings.getFoodMaxAnt();
+		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt();
+		this[_speed] = 2.5;
+		this[_speedHeading] = 0.2;
+		this[_smellingDistance] = settings.getAntSmellingDistance();
+		this[_visibilityDistance] = settings.getAntVisibilityDistance();
+		this[_visibilityRangeRad] = settings.getAntVisibilityRange();
 
 		this[_life] = 100;
 		this[_foodStorageAnt] = 0;

@@ -43,7 +43,7 @@ class Simulation {
 			var hivePos = hiveConfigurations[numHives-1][i];
 
 			// Create hive
-			this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects)); // i = hiveNumber
+			this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.collisionObjects)); // i = hiveNumber
 		}
 		
 		// first hives need their ids, then ants can be created
