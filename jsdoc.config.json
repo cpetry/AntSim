@@ -1,0 +1,27 @@
+{
+    "plugins": [],
+    "recurseDepth": 10,
+    "source": {
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_",
+		"include": ["./js"],
+		"exclude": ["./js/external"]
+    },
+	"sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": false
+    },
+	"opts": {
+        "template": "templates/default",
+        "encoding": "utf8",
+		"destination": "./doc/",	
+	    "recurse": true
+        //"tutorials": "path/to/tutorials", // same as -u path/to/tutorials
+ }
+}
+

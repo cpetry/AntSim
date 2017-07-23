@@ -1,4 +1,32 @@
-const _position = Symbol('position');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: collider.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: collider.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const _position = Symbol('position');
 const _size = Symbol('size');
 const _shapeType = Symbol('shapeType');
 const _rotation = Symbol('rotation');
@@ -33,7 +61,7 @@ class Collider {
 		this[_size] = size;
 		this[_rotation] = rotation;
 		var tests = 0;
-		while(this.checkCollision(position, colObjs) != null && tests < 100){
+		while(this.checkCollision(position, colObjs) != null &amp;&amp; tests &lt; 100){
 			position = { x: position.x + rand(-20,20), y: position.y + rand(-20,20) };
 			tests +=1;
 		}
@@ -60,7 +88,7 @@ class Collider {
 	
 	canInteractWith(obj){
 		var distance = getDistance(obj.getPosition(),this.getPosition()) - obj.getSize() - this.getSize();
-		return (distance < 10);
+		return (distance &lt; 10);
 	}
 
 	setNewHeading(newHeading){
@@ -95,7 +123,7 @@ class Collider {
 		if (collider == null)
 			return { getID(){ return -2;} };
 		//console.log(newPos);
-		for (var i=0; i < colObjs.length; i++)
+		for (var i=0; i &lt; colObjs.length; i++)
 		{
 			if (this != colObjs[i]){
 				collider = this.collidesWith(colObjs[i], newPos);
@@ -113,7 +141,7 @@ class Collider {
 		var colShape = colObj.getShapeType();
 		var thisShape = this.getShapeType();
 		var thisSize = this.getSize();
-		if (colShape == ShapeType.RECTANGLE && thisShape == ShapeType.RECTANGLE){
+		if (colShape == ShapeType.RECTANGLE &amp;&amp; thisShape == ShapeType.RECTANGLE){
 			try{
 				if (!('w' in colSize)        || !('h' in colSize))        throw "rectangle size has to have two sizes!";
 				if (!('w' in thisSize) || !('h' in thisSize)) throw "rectangle size has to have two sizes!";
@@ -128,13 +156,13 @@ class Collider {
 				console.log(err);
 			}	
 		}
-		else if (colShape == ShapeType.RECTANGLE && thisShape == ShapeType.CIRCLE){
+		else if (colShape == ShapeType.RECTANGLE &amp;&amp; thisShape == ShapeType.CIRCLE){
 			try{
 				if (!('w' in colSize) || (!'h' in colSize)) throw "rectangle size has to have two sizes!";
 				if (pos.x + thisSize > colPosition.x - colSize.w/2
-				&&  pos.y + thisSize > colPosition.y - colSize.h/2
-				&&  pos.x - thisSize < colPosition.x + colSize.w/2
-				&&  pos.y - thisSize < colPosition.y + colSize.h/2){
+				&amp;&amp;  pos.y + thisSize > colPosition.y - colSize.h/2
+				&amp;&amp;  pos.x - thisSize &lt; colPosition.x + colSize.w/2
+				&amp;&amp;  pos.y - thisSize &lt; colPosition.y + colSize.h/2){
 					return colObj;
 				}
 				else
@@ -143,13 +171,13 @@ class Collider {
 				console.log("Input is " + err);
 			}	
 		}
-		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.RECTANGLE){
+		else if (colShape == ShapeType.CIRCLE &amp;&amp; thisShape == ShapeType.RECTANGLE){
 			try{
 				if (!('x' in thisSize) || !('x' in thisSize)) throw "rectangle size has to have two sizes!";
 				if (pos.x + thisSize.w/2 > colPosition.x - colSize
-				&&  pos.y + thisSize.h/2 > colPosition.y - colSize
-				&&  pos.x - thisSize.w/2 < colPosition.x + colSize
-				&&  pos.y - thisSize.h/2 < colPosition.y + colSize){
+				&amp;&amp;  pos.y + thisSize.h/2 > colPosition.y - colSize
+				&amp;&amp;  pos.x - thisSize.w/2 &lt; colPosition.x + colSize
+				&amp;&amp;  pos.y - thisSize.h/2 &lt; colPosition.y + colSize){
 					return colObj;
 				}
 				else
@@ -159,9 +187,9 @@ class Collider {
 			}	
 		}
 
-		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.CIRCLE){
+		else if (colShape == ShapeType.CIRCLE &amp;&amp; thisShape == ShapeType.CIRCLE){
 			var distance = getDistance(pos,colPosition);
-			if (distance < thisSize + colSize)
+			if (distance &lt; thisSize + colSize)
 				return colObj;
 			else
 				return null;
@@ -185,12 +213,12 @@ class Collider {
 		if (distX > (rect.w + circle.r)) { return false; }
 		if (distY > (rect.h + circle.r)) { return false; }
 
-		if (distX <= (rect.w)) { return true; } 
-		if (distY <= (rect.h)) { return true; }
+		if (distX &lt;= (rect.w)) { return true; } 
+		if (distY &lt;= (rect.h)) { return true; }
 
 		var dx=distX-rect.w;
 		var dy=distY-rect.h;
-		return (dx*dx+dy*dy<=(circle.r*circle.r));
+		return (dx*dx+dy*dy&lt;=(circle.r*circle.r));
 	}
 	
 	static convertRectToPoly(pos, size, rot){
@@ -201,7 +229,7 @@ class Collider {
 		p[1] = rotateVector({x:  size.w/2, y:-size.h/2}, rot);
 		p[2] = rotateVector({x:  size.w/2, y: size.h/2}, rot);
 		p[3] = rotateVector({x: -size.w/2, y: size.h/2}, rot);
-		for (var i=0; i<4;i++){
+		for (var i=0; i&lt;4;i++){
 			p[i].x += pos.x;
 			p[i].y += pos.y;
 		}
@@ -212,12 +240,12 @@ class Collider {
 		var polygons = [polyA, polyB];
 		var minA, maxA, projected, i, i1, j, minB, maxB;
 
-		for (i = 0; i < polygons.length; i++) {
+		for (i = 0; i &lt; polygons.length; i++) {
 
 			// for each polygon, look at each edge of the polygon, and determine if it separates
 			// the two shapes
 			var polygon = polygons[i];
-			for (i1 = 0; i1 < polygon.length; i1++) {
+			for (i1 = 0; i1 &lt; polygon.length; i1++) {
 
 				// grab 2 vertices to create an edge
 				var i2 = (i1 + 1) % polygon.length;
@@ -230,9 +258,9 @@ class Collider {
 				minA = maxA = undefined;
 				// for each vertex in the first shape, project it onto the line perpendicular to the edge
 				// and keep track of the min and max of these values
-				for (j = 0; j < polyA.length; j++) {
+				for (j = 0; j &lt; polyA.length; j++) {
 					projected = normal.x * polyA[j].x + normal.y * polyA[j].y;
-					if (minA == undefined || projected < minA) {
+					if (minA == undefined || projected &lt; minA) {
 						minA = projected;
 					}
 					if (maxA == undefined || projected > maxA) {
@@ -243,9 +271,9 @@ class Collider {
 				// for each vertex in the second shape, project it onto the line perpendicular to the edge
 				// and keep track of the min and max of these values
 				minB = maxB = undefined;
-				for (j = 0; j < polyB.length; j++) {
+				for (j = 0; j &lt; polyB.length; j++) {
 					projected = normal.x * polyB[j].x + normal.y * polyB[j].y;
-					if (minB == undefined || projected < minB) {
+					if (minB == undefined || projected &lt; minB) {
 						minB = projected;
 					}
 					if (maxB  == undefined || projected > maxB) {
@@ -255,7 +283,7 @@ class Collider {
 
 				// if there is no overlap between the projects, the edge we are looking at separates the two
 				// polygons, and we know there is no overlap
-				if (maxA < minB || maxB < minA) {
+				if (maxA &lt; minB || maxB &lt; minA) {
 					return false;
 				}
 			}
@@ -278,4 +306,26 @@ class Collider {
 			this._context.fill();
 		}
 	}
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Ant.html">Ant</a></li><li><a href="Collider.html">Collider</a></li><li><a href="SmellableObject.html">SmellableObject</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sun Jul 23 2017 18:06:53 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
