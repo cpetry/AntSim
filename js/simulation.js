@@ -6,7 +6,7 @@ class Simulation {
 		this.delta;
 		this.then = Date.now();
 		this.iteration = 0;
-		
+
 		Collider.idCounter = null; 		// reset id counter
 		this.hives = [];
 		this.food = [];
@@ -15,17 +15,19 @@ class Simulation {
 
 		this.settings = new SettingsSimulation(antType);
 		this.graph = new Graph();
-		
+
 		this.init();
 		this.clear();
 		this.draw();
-		this.loop();	
+		this.loop();
 	}
 
-	init(numHives=2) {
+	init(numHives=3) {
 		var hiveConfigurations = [
 						[{x: this.canvas.width / 2, y: this.canvas.height / 2}], // One hive
-						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}] // Two hives
+						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}], // Two hives
+						[{x: this.canvas.width * 1 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width * 2 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width / 2, y: this.canvas.height * 1 / 3}], // Three hives
+						[{x: this.canvas.width * 1 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 1 / 4, y: this.canvas.height * 1 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 1 / 4}]  // Four hives
 						// TODO ... to be continued, but actually there should be found a better way to do this.
 					];
 
@@ -45,7 +47,7 @@ class Simulation {
 			// Create hive
 			this.hives.push(new Hive(this.canvas, hivePos, this.settings, this.collisionObjects)); // i = hiveNumber
 		}
-		
+
 		// first hives need their ids, then ants can be created
 		for (var i = 0; i < this.hives.length; ++i) {
 			this.hives[i].initAnts();
@@ -147,7 +149,7 @@ class Simulation {
 				this.draw();
 				for (var i = 0; i < this.hives.length; ++i)
 					this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
-				
+
 				this.iteration++;
 				document.getElementById('frame').value = this.iteration;
 			}
@@ -159,11 +161,11 @@ class Simulation {
 			this.simulate();
 			for (var i = 0; i < this.hives.length; ++i)
 				this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
-			
+
 			this.iteration++;
 			if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
 				document.getElementById('frame').value = this.iteration;
-			
+
 			window.setImmediate(this.loop.bind(this));
 		}
 	}

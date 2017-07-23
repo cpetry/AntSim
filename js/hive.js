@@ -1,6 +1,7 @@
 var HiveType = {
 	DEFAULT : 0,
-	CUSTOM : 1
+	CUSTOM : 1,
+	NEURALNET : 2
 }
 
 const _foodStorageHive = Symbol('foodStorageHive');
@@ -20,13 +21,15 @@ class Hive extends SmellableObject {
 		this.collisionObjs = collisionObjs;
 		this.collisionObjs.push(this);
 		this.settings = settings;
-		
+
 		if (settings.getHiveType() == HiveType.DEFAULT)
+			this.controller = new HiveController();
+		else if (settings.getHiveType() == HiveType.NEURALNET)
 			this.controller = new HiveController();
 		else if (settings.getHiveType() == HiveType.CUSTOM)
 			this.controller = new HiveControllerCustom();
 	}
-	
+
 	initAnts(antStartNumber = this.settings.getAntStartNumber()){
 		// Ant creation
 		for (var i=0; i < antStartNumber; i++)
@@ -49,12 +52,12 @@ class Hive extends SmellableObject {
 
 			// set decay
 			this.ants[i].age();
-			
+
 			if (this.ants[i].getLife() <= 0)
 				this.removeAnt(this.ants[i], i);
 		}
 	}
-	
+
 	createAnt(){
 
 		var posDistace = this.settings.getAntPositionDistance();

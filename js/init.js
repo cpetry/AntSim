@@ -131,7 +131,12 @@ function startTeaser(){
 	document.getElementById('showUI').checked = true;
 	showSimulation();
 	Math.seedrandom();
-	new Simulation(AntType.SIMPLE);
+
+	var antType = document.getElementById("AntType").value;
+	if (antType == "Neural Net")
+		new Simulation(AntType.NEURALNET);
+	else
+		new Simulation(AntType.SIMPLE);
 }
 
 function startSimulation(){

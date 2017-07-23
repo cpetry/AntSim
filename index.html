@@ -39,9 +39,9 @@
 				<div id="cleared"></div>
 			</div>
 			<div id="settings">Settings<br/>
-				AntType<select id="AntType" size="1" onchange="switchAntType()"> <option selected>Simple</option> <option>Custom</option> </select><br/>
+				AntType<select id="AntType" size="1" onchange="switchAntType()"> <option selected>Simple</option> <option>Custom</option> <option>Neural Net</option></select><br/>
 				HiveType<select id="HiveType" size="1" <!--onchange="switchAntType()"-->> <option selected>Default</option> <option>Custom</option> </select><br/>
-				
+
 				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
 				<input type="checkbox" id="showUI"  onchange="setUI()" checked /> ShowUI <br/>
 				Frame<input type="number" id="frame" style="width:50px" value="0" readonly/><br/>
@@ -61,19 +61,22 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<script src="./js/external/jquery/jquery-3.2.1.min.js"></script>
+		<script src="./js/external/jquery/jquery.cookie.js"></script>
 		<script src="./js/external/jquery.fancybox.min.js"></script>
 		<script src="./js/external/seedrandom/seedrandom.js"></script>
 		<script src="./js/external/flotr2/flotr2.min.js"></script>
 		<script src="./js/external/ace_min_noconflict/ace.js"></script>
 		<script src="./js/external/ace_min_noconflict/ext-language_tools.js"></script>
 		<script src="./js/external/setImmediate/setImmediate.js"></script>
+		<script src="./js/external/synaptic/synaptic.js"></script>
+		<script src="./js/external/require/require.js"></script>
 
 		<script src="./js/settingsGlobal.js"></script>
 		<script src="./js/settingsSimulation.js"></script>
 		<script src="./js/graph.js"></script>
-		
+
 		<!-- undependant -->
 		<script src="./js/action.js"></script>
 		<script src="./js/debug.js"></script>
@@ -82,7 +85,7 @@
 		<script src="./js/shape.js"></script>
 		<script src="./js/smellableObjectProxy.js"></script>
 		<script src="./js/visibleObjectProxy.js"></script>
-		
+
 		<script src="./js/collider.js"></script>
 		<script src="./js/colliderBranch.js"></script>
 		<script src="./js/colliderStone.js"></script>
@@ -96,6 +99,7 @@
 		<script src="./js/antController.js"></script>
 		<script src="./js/antControllerSimple.js"></script>
 		<script src="./js/antControllerCustom.js"></script>
+		<script src="./js/antControllerNeuralNet.js"></script>
 
 		<script src="./js/simulation.js"></script>
 		<script src="./js/tutorial.js"></script>
