@@ -1,0 +1,30 @@
+{
+    "plugins": [],
+    "recurseDepth": 10,
+    "source": {
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_",
+		"include": ["./js/antController.js"]
+    },
+	"sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": false
+    },
+	"plugins": [
+        "plugins/markdown",
+        "plugins/summarize"
+    ],
+	"opts": {
+        "template": "templates/default",
+        "encoding": "utf8",
+		"destination": "./user-code_doc/",	
+	    "recurse": true
+        //"tutorials": "path/to/tutorials", // same as -u path/to/tutorials
+ }
+}
+
