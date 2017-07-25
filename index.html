@@ -53,7 +53,9 @@
 					<input type="checkbox" id="debugCollider" onchange="Debug.setShowCollider(document.getElementById('debugCollider').checked);" /> Show collider <br/>
 					<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
 					<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
-				    <input type="checkbox" id="debugSmelledObjectsPosition" onchange="Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);" /> Show smelled object distance <br/>
+					<input type="checkbox" id="debugSmelledObjectsPosition" onchange="Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);" /> Show smelled object distance <br/>
+					<input type="checkbox" id="debugTrainNeuralNet" onchange="Debug.setNeuralNetworkShouldTrain(document.getElementById('debugTrainNeuralNet').checked);" /> Train neural network <br/>
+					<input type="checkbox" id="debugNewNeuralNet" onchange="Debug.setNewNeuralNetwork();" /> New neural network <br/>
 				</div>
 			</div>
 			<div id="cleared"></div>
@@ -86,7 +88,7 @@
 		<script src="./js/shape.js"></script>
 		<script src="./js/smellableObjectProxy.js"></script>
 		<script src="./js/visibleObjectProxy.js"></script>
-		
+
 		<script src="./js/collider.js"></script>
 		<script src="./js/colliderBranch.js"></script>
 		<script src="./js/colliderStone.js"></script>

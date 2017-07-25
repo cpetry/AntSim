@@ -1,3 +1,23 @@
+/**
+ *
+ * Some comments beforehand:
+ *
+ * - this class is messy, don't expect it to look good for now.
+ *   I will fix that later on.
+ * - Not everything is perfect in here, but, however, it should
+ *   work so far.
+ * - If you have any improvements, recommendations or whatever,
+ *   feel free to add those here.
+ *
+ * Greetz,
+ *     Alex.
+ */
+
+/*
+ * TODO:
+ *  - Remove all that messy global stuff. This is horrible.
+ *  - Add real documentation!
+ */
 var jquery = require['js/external/jquery/jquery-3.2.1.min'];
 var synaptic = require(['js/external/synaptic/synaptic'], initNetwork);
 
@@ -8,20 +28,20 @@ var batchSize = 10;
 var minTrainSet = batchSize * 500;
 var trainSet = [];
 
-var shouldTrain = true;
+var shouldTrain = false;
 
 var newNetwork = false;
 
 var numInputs = 38;
 var numHidden = 20;
 var numOutputs = 6;
-//newNetwork = true;
-
-//$.cookie.json = true;
 
 var realChosen = [];
 var firstChoice = [];
 
+/*
+ * TODO: Global functions are bad also! Fix this later on.
+ */
 function setActivation(network, activation) {
 	for (var i = 0; i < network.layers.hidden.length; ++i)
 		for (var j = 0; j < network.layers.hidden[i].list.length; ++j)
@@ -47,7 +67,6 @@ function setXavier(network) {
 
 			// Check if we calculated layer variance already
 			if (layerVariance == 0) {
-				//var nOut = network.layers.hidden[i].list[j].connections.outputs.length;
 				layerVariance = 2. / (nIn);
 			}
 
@@ -63,7 +82,6 @@ function setXavier(network) {
 
 		// Check if we calculated layer variance already
 		if (layerVariance == 0) {
-			//var nOut = network.layers.hidden[i].list[j].connections.outputs.length;
 			layerVariance = 2. / (nIn);
 		}
 
@@ -75,6 +93,9 @@ function setXavier(network) {
 
 function initNetwork() {
 
+	if (localStorage.getItem("network")==null)
+		newNetwork = true;
+
 	if (newNetwork) {
 		createNetwork();
 		setActivation(network, synaptic.Neuron.squash.RELU);
@@ -82,7 +103,6 @@ function initNetwork() {
 		newNetwork = false;
 	} else
 		network = synaptic.Network.fromJSON(JSON.parse(localStorage.getItem("network")));
-		//network = $.cookie('network');
 
 	trainer = new synaptic.Trainer(network);
 
@@ -90,6 +110,9 @@ function initNetwork() {
 
 }
 
+/*
+ * TODO: These functions belong to the utility class.
+ */
 function argmax(tlist) {
 	max = -9e8;
 	maxarg = -1;
@@ -111,6 +134,15 @@ function maxElement(tlist) {
 	return max;
 }
 
+/**
+ * AntControllerNeuralNet class
+ *
+ * Implements a TD-Neural-Q-Learning algorithm for AntSim.
+ * This implementation is neither perfect nor meant to look
+ * good in any way. Feel free to improve, describe, clarify,
+ * add, remove or completely rewrite. This class is mainly
+ * meant as an example and case study.
+ */
 class AntControllerNeuralNet extends AntController{
 	constructor(ant){
 		super(ant);
@@ -197,8 +229,6 @@ class AntControllerNeuralNet extends AntController{
 
 		if (shouldSave) {
 			console.log("Saving network...");
-			//$.cookie('network', network.toJSON(), { expires: 365, path: '/' });
-			//localStorage.setItem("network", network.toJSON());
 			localStorage.setItem("network", JSON.stringify(network.toJSON()));
 			console.log("Saved network!");
 		}
@@ -226,7 +256,6 @@ class AntControllerNeuralNet extends AntController{
 		 */
 
 		// Sort actions by value
-		// TODO check correctness
 		var actionList = [0,1,2,3,4,5];
 		actionList.sort(function(a,b){return networkOutput[b] - networkOutput[a];});
 
