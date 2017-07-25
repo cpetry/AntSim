@@ -41,14 +41,14 @@ class SmellableObject extends Collider {
 		}
 		
 		var distance = getDistance(this.getPosition(), ant.getPosition());
-		// [0, 1] <-> [1/4 smellingDistance, smellingDistance+smellDistance] 
+		// [0, 1] <-> [0, smellingDistance+smellDistance] 
 		var farthest = ant.getSmellingDistance() + this.getSmellDistance();
-		var nearest  = ant.getSmellingDistance()/4;
+		var nearest  = 0;
 		// [0,1]
 		var smellPos = {x: this.getPosition().x, y:this.getPosition().y }; // clone position
 		if (distance > nearest){
 			var percentage = distance / (farthest-nearest);
-			var smellPosDist = percentage * this.getSmellDistance(); // distance from actual position
+			var smellPosDist = percentage * percentage * this.getSmellDistance(); // distance from actual position
 			var addVec = rotateVector({x: smellPosDist, y:0}, rand(0, Math.PI*2));
 			var smellPos = { x: this.getPosition().x + addVec.x, 
 						     y: this.getPosition().y + addVec.y };
