@@ -15,7 +15,7 @@ class Simulation {
 
 		this.settings = new SettingsSimulation(antType);
 		this.graph = new Graph();
-		
+
 		// simulation constructor is called directly
 		if (new.target === Simulation) {
 			this.init();
@@ -29,6 +29,8 @@ class Simulation {
 		var hiveConfigurations = [
 						[{x: this.canvas.width / 2, y: this.canvas.height / 2}], // One hive
 						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}], // Two hives
+						[{x: this.canvas.width * 1 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width * 2 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width / 2, y: this.canvas.height * 1 / 3}], // Three hives
+						[{x: this.canvas.width * 1 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 1 / 4, y: this.canvas.height * 1 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 1 / 4}]  // Four hives
 						// TODO ... to be continued, but actually there should be found a better way to do this.
 					];
 
@@ -60,7 +62,7 @@ class Simulation {
 		// Iterate through all hives
 		for (var i = 0; i < this.hives.length; ++i){
 			this.hives[i].iterate();
-			
+
 			for (var a = 0; a < this.hives[i].getAnts().length; a++) {
 				if (this.hives[i].getAnts()[a].getLife() <= 0){
 					var pos = this.hives[i].getAnts()[a].getPosition();

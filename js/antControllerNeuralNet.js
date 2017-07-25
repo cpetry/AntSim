@@ -18,7 +18,6 @@
  *  - Remove all that messy global stuff. This is horrible.
  *  - Add real documentation!
  */
-var jquery = require['js/external/jquery/jquery-3.2.1.min'];
 var synaptic = require(['js/external/synaptic/synaptic'], initNetwork);
 
 var network;
@@ -32,7 +31,7 @@ var shouldTrain = false;
 
 var newNetwork = false;
 
-var numInputs = 38;
+var numInputs = 39;
 var numHidden = 20;
 var numOutputs = 6;
 
@@ -209,7 +208,7 @@ class AntControllerNeuralNet extends AntController{
 			hiveList[i] = Math.min(Math.max(-2,antList[i]),2)/2.;
 		}
 
-		var additionalList = [(this.collidedWithID != 0) ? 1 : 0, this.getFoodStorage()/this.getMaxFoodStorage()];
+		var additionalList = [(this.collidedWithID != 0) ? 1 : 0, this.getFoodStorage()/this.getMaxFoodStorage(), this.wasAttacked];
 
 		var inputSet = antList.concat(foodList.concat(hiveList.concat(additionalList)));
 		var outputSet = network.activate(inputSet);
