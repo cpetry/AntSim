@@ -15,6 +15,10 @@ class AntController {
 		this.collidedWithID = -1;
 		this.visibleObjs = {};
 		this.smelledObjs = {};
+		
+		this.collidedWithID = -1;
+		this.wasAttacked = false;
+		
 		this.memory = { };
 		
 		this.setAttributes(ant);
@@ -42,6 +46,7 @@ class AntController {
 		this.visibleObjs = ant.visibleObjs;
 		this.smelledObjs = ant.smelledObjs;
 		this.collidedWithID = (ant.hasCollidedWith() != null ? ant.hasCollidedWith().getID() : -1);
+		this.wasAttacked = ant.wasAttacked();
 	}
 	
 	/**
