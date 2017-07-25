@@ -1,12 +1,9 @@
 class SettingsSimulation
 {
-	constructor(antType){
+	constructor(antType, hiveType=HiveType.DEFAULT){
 		this.hiveSize = 14;
 		this.antType = antType;
-		if (document.getElementById('HiveType').value == 'Custom')
-			this.hiveType = HiveType.CUSTOM;
-		else
-			this.hiveType = HiveType.DEFAULT;
+		this.hiveType = hiveType;
 		this.antSize = 5;
 		this.antStartNumber = 20;
 		this.antStartPositionDistance = 40;

@@ -9,7 +9,13 @@ class Tutorial extends Simulation {
 		
 		// then check if ant has reached hive location with food
 		this.checkAreaHive;
-		
+
+		if (new.target === Tutorial) {
+			this.init();
+			this.clear();
+			this.draw();
+			this.loop();
+		}		
 	}
 	
 	init(){
@@ -17,7 +23,8 @@ class Tutorial extends Simulation {
 		this.settings.antDecayProb = 0;
 		
 		var foodPos = {x: this.canvas.width / 2, y: this.canvas.height / 2};
-		var newFood = new Food(this.canvas, foodPos, this.settings, this.collisionObjects);
+		var size = this.settings.getFoodAmount() * this.settings.getFoodSize();
+		var newFood = new Food(this.canvas, foodPos, size, this.settings, this.collisionObjects);
 		this.food.push(newFood);
 		
 		var hivePos = {x: this.canvas.width / 4, y: this.canvas.height / 2};

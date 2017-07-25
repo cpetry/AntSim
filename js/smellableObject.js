@@ -41,9 +41,18 @@ class SmellableObject extends Collider {
 		}
 		
 		var distance = getDistance(this.getPosition(), ant.getPosition());
-		var smallPosDist = Math.pow(distance/(this.getSmellDistance()+ant.getSmellingDistance()),3) * distance;
-		var smellPos = { x: this.getPosition().x + rand(-smallPosDist,smallPosDist), 
-						 y: this.getPosition().y + rand(-smallPosDist,smallPosDist)};
+		// [0, 1] <-> [1/4 smellingDistance, smellingDistance+smellDistance] 
+		var farthest = ant.getSmellingDistance() + this.getSmellDistance();
+		var nearest  = ant.getSmellingDistance()/4;
+		// [0,1]
+		var smellPos = {x: this.getPosition().x, y:this.getPosition().y }; // clone position
+		if (distance > nearest){
+			var percentage = distance / (farthest-nearest);
+			var smellPosDist = percentage * this.getSmellDistance(); // distance from actual position
+			var addVec = rotateVector({x: smellPosDist, y:0}, rand(0, Math.PI*2));
+			var smellPos = { x: this.getPosition().x + addVec.x, 
+						     y: this.getPosition().y + addVec.y };
+		}
 		return smellPos;
 	}
 	
@@ -52,9 +61,9 @@ class SmellableObject extends Collider {
 		if (Debug.getShowSmellingDistance()){
 			var pos = this.getPosition()
 			this._context.beginPath();
+			this._context.lineWidth = 2;
 			this._context.arc(pos.x, pos.y, this.getSmellDistance() - 2, 0, 2 * Math.PI, false);
 			this._context.strokeStyle = '#ddaa99';
-			this._context.lineWidth = 2;
 			this._context.stroke();
 		}
 	}

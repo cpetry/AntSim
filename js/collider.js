@@ -23,9 +23,7 @@ class Collider {
 	*/
 	constructor(canvas, position, shapeType, size, rotation, colObjs)
 	{
-		if (new.target === Collider) {
-			throw new TypeError("Cannot construct Collider instances directly");
-		}
+		
 		this[_id] = Collider.getNewID();
 		this[_canvas] = canvas;
 		this._context = canvas.getContext("2d");

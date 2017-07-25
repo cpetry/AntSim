@@ -16,10 +16,13 @@ class Simulation {
 		this.settings = new SettingsSimulation(antType);
 		this.graph = new Graph();
 		
-		this.init();
-		this.clear();
-		this.draw();
-		this.loop();	
+		// simulation constructor is called directly
+		if (new.target === Simulation) {
+			this.init();
+			this.clear();
+			this.draw();
+			this.loop();
+		}
 	}
 
 	init(numHives=2) {

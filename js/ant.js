@@ -252,6 +252,18 @@ class Ant extends SmellableObject {
 			this._context.stroke();
 		}
 		
+		if (Debug.getShowSmelledObjectsPosition()){
+			for (var id in this.smelledObjs){
+				var dist = this.smelledObjs[id].getDistanceToObj();
+				var rot  = this.smelledObjs[id].getRotationToObj();
+				var addVec = rotateVector({x: dist, y:0}, rot + this.getRotation());
+				this._context.beginPath();
+				this._context.arc(pos.x+addVec.x, pos.y+addVec.y, 6, 0, 2 * Math.PI, false);
+				this._context.fillStyle = '#aaaaee';
+				this._context.fill();
+			}
+		}
+		
 		if (Debug.getShowSmellingDistance()){
 			this._context.beginPath();
 			this._context.arc(pos.x, pos.y, this.getSmellingDistance() - 2, 0, 2 * Math.PI, false);
