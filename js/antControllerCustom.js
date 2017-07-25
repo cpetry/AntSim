@@ -31,6 +31,7 @@ class AntControllerCustom extends AntController{
 			window.cancelAnimationFrame(requestID);
 			requestID = undefined;
 		}
+		//console.log(result);
 		return result;
 	}
 }

@@ -1,7 +1,35 @@
-/**
- * The AntController enables the user to program his/hers ants behaviour.<br>
- * It has limited access to some of the ants current values.<br>
- * The action for the upcoming iteration is to be written by the user.<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: antController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: antController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * The AntController enables the user to program his/hers ants behaviour.&lt;br>
+ * It has limited access to some of the ants current values.&lt;br>
+ * The action for the upcoming iteration is to be written by the user.&lt;br>
  */
 class AntController {
   /**
@@ -15,10 +43,6 @@ class AntController {
 		this.collidedWithID = -1;
 		this.visibleObjs = {};
 		this.smelledObjs = {};
-		
-		this.collidedWithID = -1;
-		this.wasAttacked = false;
-		
 		this.memory = { };
 		
 		this.setAttributes(ant);
@@ -46,7 +70,6 @@ class AntController {
 		this.visibleObjs = ant.visibleObjs;
 		this.smelledObjs = ant.smelledObjs;
 		this.collidedWithID = (ant.hasCollidedWith() != null ? ant.hasCollidedWith().getID() : -1);
-		this.wasAttacked = ant.wasAttacked();
 	}
 	
 	/**
@@ -93,13 +116,13 @@ class AntController {
 	hasCollidedWithID() {return this.collidedWithID;}
 	
 	/**
-	* Returns the action the ant should do in the upcoming iteration.<br>
-	* This has to be an array with an ActionType and parameters.<br>
-	* Some examples:<br>
-	* - [ActionType.WALK, Direction.NONE, 0] // walks straight forward<br>
-	* - [ActionType.HARVEST, foodObj, 10]    // wants to harvest 10 food from foodObj<br>
-	* - [ActionType.GIVEFOOD, hive, 10]      // wants to give 10 food to hive<br>
-	* - [ActionType.ATTACK, enemy]           // wants to attack an enemy<br>
+	* Returns the action the ant should do in the upcoming iteration.&lt;br>
+	* This has to be an array with an ActionType and parameters.&lt;br>
+	* Some examples:&lt;br>
+	* - [ActionType.WALK, Direction.NONE, 0] // walks straight forward&lt;br>
+	* - [ActionType.HARVEST, foodObj, 10]    // wants to harvest 10 food from foodObj&lt;br>
+	* - [ActionType.GIVEFOOD, hive, 10]      // wants to give 10 food to hive&lt;br>
+	* - [ActionType.ATTACK, enemy]           // wants to attack an enemy&lt;br>
 	* @return {number[]} Array with type and parameters.
 	*/
 	getAction(){
@@ -111,8 +134,8 @@ class AntController {
 		var prey = null;
 		for (var id in this.visibleObjs){
 			if(this.visibleObjs[id].getType() == ObjectType.ANT
-			&& this.visibleObjs[id].getParentID() != this.getParentID()
-			&& this.visibleObjs[id].getDistanceToObj() < minDist){
+			&amp;&amp; this.visibleObjs[id].getParentID() != this.getParentID()
+			&amp;&amp; this.visibleObjs[id].getDistanceToObj() &lt; minDist){
 				minDist = this.visibleObjs[id].getDistanceToObj();
 				var prey = this.visibleObjs[id];
 			}
@@ -120,8 +143,8 @@ class AntController {
 		if(prey==null){
 			for (var id in this.smelledObjs){
 				if(this.smelledObjs[id].getType() == ObjectType.ANT
-				&& this.smelledObjs[id].getParentID() != this.getParentID()
-				&& this.smelledObjs[id].getDistanceToObj() < minDist){
+				&amp;&amp; this.smelledObjs[id].getParentID() != this.getParentID()
+				&amp;&amp; this.smelledObjs[id].getDistanceToObj() &lt; minDist){
 					minDist = this.smelledObjs[id].getDistanceToObj();
 					var prey = this.smelledObjs[id];
 				}
@@ -134,7 +157,7 @@ class AntController {
 		var hive = null;
 		for (var id in this.visibleObjs){
 			if (this.visibleObjs[id].getType() == ObjectType.HIVE
-			&& this.visibleObjs[id].getParentID() == this.getParentID()){
+			&amp;&amp; this.visibleObjs[id].getParentID() == this.getParentID()){
 				hive = this.visibleObjs[id];
 			}
 		}
@@ -143,7 +166,7 @@ class AntController {
 		if (hive == null){
 			for (var id in this.smelledObjs){
 				if (this.smelledObjs[id].getType() == ObjectType.HIVE
-				&& this.smelledObjs[id].getParentID() == this.getParentID()){
+				&amp;&amp; this.smelledObjs[id].getParentID() == this.getParentID()){
 					hive = this.smelledObjs[id];
 				}
 			}
@@ -179,7 +202,7 @@ class AntController {
 		// is some food visible?
 		for (var id in this.visibleObjs){
 			if (this.visibleObjs[id].getType() == objType
-			&& this.visibleObjs[id].getDistanceToObj() < minDist){
+			&amp;&amp; this.visibleObjs[id].getDistanceToObj() &lt; minDist){
 				minDist = this.visibleObjs[id].getDistanceToObj();
 				nearestOfObjType = this.visibleObjs[id];
 			}
@@ -189,7 +212,7 @@ class AntController {
 		if (nearestOfObjType == null){
 			for (var id in this.smelledObjs){
 				if (this.smelledObjs[id].getType() == objType
-				&& this.smelledObjs[id].getDistanceToObj() < minDist){
+				&amp;&amp; this.smelledObjs[id].getDistanceToObj() &lt; minDist){
 					minDist = this.smelledObjs[id].getDistanceToObj();
 					nearestOfObjType = this.smelledObjs[id];
 				}
@@ -199,4 +222,26 @@ class AntController {
 		return nearestOfObjType;
 	}
 	
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AntController.html">AntController</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Mon Jul 24 2017 07:12:45 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

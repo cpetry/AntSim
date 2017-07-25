@@ -1,12 +1,9 @@
 class SettingsSimulation
 {
-	constructor(antType){
+	constructor(antType, hiveType=HiveType.DEFAULT){
 		this.hiveSize = 14;
 		this.antType = antType;
-		if (document.getElementById('HiveType').value == 'Custom')
-			this.hiveType = HiveType.CUSTOM;
-		else
-			this.hiveType = HiveType.DEFAULT;
+		this.hiveType = hiveType;
 		this.antSize = 5;
 		this.antStartNumber = 20;
 		this.antStartPositionDistance = 40;
@@ -16,6 +13,7 @@ class SettingsSimulation
 		this.antVisibilityDistance = 30;
 		this.antVisibilityRange = 0.8;
 		this.foodAmount = 1000;
+		this.foodAmountDeadAnt = 50;
 		this.foodSize = 0.005; // percentage of food amount
 		this.foodCreationPropability = 0.05; // chance for each iteration to create food
 		this.foodMaxSiteNumber = 10; // maximum number of food sites
@@ -40,6 +38,7 @@ class SettingsSimulation
 	getAntVisibilityRange() { return this.antVisibilityRange; }
 	getFoodSize(){ return this.foodSize; }
 	getFoodAmount(){ return this.foodAmount; }
+	getFoodAmountDeadAnt(){ return this.foodAmountDeadAnt; }
 	getFoodCreationPropability(){ return this.foodCreationPropability; }
 	getFoodMaxSiteNumber(){ return this.foodMaxSiteNumber; }
 	getFoodMaxHive(){ return this.foodMaxHive; }

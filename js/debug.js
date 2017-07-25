@@ -31,4 +31,10 @@ class Debug
 	static getShowSmellingDistance(){
 		return this.showSmellingDistance;
 	}
+	static setShowSmelledObjectsPosition(enabled){
+		this.showSmelledObjectsPosition = enabled;
+	}
+	static getShowSmelledObjectsPosition(){
+		return this.showSmelledObjectsPosition;
+	}
 }

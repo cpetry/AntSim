@@ -5,9 +5,25 @@ const _rotation = Symbol('rotation');
 const _canvas = Symbol('canvas');
 const _id = Symbol('id');
 
+/**
+ * An object that can collide with another one.
+ */
 class Collider {
+	
+	/**
+	* Creates a collider object
+	* @constructor
+	* @abstract
+	* @param {object} canvas - The canvas used to draw.
+    * @param {object} position - 2D position of where the object shall be created (if no collision occurs).
+    * @param {ShapeType} shapeType - Type of shape the object has.
+    * @param {number} size - Size of the objects collider.
+    * @param {number} rotation - Rotation in radians.
+	* @param {Objects[]} collisionObjs - Objects in simulation that can collide with this.
+	*/
 	constructor(canvas, position, shapeType, size, rotation, colObjs)
 	{
+		
 		this[_id] = Collider.getNewID();
 		this[_canvas] = canvas;
 		this._context = canvas.getContext("2d");

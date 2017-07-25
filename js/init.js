@@ -23,6 +23,7 @@ Debug.setVisibility(document.getElementById('debugVisibility').checked);
 Debug.setShowCollider(document.getElementById('debugCollider').checked);
 Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);
 Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);
+Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);
 
 var mode;
 var requestID;
@@ -59,7 +60,7 @@ customAntEditor.setOptions({
     enableBasicAutocompletion: true,
 });
 customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
-customAntEditor.setValue("return [Action.WALK, Direction.FORWARD, rand(-0.5,0.5)];");
+customAntEditor.setValue("return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];");
 
 var userAntFunction = new Function(customAntEditor.getValue());
 var userHiveFunction;

@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<div id="header">
-			AntSim
+			<img src="./images/ant150px.png" />AntSim <img class="flipped" src="./images/ant150px.png" />
 		</div>
 		<div style="height:50px;"></div>
 		<div id="options">
@@ -27,6 +27,7 @@
 		<div id="all">
 			<div id="terrariumContainer">
 				<div id="editorButtons">
+					<a target="_blank" href="./user-code_doc/AntController.html">API</a>
 					<input type="button" value="Run" onclick="run()">
 					<input type="button" value="Editor" onclick="editorClicked()">
 				</div>
@@ -52,6 +53,7 @@
 					<input type="checkbox" id="debugCollider" onchange="Debug.setShowCollider(document.getElementById('debugCollider').checked);" /> Show collider <br/>
 					<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
 					<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
+				    <input type="checkbox" id="debugSmelledObjectsPosition" onchange="Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);" /> Show smelled object distance <br/>
 				</div>
 			</div>
 			<div id="cleared"></div>
@@ -63,7 +65,6 @@
 		</div>
 
 		<script src="./js/external/jquery/jquery-3.2.1.min.js"></script>
-		<script src="./js/external/jquery/jquery.cookie.js"></script>
 		<script src="./js/external/jquery.fancybox.min.js"></script>
 		<script src="./js/external/seedrandom/seedrandom.js"></script>
 		<script src="./js/external/flotr2/flotr2.min.js"></script>
@@ -85,17 +86,20 @@
 		<script src="./js/shape.js"></script>
 		<script src="./js/smellableObjectProxy.js"></script>
 		<script src="./js/visibleObjectProxy.js"></script>
-
+		
 		<script src="./js/collider.js"></script>
 		<script src="./js/colliderBranch.js"></script>
 		<script src="./js/colliderStone.js"></script>
 		<script src="./js/smellableObject.js"></script>
 
 		<script src="./js/hive.js"></script>
+		<script src="./js/hiveGenetic.js"></script>
 		<script src="./js/hiveController.js"></script>
 		<script src="./js/hiveControllerCustom.js"></script>
 		<script src="./js/food.js"></script>
 		<script src="./js/ant.js"></script>
+		<script src="./js/antDead.js"></script>
+		<script src="./js/antGenetic.js"></script>
 		<script src="./js/antController.js"></script>
 		<script src="./js/antControllerSimple.js"></script>
 		<script src="./js/antControllerCustom.js"></script>

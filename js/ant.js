@@ -8,9 +8,7 @@ var AntType = {
 	SIMPLE: 0,
 	CUSTOM: 1
 }
-const _strength = Symbol('strength');
-const _agility = Symbol('agility');
-const _sensitivity = Symbol('sensitivity');
+
 const _speed = Symbol('speed');
 const _life = Symbol('life');
 const _smellingDistance = Symbol('smellingDistance');
@@ -24,43 +22,45 @@ const _foodMaxAnt = Symbol('foodMaxAnt');
 const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
 const _parentID = Symbol('parentID');
 const _collidedWithSth = Symbol('collidedWithSth');
+const _wasAttacked = Symbol('wasAttacked');
 
 const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
+/**
+ * Ant
+ */
 class Ant extends SmellableObject {
-	constructor(canvas, position, rotation, settings, newGenes, collisionObjs, parentID){
+
+	/**
+	* Creates an ant and sets its abilities
+	* @constructor
+	* @param {object} canvas - The canvas used to draw.
+    * @param {object} position - 2D position of where the ant shall be created (if no collision occurs).
+    * @param {float} rotation - Rotation of the object in radians.
+    * @param {SettingsSimulation} settings - Settings of the current simulation.
+    * @param {Objects[]} collisionObjs.
+    * @param {number} parentID - ID of the ants hive.
+	*/
+	constructor(canvas, position, rotation, settings, collisionObjs, parentID){
 		super(canvas, position, settings.getAntSize(), settings.getSizeSmellingFactor(), collisionObjs, rotation);
-
-		// Genes / attributes
-		// Test if genes are chosen correctly and fair. Correct if not.
-		// If all are equally chosen -> Str = Agi = Sen = 1 !
-		var aThird = 1.0/3.0;
-		var total = newGenes[0] + newGenes[1] + newGenes[2];
-		var genes = [newGenes[0]/total/aThird, newGenes[1]/total/aThird, newGenes[2]/total/aThird]
-
-		this[_strength] = genes[0];    // [0.0 - 3.0]
-		this[_agility] = genes[1];     // [0.0 - 3.0]
-		this[_sensitivity] = genes[2]; // [0.0 - 3.0]
-
+		
 		// Abilities
-		// Strength type
-		this[_decayProb]     = settings.getAntDecayProb()     * (1/this[_strength]);
-		this[_foodBonusProb] = settings.getAntFoodBonusProb() * (1/this[_strength]); // less life loss when carrying food
-		this[_foodMaxAnt] = settings.getFoodMaxAnt() * this[_strength];
-		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt() * this[_strength];
-		// Agility type
-		this[_speed] = 2.5 * this[_agility];
-		this[_speedHeading] = 0.2 * this[_agility]; // radians
-		// Sensitivity type
-		this[_smellingDistance] = settings.getAntSmellingDistance() * this[_sensitivity];
-		this[_visibilityDistance] = settings.getAntVisibilityDistance() * this[_sensitivity];
-		this[_visibilityRangeRad] = settings.getAntVisibilityRange() * this[_sensitivity];
+		this[_decayProb]     = settings.getAntDecayProb();
+		this[_foodBonusProb] = settings.getAntFoodBonusProb(); // less life loss when carrying food
+		this[_foodMaxAnt] = settings.getFoodMaxAnt();
+		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt();
+		this[_speed] = 2.5;
+		this[_speedHeading] = 0.2;
+		this[_smellingDistance] = settings.getAntSmellingDistance();
+		this[_visibilityDistance] = settings.getAntVisibilityDistance();
+		this[_visibilityRangeRad] = settings.getAntVisibilityRange();
 
 		this[_life] = 100;
 		this[_foodStorageAnt] = 0;
 		this[_parentID] = parentID;
 		this[_collidedWithSth] = null;
-
+		this[_wasAttacked] = false;
+		
 		if (settings.getAntType() == AntType.SIMPLE)
 			this.controller = new AntControllerSimple(this);
     else if (settings.getAntType() == AntType.NEURALNET)
@@ -71,10 +71,11 @@ class Ant extends SmellableObject {
 		this.visibleObjs = {};
 		this.smelledObjs = {};
 	}
-
+	
 	iterate(){
 		this.controller.setAttributes(this);
 		return this.controller.getAction();
+		this[_wasAttacked] = false;
 	}
 
 	// getter
@@ -88,8 +89,9 @@ class Ant extends SmellableObject {
 	getFoodStorage() { return this[_foodStorageAnt]; }
 	getMaxFoodStorage() { return this[_foodMaxAnt]; }
 	getMaxHarvestAmount() { return this[_foodMaxHarvestAmount]; }
-
+	
 	hasCollidedWith(){ return this[_collidedWithSth];}
+	wasAttacked(){ return this[_wasAttacked];}
 
 	age(){
 		var bonus = 0;
@@ -234,9 +236,10 @@ class Ant extends SmellableObject {
 		this[_foodStorageAnt] += additionalFood;
 	}
 
-  receiveAttack(){
-    this[_life] -= 1;
-  }
+    receiveAttack(){
+	this[_life] -= 1;
+	this[_wasAttacked] = true;
+    }
 
 
 	draw(){
@@ -256,6 +259,18 @@ class Ant extends SmellableObject {
 			this._context.stroke();
 		}
 
+		if (Debug.getShowSmelledObjectsPosition()){
+			for (var id in this.smelledObjs){
+				var dist = this.smelledObjs[id].getDistanceToObj();
+				var rot  = this.smelledObjs[id].getRotationToObj();
+				var addVec = rotateVector({x: dist, y:0}, rot + this.getRotation());
+				this._context.beginPath();
+				this._context.arc(pos.x+addVec.x, pos.y+addVec.y, 6, 0, 2 * Math.PI, false);
+				this._context.fillStyle = '#aaaaee';
+				this._context.fill();
+			}
+		}
+		
 		if (Debug.getShowSmellingDistance()){
 			this._context.beginPath();
 			this._context.arc(pos.x, pos.y, this.getSmellingDistance() - 2, 0, 2 * Math.PI, false);

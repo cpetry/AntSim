@@ -1,0 +1,1 @@
+jsdoc -c ./jsdoc.config.json && jsdoc -c ./jsdoc.usercode.config.json
