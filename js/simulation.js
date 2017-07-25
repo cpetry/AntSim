@@ -1,5 +1,13 @@
 class Simulation {
+
+	static __init__() {
+		Simulation.isFinished = false;
+	}
+
 	constructor(antType){
+
+		Simulation.isFinished = false;
+
 		this.canvas = document.getElementById("terrarium");
 
 		this.now;
@@ -143,6 +151,7 @@ class Simulation {
 		if (numLivingHives == 1 && this.hives.length > 1
 			  || numLivingHives == 0)
 		{
+			Simulation.isFinished = true;
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
@@ -208,3 +217,5 @@ class Simulation {
 	}
 
 }
+
+Simulation.__init__();

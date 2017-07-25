@@ -106,7 +106,10 @@ function setUI(show){
 	if (show)
 		showSimulation();
 	else
-		showNoUI();
+		if (Simulation.isFinished)
+			showGraph();
+		else
+			showNoUI();
 }
 
 function run(){
