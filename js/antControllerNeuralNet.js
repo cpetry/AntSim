@@ -1,139 +1,4 @@
 /**
- *
- * Some comments beforehand:
- *
- * - this class is messy, don't expect it to look good for now.
- *   I will fix that later on.
- * - Not everything is perfect in here, but, however, it should
- *   work so far.
- * - If you have any improvements, recommendations or whatever,
- *   feel free to add those here.
- *
- * Greetz,
- *     Alex.
- */
-
-/*
- * TODO:
- *  - Remove all that messy global stuff. This is horrible.
- *  - Add real documentation!
- */
-var synaptic = require(['js/external/synaptic/synaptic'], initNetwork);
-
-var network;
-var trainer;
-
-var batchSize = 10;
-var minTrainSet = batchSize * 500;
-var trainSet = [];
-
-var shouldTrain = false;
-
-var newNetwork = false;
-
-var numInputs = 39;
-var numHidden = 20;
-var numOutputs = 6;
-
-var realChosen = [];
-var firstChoice = [];
-
-/*
- * TODO: Global functions are bad also! Fix this later on.
- */
-function setActivation(network, activation) {
-	for (var i = 0; i < network.layers.hidden.length; ++i)
-		for (var j = 0; j < network.layers.hidden[i].list.length; ++j)
-			network.layers.hidden[i].list[j].squash = activation;
-	for (var j = 0; j < network.layers.output.list.length; ++j)
-		network.layers.output.list[j].squash = activation;
-}
-
-function createNetwork() {
-
-	network = new synaptic.Architect.Perceptron(numInputs, numHidden, numOutputs);
-	console.dir(network);
-
-}
-
-function setXavier(network) {
-	for (var i = 0; i < network.layers.hidden.length; ++i) {
-		var layerVariance = 0;
-		for (var j = 0; j < network.layers.hidden[i].list.length; ++j) {
-
-			var inputKeys = Object.keys(network.layers.hidden[i].list[j].connections.inputs);
-			var nIn = inputKeys.length;
-
-			// Check if we calculated layer variance already
-			if (layerVariance == 0) {
-				layerVariance = 2. / (nIn);
-			}
-
-			for (var k = 0; k < nIn; k++)
-				network.layers.hidden[i].list[j].connections.inputs[inputKeys[k]].weight = rand(-layerVariance,layerVariance);
-
-		}
-	}
-	var layerVariance = 0;
-	for (var j = 0; j < network.layers.output.list.length; ++j) {
-		var inputKeys = Object.keys(network.layers.output.list[j].connections.inputs);
-		var nIn = inputKeys.length;
-
-		// Check if we calculated layer variance already
-		if (layerVariance == 0) {
-			layerVariance = 2. / (nIn);
-		}
-
-		for (var k = 0; k < nIn; k++)
-			network.layers.output.list[j].connections.inputs[inputKeys[k]].weight = rand(-layerVariance,layerVariance);
-	}
-
-}
-
-function initNetwork() {
-
-	if (localStorage.getItem("network")==null)
-		newNetwork = true;
-
-	if (newNetwork) {
-		createNetwork();
-		setActivation(network, synaptic.Neuron.squash.RELU);
-		setXavier(network);
-		newNetwork = false;
-	} else
-		network = synaptic.Network.fromJSON(JSON.parse(localStorage.getItem("network")));
-
-	trainer = new synaptic.Trainer(network);
-
-	console.log("Hallo! Biatch!");
-
-}
-
-/*
- * TODO: These functions belong to the utility class.
- */
-function argmax(tlist) {
-	max = -9e8;
-	maxarg = -1;
-	for (var i = 0; i < tlist.length; ++i) {
-		if (tlist[i] > max) {
-			max = tlist[i];
-			maxarg = i;
-		}
-	}
-	return maxarg;
-}
-function maxElement(tlist) {
-	max = -9e8;
-	for (var i = 0; i < tlist.length; ++i) {
-		if (tlist[i] > max) {
-			max = tlist[i];
-		}
-	}
-	return max;
-}
-
-/**
  * AntControllerNeuralNet class
  *
  * Implements a TD-Neural-Q-Learning algorithm for AntSim.
@@ -143,15 +8,45 @@ function maxElement(tlist) {
  * meant as an example and case study.
  */
 class AntControllerNeuralNet extends AntController{
-	constructor(ant){
+	constructor(ant, neuralNetwork){
 		super(ant);
 		this.memory = { harvestedFood : false, lastLife : -1 };
 		this.networkMemory = [];
+		this.neuralNetwork = neuralNetwork;
+		
+		this.batchSize = 10;
+		this.minTrainSet = this.batchSize * 500;
+
+		this.trainSet = [];
+		this.realChosen = [];
+		this.firstChoice = [];
+	}
+	
+	
+	argmax(tlist) {
+		var max = -9e8;
+		var maxarg = -1;
+		for (var i = 0; i < tlist.length; ++i) {
+			if (tlist[i] > max) {
+				max = tlist[i];
+				maxarg = i;
+			}
+		}
+		return maxarg;
+	}
+	maxElement(tlist) {
+		var max = -9e8;
+		for (var i = 0; i < tlist.length; ++i) {
+			if (tlist[i] > max) {
+				max = tlist[i];
+			}
+		}
+		return max;
 	}
 
 	createFeatureVector() {
 
-		if (typeof(network)==='undefined')
+		if (typeof(this.neuralNetwork.network)==='undefined')
 			return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
 
 		var visibleObjects = this.getVisibleObjs();
@@ -211,7 +106,7 @@ class AntControllerNeuralNet extends AntController{
 		var additionalList = [(this.collidedWithID != 0) ? 1 : 0, this.getFoodStorage()/this.getMaxFoodStorage(), this.wasAttacked];
 
 		var inputSet = antList.concat(foodList.concat(hiveList.concat(additionalList)));
-		var outputSet = network.activate(inputSet);
+		var outputSet = this.neuralNetwork.network.activate(inputSet);
 
 		var setElement = {input: inputSet, output: outputSet, chosenAction: -1};
 
@@ -221,19 +116,19 @@ class AntControllerNeuralNet extends AntController{
 
 	getAction(){
 
-		if (typeof(network)==='undefined')
-		return
+		if (typeof(this.neuralNetwork.network)==='undefined')
+			return [ActionType.NONE, 0, 0];
 
 		var shouldSave = rand(0,1) < 0.001 ? true : false;
 
 		if (shouldSave) {
 			console.log("Saving network...");
-			localStorage.setItem("network", JSON.stringify(network.toJSON()));
+			localStorage.setItem("network", JSON.stringify(this.neuralNetwork.network.toJSON()));
 			console.log("Saved network!");
 		}
 
-		if (newNetwork) {
-			initNetwork();
+		if (this.newNetwork) {
+			this.initNetwork();
 		}
 
 		var foodKept = this.getMaxFoodStorage() * 0.14;
@@ -245,7 +140,7 @@ class AntControllerNeuralNet extends AntController{
 		 * Chose action
 		 */
 		var networkOutput = networkAnswer.output;
-		var maxAction = argmax(networkOutput);
+		var maxAction = this.argmax(networkOutput);
 
 		/*
 		 * - Attack nearest Ant 					0
@@ -349,30 +244,30 @@ class AntControllerNeuralNet extends AntController{
 		// Push into memory
 		if (actionTuple.length > 0) {
 			this.networkMemory.push(networkAnswer);
-			if (this.networkMemory.length > batchSize)
+			if (this.networkMemory.length > this.batchSize)
 				this.networkMemory.shift(1);
 		}
 
 		if (actionTuple.length > 0) {
-			realChosen.push(true);
+			this.realChosen.push(true);
 		} else {
-			realChosen.push(false);
+			this.realChosen.push(false);
 		}
-		firstChoice.push(networkAnswer.chosenAction == maxAction);
+		this.firstChoice.push(networkAnswer.chosenAction == maxAction);
 
-		if (realChosen.length > 1000) {
+		if (this.realChosen.length > 1000) {
 			var chosenPart = 0.;
 			var firstChoicePart = 0.;
-			for (var i = 0; i < realChosen.length; ++i) {
-				chosenPart += realChosen[i] ? 1. : 0.;
-				firstChoicePart += firstChoice[i] ? 1. : 0.;
+			for (var i = 0; i < this.realChosen.length; ++i) {
+				chosenPart += this.realChosen[i] ? 1. : 0.;
+				firstChoicePart += this.firstChoice[i] ? 1. : 0.;
 			}
-			chosenPart /= realChosen.length;
-			firstChoicePart /= realChosen.length;
+			chosenPart /= this.realChosen.length;
+			firstChoicePart /= this.realChosen.length;
 			console.log("Actively chosen %: "+chosenPart*100+"%");
 			console.log("First choice %:    "+firstChoicePart*100+"%");
-			realChosen = [];
-			firstChoice = [];
+			this.realChosen = [];
+			this.firstChoice = [];
 		}
 
 		/*
@@ -401,13 +296,13 @@ class AntControllerNeuralNet extends AntController{
 		var qLearningAlpha = 0.01;
 		var qLearningGamma = 0.9;
 
-		if (reward != 0 && this.networkMemory.length >= batchSize && shouldTrain) {
-			var lastBest = maxElement(networkAnswer.output);
+		if (reward != 0 && this.networkMemory.length >= this.batchSize && this.neuralNetwork.shouldTrain) {
+			var lastBest = this.maxElement(networkAnswer.output);
 			for (var i = this.networkMemory.length - 1; i >= 0; --i) {
 
 				var originalOutput = this.networkMemory[i].output;
 				var modifiedOutput = originalOutput;
-				var maxIdx = argmax(originalOutput);
+				var maxIdx = this.argmax(originalOutput);
 				var chosenAction = this.networkMemory[i].chosenAction;
 
 				if (chosenAction != -1 && modifiedOutput[chosenAction] > 0.2)
@@ -425,25 +320,25 @@ class AntControllerNeuralNet extends AntController{
 				for (var j = 0; j < modifiedOutput.length; ++j)
 					modifiedOutput[j] = (modifiedOutput[j]) / sum;
 
-				lastBest = maxElement(modifiedOutput);
+				lastBest = this.maxElement(modifiedOutput);
 
 				this.networkMemory[i].output = modifiedOutput;
 
 			}
 
-			trainSet = trainSet.concat(this.networkMemory);
+			this.trainSet = this.trainSet.concat(this.networkMemory);
 
-			if (trainSet.length >= minTrainSet) {
+			if (this.trainSet.length >= this.minTrainSet) {
 
-				if (trainSet.length > minTrainSet)
-					trainSet.shift(trainSet.length - minTrainSet);
+				if (this.trainSet.length > this.minTrainSet)
+					this.trainSet.shift(this.trainSet.length - this.minTrainSet);
 
 				//var showDebug = rand(0,1) < 0.01;
 				var showDebug = true;
 				if (showDebug)
 					console.log("Starting training...");
-				var data = trainer.train(trainSet,{iterations: 100, rate: 0.001, error: 1e-10, shuffle: true, log: showDebug ? 10 : 1e8});
-				trainSet = [];
+				var data = this.neuralNetwork.trainer.train(this.trainSet,{iterations: 100, rate: 0.001, error: 1e-10, shuffle: true, log: showDebug ? 10 : 1e8});
+				this.trainSet = [];
 
 	 			if (showDebug){
 					console.dir(data);

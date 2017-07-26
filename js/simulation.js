@@ -4,7 +4,7 @@ class Simulation {
 		Simulation.isFinished = false;
 	}
 
-	constructor(antType){
+	constructor(settings){
 
 		Simulation.isFinished = false;
 
@@ -20,8 +20,7 @@ class Simulation {
 		this.food = [];
 		this.collisionObjects = [];
 		this.environmentObjs = [];
-
-		this.settings = new SettingsSimulation(antType);
+		this.settings = settings;
 		this.graph = new Graph();
 
 		// simulation constructor is called directly

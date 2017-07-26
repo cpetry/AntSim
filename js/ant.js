@@ -6,7 +6,8 @@ var Direction = {
 
 var AntType = {
 	SIMPLE: 0,
-	CUSTOM: 1
+	CUSTOM: 1,
+	NEURALNET: 2
 }
 
 const _speed = Symbol('speed');
@@ -60,11 +61,10 @@ class Ant extends SmellableObject {
 		this[_parentID] = parentID;
 		this[_collidedWithSth] = null;
 		this[_wasAttacked] = false;
-		
 		if (settings.getAntType() == AntType.SIMPLE)
 			this.controller = new AntControllerSimple(this);
-    else if (settings.getAntType() == AntType.NEURALNET)
-      this.controller = new AntControllerNeuralNet(this);
+		else if (settings.getAntType() == AntType.NEURALNET)
+			this.controller = new AntControllerNeuralNet(this, settings.neuralNetwork);
 		else if (settings.getAntType() == AntType.CUSTOM)
 			this.controller = new AntControllerCustom(this);
 
@@ -74,8 +74,8 @@ class Ant extends SmellableObject {
 	
 	iterate(){
 		this.controller.setAttributes(this);
-		return this.controller.getAction();
 		this[_wasAttacked] = false;
+		return this.controller.getAction();
 	}
 
 	// getter

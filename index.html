@@ -17,6 +17,7 @@
 			<input type="button" value="Tutorial" onclick="tutorialClicked()">
 			<input type="button" value="Teaser" onclick="teaserClicked()">
 			<input type="button" value="Simulation" onclick="simulationClicked()">
+			<input type="button" value="Training" onclick="trainingClicked()">
 		</div>
 		<div id="tutorial">
 			<input type="radio" name="tutorialPart" value="0" onclick="setupTutorialPart(0)">
@@ -26,23 +27,43 @@
 		</div>
 		<div id="all">
 			<div id="terrariumContainer">
+				<!-- Editor stuff -->
 				<div id="editorButtons">
 					<a target="_blank" href="./user-code_doc/AntController.html">API</a>
 					<input type="button" value="Run" onclick="run()">
 					<input type="button" value="Editor" onclick="editorClicked()">
 				</div>
-				<div align="center" id="graphs" style="display:none;"></div>
-				<canvas align="center" width="600" height="350" id="terrarium"></canvas>
 				<div id="customAntContainer" style="display:none;">
 					<pre id="editor"></pre>
 				</div>
+				
+				<!-- Graphs -->
+				<div align="center" id="graphs" style="display:none;"></div>
+				
+				<!-- Training view -->
+				<div id="trainingButtons">
+					AntType<select id="AntType" size="1"> 
+						<option>Simple</option> 
+						<option>Custom</option> 
+						<option selected>NeuralNet</option>
+					</select>
+					HiveType<select id="HiveType" size="1"> 
+						<option selected>Default</option> 
+						<option>Custom</option> 
+					</select>
+					<input type="button" value="train" onclick="startTraining()">
+					<input type="button" value="test"  onclick="testTraining()">
+					<input type="button" value="reset" onclick="resetTraining()">
+				</div>
+				<!-- Simulation view -->
+				<canvas align="center" width="600" height="350" id="terrarium"></canvas>
+				
+				<!-- no ui -->
 				<div id="NoUI" style="display:none;">...Simulating...</div>
+				
 				<div id="cleared"></div>
 			</div>
 			<div id="settings">Settings<br/>
-				AntType<select id="AntType" size="1" onchange="switchAntType()"> <option selected>Simple</option> <option>Custom</option> <option>Neural Net</option></select><br/>
-				HiveType<select id="HiveType" size="1" <!--onchange="switchAntType()"-->> <option selected>Default</option> <option>Custom</option> </select><br/>
-
 				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
 				<input type="checkbox" id="showUI"  onchange="setUI()" checked /> ShowUI <br/>
 				Frame<input type="number" id="frame" style="width:50px" value="0" readonly/><br/>
@@ -54,8 +75,6 @@
 					<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
 					<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
 					<input type="checkbox" id="debugSmelledObjectsPosition" onchange="Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);" /> Show smelled object distance <br/>
-					<input type="checkbox" id="debugTrainNeuralNet" onchange="Debug.setNeuralNetworkShouldTrain(document.getElementById('debugTrainNeuralNet').checked);" /> Train neural network <br/>
-					<input type="checkbox" id="debugNewNeuralNet" onchange="Debug.setNewNeuralNetwork();" /> New neural network <br/>
 				</div>
 			</div>
 			<div id="cleared"></div>
@@ -74,8 +93,7 @@
 		<script src="./js/external/ace_min_noconflict/ext-language_tools.js"></script>
 		<script src="./js/external/setImmediate/setImmediate.js"></script>
 		<script src="./js/external/synaptic/synaptic.js"></script>
-		<script src="./js/external/require/require.js"></script>
-
+		
 		<script src="./js/settingsGlobal.js"></script>
 		<script src="./js/settingsSimulation.js"></script>
 		<script src="./js/graph.js"></script>
@@ -94,6 +112,8 @@
 		<script src="./js/colliderStone.js"></script>
 		<script src="./js/smellableObject.js"></script>
 
+		<script src="./js/neuralNetwork.js"></script>
+
 		<script src="./js/hive.js"></script>
 		<script src="./js/hiveGenetic.js"></script>
 		<script src="./js/hiveController.js"></script>
@@ -109,6 +129,7 @@
 
 		<script src="./js/simulation.js"></script>
 		<script src="./js/tutorial.js"></script>
+		<script src="./js/training.js"></script>
 		<script src="./js/init.js"></script>
 	</body>
 </html>

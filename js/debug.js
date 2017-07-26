@@ -37,11 +37,4 @@ class Debug
 	static getShowSmelledObjectsPosition(){
 		return this.showSmelledObjectsPosition;
 	}
-	static setNewNeuralNetwork() {
-		newNetwork = true;
-		document.getElementById('debugNewNeuralNet').checked = false;
-	}
-	static setNeuralNetworkShouldTrain(mode) {
-		shouldTrain = mode;
-	}
 }

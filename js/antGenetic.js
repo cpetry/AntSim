@@ -30,8 +30,5 @@ class AntGenetic extends Ant {
 		this[_smellingDistance]   *= this[_sensitivity];
 		this[_visibilityDistance] *= this[_sensitivity];
 		this[_visibilityRangeRad] *= this[_sensitivity];
-
-
-	}
-	
+	}	
 }

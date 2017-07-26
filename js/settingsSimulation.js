@@ -1,6 +1,6 @@
 class SettingsSimulation
 {
-	constructor(antType, hiveType=HiveType.DEFAULT){
+	constructor(antType, hiveType, neuralNetwork=undefined){
 		this.hiveSize = 14;
 		this.antType = antType;
 		this.hiveType = hiveType;
@@ -21,6 +21,7 @@ class SettingsSimulation
 		this.foodMaxAnt = 35;
 		this.foodMaxHarvestAmountAnt = 1;
 		this.sizeSmellingFactor = 6;
+		this.neuralNetwork = neuralNetwork;
 	}
 	// attribute related settings
 	getTerrariumWidth(){ return this.terrariumWidth; }

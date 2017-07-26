@@ -22,12 +22,13 @@ class Hive extends SmellableObject {
 		this.collisionObjs.push(this);
 		this.settings = settings;
 
-		if (settings.getHiveType() == HiveType.DEFAULT)
-			this.controller = new HiveController();
-		else if (settings.getHiveType() == HiveType.NEURALNET)
+		if (settings.getHiveType() == HiveType.NEURALNET)
 			this.controller = new HiveController();
 		else if (settings.getHiveType() == HiveType.CUSTOM)
 			this.controller = new HiveControllerCustom();
+		else
+			this.controller = new HiveController();
+
 	}
 
 	initAnts(antStartNumber = this.settings.getAntStartNumber()){

@@ -69,12 +69,14 @@ window.onload = function(){
 	startTeaser();
 }
 
+var training = new Training();
 
 function showGraph(){
 	document.getElementById('terrarium').style.display = 'none';
 	document.getElementById('graphs').style.display = 'block';
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'none';
+	document.getElementById('trainingButtons').style.visibility = 'hidden';
 }
 
 function showSimulation(){
@@ -83,6 +85,7 @@ function showSimulation(){
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'none';
 	document.getElementById('editorButtons').style.visibility = 'hidden';
+	document.getElementById('trainingButtons').style.visibility = 'hidden';
 }
 
 function showEditor(){
@@ -91,6 +94,7 @@ function showEditor(){
 	document.getElementById('customAntContainer').style.display = 'block';
 	document.getElementById('NoUI').style.display = 'none';
 	document.getElementById('editorButtons').style.visibility = 'visible';
+	document.getElementById('trainingButtons').style.visibility = 'hidden';
 }
 
 function showNoUI(){
@@ -99,6 +103,16 @@ function showNoUI(){
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'block';
 	document.getElementById('editorButtons').style.visibility = 'hidden';
+	document.getElementById('trainingButtons').style.visibility = 'hidden';
+}
+
+function showTraining(){
+	document.getElementById('graphs').style.display = 'none';
+	document.getElementById('terrarium').style.display = 'block';
+	document.getElementById('customAntContainer').style.display = 'none';
+	document.getElementById('NoUI').style.display = 'none';
+	document.getElementById('editorButtons').style.visibility = 'hidden';
+	document.getElementById('trainingButtons').style.visibility = 'visible';
 }
 
 function setUI(show){
@@ -135,18 +149,15 @@ function startTeaser(){
 	document.getElementById('showUI').checked = true;
 	showSimulation();
 	Math.seedrandom();
-
-	var antType = document.getElementById("AntType").value;
-	if (antType == "Neural Net")
-		new Simulation(AntType.NEURALNET);
-	else
-		new Simulation(AntType.SIMPLE);
+	settings = new SettingsSimulation(AntType.SIMPLE);
+	new Simulation(settings);
 }
 
 function startSimulation(){
 	document.getElementById('showUI').checked = false;
 	Math.seedrandom(document.getElementById('seed').value);
-	new Simulation(AntType.CUSTOM);
+	settings = new SettingsSimulation(AntType.CUSTOM);
+	new Simulation(settings);
 }
 
 
@@ -188,4 +199,38 @@ function editorClicked(){
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
 	showEditor();
+}
+
+function trainingClicked(){
+	Message.hideMessage();
+	document.getElementById('frame').value = 0;
+	document.getElementById('tutorial').style.visibility = 'hidden';
+	//mode = Mode.TEASER;
+	window.cancelAnimationFrame(requestID);
+	requestID = undefined;
+	showTraining();
+}
+
+function startTraining(){
+	var antType = document.getElementById("AntType").value;
+	if (antType == "Simple")
+		training.start(AntType.SIMPLE);
+	else if (antType == "NeuralNet")
+		training.start(AntType.NEURALNET);
+	else if (antType == "Custom")
+		training.start(AntType.CUSTOM);
+}
+
+function testTraining(){
+	var antType = document.getElementById("AntType").value;
+	if (antType == "Simple")
+		training.test(AntType.SIMPLE);
+	else if (antType == "NeuralNet")
+		training.test(AntType.NEURALNET);
+	else if (antType == "Custom")
+		training.test(AntType.CUSTOM);
+}
+
+function resetTraining(){
+	training.reset();
 }
