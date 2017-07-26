@@ -24,8 +24,8 @@ class NeuralNetwork {
 		this.network = undefined;
 		this.trainer = undefined;
 
-		var shouldTrain = false;
-		var newNetwork = false;
+		this.shouldTrain = false;
+		this.newNetwork = false;
 
 		this.numInputs = 39;
 		this.numHidden = 20;
