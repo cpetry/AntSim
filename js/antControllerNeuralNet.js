@@ -127,8 +127,8 @@ class AntControllerNeuralNet extends AntController{
 			console.log("Saved network!");
 		}
 
-		if (this.newNetwork) {
-			this.initNetwork();
+		if (this.neuralNetwork.newNetwork) {
+			this.neuralNetwork.initNetwork();
 		}
 
 		var foodKept = this.getMaxFoodStorage() * 0.14;
