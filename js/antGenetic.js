@@ -25,13 +25,11 @@ class AntGenetic extends Ant {
 		this[_foodMaxHarvestAmount] *= this[_strength];
 		// Agility type
 		this[_speed]        *= this[_agility];
-		this[_speedHeading] *= this[_agility]; // radians
+		this[_speedRotation] *= this[_agility]; // radians
 		// Sensitivity type
 		this[_smellingDistance]   *= this[_sensitivity];
 		this[_visibilityDistance] *= this[_sensitivity];
 		this[_visibilityRangeRad] *= this[_sensitivity];
-
-
 	}
 	
 }

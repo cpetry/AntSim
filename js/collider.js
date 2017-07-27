@@ -38,6 +38,8 @@ class Collider {
 		if (tests==300)
 			console.log("ERROR positioning object!");
 		this[_position] = position;
+		
+		colObjs.push(this);
 	}
 	
 	static getNewID(){ 
@@ -61,8 +63,8 @@ class Collider {
 		return (distance < 10);
 	}
 
-	setNewHeading(newHeading){
-		this[_rotation] = newHeading;
+	setNewRotation(newRotation){
+		this[_rotation] = newRotation;
 		this[_rotation] = this.getRotation() % (Math.PI*2);
 	}
 		
@@ -90,9 +92,18 @@ class Collider {
 		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, w: this.getCanvas().width-15, h: this.getCanvas().height-15 };
 		var canvasArea = new Shape(canvasRect, ShapeType.RECTANGLE, 0);
 		var collider = this.collidesWith(canvasArea, newPos);
-		if (collider == null)
-			return { getID(){ return -2;} };
-		//console.log(newPos);
+		
+		// spiders spawn from outside the canvas! 
+		// They are not supposed to collide with canvas.
+		/*if (typeof(this) == Spider){
+			if (collider != null) 
+				return { getID(){ return -1000;} };
+		}
+		// every other object has to collide with the canvas.
+		else*/ if (collider == null){
+			return { getID(){ return -1000;} };
+		}
+		
 		for (var i=0; i < colObjs.length; i++)
 		{
 			if (this != colObjs[i]){
@@ -103,6 +114,7 @@ class Collider {
 		}
 		return null;
 	}
+	
 	
 	collidesWith(colObj, pos = this.getPosition())
 	{

@@ -3,23 +3,15 @@
  * It has limited access to some of the ants current values.<br>
  * The action for the upcoming iteration is to be written by the user.<br>
  */
-class AntController {
+class AntController extends Controller {
   /**
    * @ignore 
    */
 	constructor(ant){
+		super(ant);
 		this.parentID = 0;
-		this.life = 0;
 		this.food = 0;
 		this.foodMax = 0;
-		this.collidedWithID = -1;
-		this.visibleObjs = {};
-		this.smelledObjs = {};
-		
-		this.collidedWithID = -1;
-		this.wasAttacked = false;
-		
-		this.memory = { };
 		
 		this.setAttributes(ant);
 	}
@@ -39,14 +31,42 @@ class AntController {
 	}
 	
 	setAttributes(ant){
+		super.setAttributes(ant);
 		this.parentID = ant.getParentID();
-		this.life = ant.getLife();
 		this.food = ant.getFoodStorage();
 		this.foodMax = ant.getMaxFoodStorage();
-		this.visibleObjs = ant.visibleObjs;
-		this.smelledObjs = ant.smelledObjs;
-		this.collidedWithID = (ant.hasCollidedWith() != null ? ant.hasCollidedWith().getID() : -1);
-		this.wasAttacked = ant.wasAttacked();
+	}
+	
+	getAction(){
+		//eval('(' + document.getElementById("customIterate").value + ')');
+		var result = [ActionType.NONE, 0, 0];
+		try{
+			var newResult;
+			var func = userAntFunction.bind(this);
+			try{
+				newResult = func();
+			}
+			catch (runtimeError) {
+				console.error("legal code; unforeseen result: ", runtimeError);
+				console.info(runtimeError.name ,"-", runtimeError.message);
+				window.cancelAnimationFrame(requestID);
+				requestID = undefined;
+			}
+			//console.log(result);
+			if (newResult == null) {throw "no result value given!"; }
+			if (newResult.length != 3){throw "User input incorrect - return value needs 3 elements!"; }
+			if (newResult[0] < 0 || newResult[0] > 4){throw "User input incorrect - First element has to be a ActionType!"; }
+			else
+				result = newResult;
+		}
+		catch (syntaxError) {
+			console.error("illegal code; syntax errors: ", syntaxError);
+			console.info(syntaxError.name ,"-", syntaxError.message);
+			window.cancelAnimationFrame(requestID);
+			requestID = undefined;
+		}
+		//console.log(result);
+		return result;
 	}
 	
 	/**
@@ -54,12 +74,6 @@ class AntController {
 	* @return {number} parentID.
 	*/
 	getParentID(){return this.parentID;}
-
-	/**
-	* Get the current health of the ant (max: 100)
-	* @return {number} life.
-	*/
-	getLife(){return this.life;}
 
 	/**
 	* Get the current food the ant carries around.
@@ -73,38 +87,6 @@ class AntController {
 	*/
 	getMaxFoodStorage(){return this.foodMax;}
 
-	/**
-	* Get a list of all visible objects.
-	* @return {Object[]} visible objects.
-	*/
-	getVisibleObjs(){return this.visibleObjs;}
-
-	/**
-	* Get a list of all smelled objects.
-	* @return {Object[]} smelled objects.
-	*/
-	getSmelledObjs(){return this.smelledObjs;}
-	
-	/**
-	* Checks if the ant has collided with something in the previous iteration and returns its id.
-	* Returns -1 if no collision has occured.
-	* @return {number} Collision object ID.
-	*/
-	hasCollidedWithID() {return this.collidedWithID;}
-	
-	/**
-	* Returns the action the ant should do in the upcoming iteration.<br>
-	* This has to be an array with an ActionType and parameters.<br>
-	* Some examples:<br>
-	* - [ActionType.WALK, Direction.NONE, 0] // walks straight forward<br>
-	* - [ActionType.HARVEST, foodObj, 10]    // wants to harvest 10 food from foodObj<br>
-	* - [ActionType.GIVEFOOD, hive, 10]      // wants to give 10 food to hive<br>
-	* - [ActionType.ATTACK, enemy]           // wants to attack an enemy<br>
-	* @return {number[]} Array with type and parameters.
-	*/
-	getAction(){
-		
-	}
 	
 	getNearestEnemyAnt(){
 		var minDist = 1000;
@@ -150,53 +132,6 @@ class AntController {
 		}
 		
 		return hive;
-	}
-	
-	getObjectOfID(searchID){
-		var searchObj = null;
-		// is object of searchID visible?
-		for (var id in this.visibleObjs){
-			if(this.visibleObjs[id].getID() == searchID){
-				searchObj = this.visibleObjs[id];
-			}
-		}
-		
-		if (searchObj == null){
-			for (var id in this.smelledObjs){
-				if(this.smelledObjs[id].getID() == searchID){
-					searchObj = this.smelledObjs[id];
-				}
-			}
-		}
-		
-		return searchObj;
-	}
-	
-	//convenience functions for user
-	getNearestObjectType(objType){
-		var minDist = 1000;
-		var nearestOfObjType = null;
-		// is some food visible?
-		for (var id in this.visibleObjs){
-			if (this.visibleObjs[id].getType() == objType
-			&& this.visibleObjs[id].getDistanceToObj() < minDist){
-				minDist = this.visibleObjs[id].getDistanceToObj();
-				nearestOfObjType = this.visibleObjs[id];
-			}
-		}
-		
-		// no food visible -> try smelling
-		if (nearestOfObjType == null){
-			for (var id in this.smelledObjs){
-				if (this.smelledObjs[id].getType() == objType
-				&& this.smelledObjs[id].getDistanceToObj() < minDist){
-					minDist = this.smelledObjs[id].getDistanceToObj();
-					nearestOfObjType = this.smelledObjs[id];
-				}
-			}
-		}
-		
-		return nearestOfObjType;
 	}
 	
 }

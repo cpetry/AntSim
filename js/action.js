@@ -26,12 +26,16 @@ class Action {
 	static walk(obj, direction, rotation, colObjs){
 		// check parameters
 		if (!isNaN(rotation)){
-			obj.setNewHeading(obj.getRotation() + rotation);
+			obj.setNewRotation(obj.getRotation() + rotation);
 			obj.move(direction, colObjs);
 		}
 	}
 
 	static harvest(harvester, harvestObjProxy, amount, colObjs){
+		if (!harvestObjProxy.canBeInteractedWith(harvester)){
+			console.log("Trying to harvest out of range!")
+			return;
+		}
 		
 		// first get real obj to proxy obj
 		var objID = harvestObjProxy.getID();
@@ -53,6 +57,11 @@ class Action {
 	}
 	
 	static transferFood(sender, receiverProxy, foodWantingToGiveAway, colObjs){
+		if (!receiverProxy.canBeInteractedWith(sender)){
+			console.log("Trying to give food to something out of range!")
+			return;
+		}
+
 		var objID = receiverProxy.getID();
 		var receiver;
 		for (var i=0; i< colObjs.length; i++)
@@ -71,6 +80,11 @@ class Action {
 	}
 
 	static attack(hunter, preyProxy, colObjs) {
+		if (!preyProxy.canBeInteractedWith(hunter)){
+			console.log("Trying to attack something out of range!")
+			return;
+		}
+
 		// first get real obj to proxy obj
 		var objID = preyProxy.getID();
 		var prey;
@@ -80,8 +94,10 @@ class Action {
 				break;
 			}
 
-		if (prey instanceof Ant)
-			prey.receiveAttack();
+		// do we need this check?
+		if (prey instanceof Ant
+		|| prey instanceof Spider)
+			prey.receiveAttack(hunter.getAttackDamage());
 
 	}
 

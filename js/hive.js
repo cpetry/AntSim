@@ -18,7 +18,6 @@ class Hive extends SmellableObject {
 
 		this.ants = [];
 		this.collisionObjs = collisionObjs;
-		this.collisionObjs.push(this);
 		this.settings = settings;
 		
 		if (settings.getHiveType() == HiveType.DEFAULT)
@@ -27,47 +26,29 @@ class Hive extends SmellableObject {
 			this.controller = new HiveControllerCustom();
 	}
 	
-	initAnts(antStartNumber = this.settings.getAntStartNumber()){
-		// Ant creation
-		for (var i=0; i < antStartNumber; i++)
-			this.createAnt();
-	}
-
 	getFoodMaxStorage(){ return this[_foodMaxHive];}
 	getFoodStorage(){ return this[_foodStorageHive];}
 	getAnts() {return this.ants;}
 
-	iterate(){
+	iterate(collisionObjs){
 		for (var i = 0; i < this.ants.length; i++) {
-			// setting sight and smell
-			this.ants[i].setVisibleObjects(this.collisionObjs);
-			this.ants[i].setSmelledObjects(this.collisionObjs);
-			// get action
-			let [action, parameter1, parameter2] = this.ants[i].iterate();
-			// apply action
-			Action.apply(this.ants[i], action, parameter1, parameter2, this.collisionObjs);
-
-			// set decay
-			this.ants[i].age();
+			this.ants[i].iterate(collisionObjs);
 		}
 	}
 	
-	createAnt(){
-
+	createAnt(collisionObjs){
 		var posDistace = this.settings.getAntPositionDistance();
 		var antPos = { x: rand(-posDistace,posDistace) + this.getPosition().x , y: rand(-posDistace,posDistace) + this.getPosition().y };
 		var rotation = rand(0, 3.14*2); // 0 - 360°
 
-		var newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, this.collisionObjs, this.getID());
+		var newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, collisionObjs, this.getID());
 		this.ants.push(newAnt);
-		this.collisionObjs.push(newAnt);
-
 	}
 
-	removeAnt(ant, index){
-		for (var a =0; a < this.collisionObjs.length; a++){
-			if (this.collisionObjs[a] == this.ants[index])
-				this.collisionObjs.splice(a, 1);
+	removeAnt(ant, index, collisionObjs){
+		for (var a =0; a < collisionObjs.length; a++){
+			if (collisionObjs[a] == this.ants[index])
+				collisionObjs.splice(a, 1);
 		}
 		this.ants.splice(index, 1);
 	}

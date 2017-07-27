@@ -12,7 +12,7 @@ class SmellableObject extends Collider {
     * @param {number} size - Size of the objects collider.
     * @param {number} sizeSmellingFactor - Size of the objects smell.
     * @param {Objects[]} collisionObjs - Objects in simulation that can collide with this.
-    * @param {number} [rotation=0]rotation - ID of the ants hive.
+    * @param {number} [rotation=0]rotation - Rotation in radians.
 	*/
 	constructor(canvas, position, size, sizeSmellingFactor, collisionObjs, rotation = 0){
 		if (new.target === SmellableObject) {

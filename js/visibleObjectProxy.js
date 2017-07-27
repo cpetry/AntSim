@@ -5,8 +5,10 @@ class VisibleObjectProxy extends SmellableObjectProxy{
 		this.refID = refID;
 	}
 
-	canBeInteractedWith(){
-		return (this.distance - this.size < 10);
+	canBeInteractedWith(other){
+		var isNearEnough = this.distance - this.size - other.getSize() < 10;
+		var rotatedTowards = Math.abs(this.getRotationToObj()) < Math.PI/4; 
+		return (isNearEnough && rotatedTowards);
 	}
 	
 	getID(){ return this.refID; }

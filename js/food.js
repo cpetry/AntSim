@@ -6,7 +6,6 @@ class Food extends SmellableObject {
 		super(canvas, position, size, settings.getSizeSmellingFactor(), collisionObjs);
 		this[_amount] = settings.getFoodAmount();
 		this[_foodSize] = settings.getFoodSize();
-		collisionObjs.push(this);
 	}
 	
 	getAmount()  {return this[_amount];}

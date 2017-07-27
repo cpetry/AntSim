@@ -18,7 +18,7 @@ class AntControllerSimple extends AntController{
 			var prey = this.getNearestEnemyAnt();
 			if (prey != null){
 				if (this.getLife() > 50) {
-					if (prey.canBeInteractedWith()) {
+					if (prey.canBeInteractedWith(this)) {
 						return [ActionType.ATTACK, prey]
 					}
 					else {
@@ -36,7 +36,7 @@ class AntControllerSimple extends AntController{
 			nearestFood = this.getNearestObjectType(ObjectType.FOOD);
 			
 			if (nearestFood != null ){
-				var canBeHarvested = nearestFood.canBeInteractedWith();
+				var canBeHarvested = nearestFood.canBeInteractedWith(this);
 				var isFull = (this.getFoodStorage() == this.getMaxFoodStorage());
 				var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
 					
@@ -73,7 +73,7 @@ class AntControllerSimple extends AntController{
 
 			if (hive != null){
 				// harvest food if possible
-				if(hive.canBeInteractedWith()){
+				if(hive.canBeInteractedWith(this)){
 					return [ActionType.GIVEFOOD, hive, foodGivingToHive];
 				}
 				// walk towards hive
