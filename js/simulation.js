@@ -129,7 +129,6 @@ class Simulation {
 			var level = 1;
 			var newSpider = new Spider(this.canvas, enterFromRotation, this.settings, level, this.collisionObjects);
 			this.spiders.push(newSpider);
-			console.log("Spider created!")
 		}
 	}
 

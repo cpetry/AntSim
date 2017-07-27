@@ -35,6 +35,8 @@ class SettingsSimulation
 		this.spiderVisibilityDistance = 30;
 		this.spiderVisibilityRange = 0.8;
 		this.sizeSmellingFactor = 6;
+		this.interactionDistance = 5;
+		this.interactionRange = Math.PI/4;
 	}
 	// attribute related settings
 	getTerrariumWidth(){ return this.terrariumWidth; }
@@ -73,4 +75,6 @@ class SettingsSimulation
 	getFoodMaxAnt(){ return this.foodMaxAnt; }
 	getFoodMaxHarvestAmountAnt(){ return this.foodMaxHarvestAmountAnt; }
 	getSizeSmellingFactor() { return this.sizeSmellingFactor; }
+	getInteractionDistance() { return this.interactionDistance; }
+	getInteractionRange() { return this.interactionRange; }
 }

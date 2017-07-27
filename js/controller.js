@@ -21,6 +21,8 @@ class Controller {
 		this.smelledObjs = animal.getSmelledObjs();
 		this.collidedWithID = (animal.hasCollidedWith() != null ? animal.hasCollidedWith().getID() : -1);
 		this.wasAttacked = animal.wasAttacked();
+		this.interactionDistance = animal.getInteractionDistance();
+		this.interactionRange = animal.getInteractionRange();
 	}
 
 	/**
@@ -46,6 +48,18 @@ class Controller {
 	* @return {Object[]} smelled objects.
 	*/
 	getSmelledObjs(){return this.smelledObjs;}
+
+	/**
+	* Get the maximum distance ants can interact with stuff
+	* @return {number} distance.
+	*/
+	getInteractionDistance(){return this.interactionDistance;}
+
+	/**
+	* Get the maximum range ants can interact with stuff
+	* @return {number} range in rad.
+	*/
+	getInteractionRange(){return this.interactionRange;}
 	
 	/**
 	* Checks if the ant has collided with something in the previous iteration and returns its id.

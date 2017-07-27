@@ -11,7 +11,8 @@ const _controller = Symbol('controller');
 const _visibleObjs = Symbol('visibleObjects');
 const _smelledObjs = Symbol('smelledObjects');
 const _attackDamage = Symbol('attackDamage');
-
+const _interactionDistance = Symbol('interactionDistance');
+const _interactionRange = Symbol('interactionRange');
 
 class Animal extends SmellableObject {
 	/**
@@ -25,8 +26,8 @@ class Animal extends SmellableObject {
     * @param {Objects[]} collisionObjs - Objects in simulation that can collide with this.
     * @param {number} [rotation=0]rotation - Rotation of the animal.
 	*/
-	constructor(canvas, position, size, smellingFactor, collisionObjs, rotation){
-		super(canvas, position, size, smellingFactor, collisionObjs, rotation);
+	constructor(canvas, position, size, settings, collisionObjs, rotation){
+		super(canvas, position, size, settings.getSizeSmellingFactor(), collisionObjs, rotation);
 		
 		if (new.target === Animal) {
 			throw new TypeError("Cannot construct animals directly");
@@ -43,6 +44,8 @@ class Animal extends SmellableObject {
 		this[_wasAttacked] = false;
 		this[_controller] = null;
 		this[_attackDamage] = 0;
+		this[_interactionDistance] = settings.getInteractionDistance();
+		this[_interactionRange] = settings.getInteractionRange();
 		
 		this[_visibleObjs] = {};
 		this[_smelledObjs] = {};
@@ -58,6 +61,8 @@ class Animal extends SmellableObject {
 	getVisibleObjs(){return this[_visibleObjs];}
 	getSmelledObjs(){return this[_smelledObjs];}
 	getAttackDamage() {return this[_attackDamage];}
+	getInteractionDistance() {return this[_interactionDistance];}
+	getInteractionRange() {return this[_interactionRange];}
 	
 	hasCollidedWith(){ return this[_collidedWithSth];}
 	wasAttacked(){ return this[_wasAttacked];}

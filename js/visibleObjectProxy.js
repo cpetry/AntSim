@@ -6,8 +6,8 @@ class VisibleObjectProxy extends SmellableObjectProxy{
 	}
 
 	canBeInteractedWith(other){
-		var isNearEnough = this.distance - this.size - other.getSize() < 10;
-		var rotatedTowards = Math.abs(this.getRotationToObj()) < Math.PI/4; 
+		var isNearEnough = this.distance - this.size - other.getSize() < other.getInteractionDistance();
+		var rotatedTowards = Math.abs(this.getRotationToObj()) < other.getInteractionRange(); 
 		return (isNearEnough && rotatedTowards);
 	}
 	

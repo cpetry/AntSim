@@ -4,6 +4,7 @@ const _shapeType = Symbol('shapeType');
 const _rotation = Symbol('rotation');
 const _canvas = Symbol('canvas');
 const _id = Symbol('id');
+const _isEntering = Symbol('isEntering');
 
 /**
  * An object that can collide with another one.
@@ -30,12 +31,15 @@ class Collider {
 		this[_shapeType] = shapeType;
 		this[_size] = size;
 		this[_rotation] = rotation;
+		this[_isEntering] = (this instanceof Spider); // only used for spiders
+
 		var tests = 0;
-		while(this.checkCollision(position, colObjs) != null && tests < 100){
+		var maxTests = 300;
+		while(this.checkCollision(position, colObjs) != null && tests < maxTests){
 			position = { x: position.x + rand(-20,20), y: position.y + rand(-20,20) };
 			tests +=1;
 		}
-		if (tests==300)
+		if (tests==maxTests)
 			console.log("ERROR positioning object!");
 		this[_position] = position;
 		
@@ -95,12 +99,13 @@ class Collider {
 		
 		// spiders spawn from outside the canvas! 
 		// They are not supposed to collide with canvas.
-		/*if (typeof(this) == Spider){
-			if (collider != null) 
-				return { getID(){ return -1000;} };
+		if (this instanceof Spider && this[_isEntering]){
+			if (collider != null)
+				this[_isEntering] = false;
+			return null;
 		}
 		// every other object has to collide with the canvas.
-		else*/ if (collider == null){
+		else if (collider == null){
 			return { getID(){ return -1000;} };
 		}
 		
@@ -129,7 +134,7 @@ class Collider {
 				if (!('w' in thisSize) || !('h' in thisSize)) throw "rectangle size has to have two sizes!";
 				var polyA = Collider.convertRectToPoly(pos, thisSize, this.getRotation());
 				var polyB = Collider.convertRectToPoly(colPosition, colSize, colObj.getRotation());
-				if (Collider.checkPolygonCollition(polyA, polyB))
+				if (Collider.checkPolygonCollision(polyA, polyB))
 					return colObj;
 				else
 					return null;
@@ -218,7 +223,7 @@ class Collider {
 		return p;
 	}
 	
-	static checkPolygonCollition(polyA, polyB){
+	static checkPolygonCollision(polyA, polyB){
 		var polygons = [polyA, polyB];
 		var minA, maxA, projected, i, i1, j, minB, maxB;
 

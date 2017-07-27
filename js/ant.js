@@ -33,19 +33,19 @@ class Ant extends Animal {
     * @param {number} parentID - ID of the ants hive.
 	*/
 	constructor(canvas, position, rotation, settings, collisionObjs, parentID){
-		super(canvas, position, settings.getAntSize(), settings.getSizeSmellingFactor(), collisionObjs, rotation);
+		super(canvas, position, settings.getAntSize(), settings, collisionObjs, rotation);
 		
 		// Abilities
-		this[_decayProb]     = settings.getAntDecayProb();
-		this[_foodBonusProb] = settings.getAntFoodBonusProb(); // less life loss when carrying food
-		this[_foodMaxAnt] = settings.getFoodMaxAnt();
+		this[_decayProb]            = settings.getAntDecayProb();
+		this[_foodBonusProb]        = settings.getAntFoodBonusProb(); // less life loss when carrying food
+		this[_foodMaxAnt]           = settings.getFoodMaxAnt();
 		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt();
-		this[_speed] = settings.getAntSpeed();
-		this[_speedRotation] = settings.getAntSpeedRotation();
-		this[_smellingDistance] = settings.getAntSmellingDistance();
-		this[_visibilityDistance] = settings.getAntVisibilityDistance();
-		this[_visibilityRangeRad] = settings.getAntVisibilityRange();
-		this[_attackDamage] = settings.getAntAttackDamage();
+		this[_speed]                = settings.getAntSpeed();
+		this[_speedRotation]        = settings.getAntSpeedRotation();
+		this[_smellingDistance]     = settings.getAntSmellingDistance();
+		this[_visibilityDistance]   = settings.getAntVisibilityDistance();
+		this[_visibilityRangeRad]   = settings.getAntVisibilityRange();
+		this[_attackDamage]         = settings.getAntAttackDamage();
 
 		this[_life] = settings.getAntLife();
 		this[_foodStorageAnt] = 0;
