@@ -20,7 +20,9 @@ class Simulation {
 		this.food = [];
 		this.collisionObjects = [];
 		this.environmentObjs = [];
+		this.spiders = [];
 		this.settings = settings;
+
 		this.graph = new Graph();
 
 		// simulation constructor is called directly
@@ -59,30 +61,34 @@ class Simulation {
 		}
 
 		// first hives need their ids, then ants can be created
-		for (var i = 0; i < this.hives.length; ++i) {
-			this.hives[i].initAnts();
-		}
+		for (var i = 0; i < this.hives.length; ++i) 
+			for (var a=0; a < this.settings.getAntStartNumber(); a++)
+				this.hives[i].createAnt(this.collisionObjects);
 	}
 
 	simulate(){
 
 		// Iterate through all hives
 		for (var i = 0; i < this.hives.length; ++i){
-			this.hives[i].iterate();
-
+			this.hives[i].iterate(this.collisionObjects);
 			for (var a = 0; a < this.hives[i].getAnts().length; a++) {
 				if (this.hives[i].getAnts()[a].getLife() <= 0){
 					var pos = this.hives[i].getAnts()[a].getPosition();
-					this.hives[i].removeAnt(this.hives[i].getAnts()[a], a);
+					this.hives[i].removeAnt(this.hives[i].getAnts()[a], a, this.collisionObjects);
 					this.food.push(new AntDead(this.canvas, pos, this.settings, this.collisionObjects));
 				}
 			}
 		}
+		
+		for (var i = 0; i < this.spiders.length; ++i){
+			this.spiders[i].iterate(this.collisionObjects);
+		}
+		this.spiderCreation();
 
+		
 		// Update food (and in case create new one)
 		this.foodDecay();
 		this.foodCreation();
-
 	}
 
 	foodDecay(){
@@ -116,6 +122,23 @@ class Simulation {
 			var size = this.settings.getFoodAmount() * this.settings.getFoodSize();
 			var newFood = new Food(this.canvas, foodPos, size, this.settings, this.collisionObjects);
 			this.food.push(newFood);
+		}
+	}
+	
+	spiderCreation(){
+		var maxSpiderNmb = 2;
+		var spiderCreationProb = 0.02;
+		var reduceByTime = this.iteration/1000.0*spiderCreationProb/10;
+		var reduceBySpiderNumber = (maxSpiderNmb-this.spiders.length)/maxSpiderNmb;
+		var probability = (spiderCreationProb-reduceByTime)*reduceBySpiderNumber;
+		var createSpider = Math.floor(rand(0,1+probability));
+		if (createSpider && this.spiders.length < maxSpiderNmb){
+			// spiders are positioned outside of canvas
+			var enterFromRotation = rand(0,2*Math.PI);
+			var level = 1;
+			var newSpider = new Spider(this.canvas, enterFromRotation, this.settings, level, this.collisionObjects);
+			this.spiders.push(newSpider);
+			console.log("Spider created!")
 		}
 	}
 
@@ -197,18 +220,8 @@ class Simulation {
 		for (var i = 0; i < this.environmentObjs.length; i++)
 			this.environmentObjs[i].draw();
 
-		for (var i = 0; i < this.food.length; i++)
-			this.food[i].draw();
-
-		if (this.hives.length > 0)
-			for (var i = 0; i < this.hives.length; ++i)
-				this.hives[i].draw();
-
-		for (var i = 0; i < this.hives.length; ++i)
-			if (this.hives[i] instanceof Hive)
-				for (var j = 0; j < this.hives[i].getAnts().length; j++)
-					this.hives[i].getAnts()[j].draw();
-
+		for (var i = 0; i < this.collisionObjects.length; i++)
+			this.collisionObjects[i].draw();
 	}
 
 	updateGraph(){

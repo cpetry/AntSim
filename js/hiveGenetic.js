@@ -13,6 +13,5 @@ class HiveGenetic extends Hive {
 		var newGenes = this.controller.getNewGeneCombination();
 		var newAnt = new AntGenetic(this.getCanvas(), antPos, rotation, this.settings, newGenes, this.collisionObjs, this.getID());
 		this.ants.push(newAnt);
-		this.collisionObjs.push(newAnt);
 	}
 }

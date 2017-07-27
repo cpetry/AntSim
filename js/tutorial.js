@@ -37,7 +37,7 @@ class Tutorial extends Simulation {
 		// Explain vision, smell and basic action concept.
 		// Let it find the food and walk to it.
 		this.hives[0].controller.setNewGeneCombination([0.05,0.15,0.8]);
-		this.hives[0].initAnts(1);
+		this.hives[0].createAnt(this.collisionObjects);
 		
 		// Tutorial 2 should fortify this concept and the scout is to harvest 
 		// and return back to the hive with food.
@@ -63,7 +63,7 @@ class Tutorial extends Simulation {
 	
 	simulate(){
 		// Iterate through all hives
-		this.hives[0].iterate();
+		this.hives[0].iterate(this.collisionObjects);
 		
 		var firstAnt = this.hives[0].getAnts()[0];
 		if (firstAnt.collidesWith(this.checkAreaFood) && this.part == 0){
