@@ -11,15 +11,15 @@ class AntControllerNeuralNet extends AntController{
 	constructor(ant, neuralNetwork){
 		super(ant);
 		this.memory = { harvestedFood : false, lastLife : -1 };
-		this.networkMemory = [];
 		this.neuralNetwork = neuralNetwork;
+		this.networkMemory = this.neuralNetwork.networkMemory;
 		
 		this.batchSize = 10;
 		this.minTrainSet = this.batchSize * 500;
 
-		this.trainSet = [];
-		this.realChosen = [];
-		this.firstChoice = [];
+		this.trainSet = this.neuralNetwork.trainSet;
+		this.realChosen = this.neuralNetwork.realChosen;
+		this.firstChoice = this.neuralNetwork.firstChoice;
 	}
 	
 	
@@ -174,7 +174,7 @@ class AntControllerNeuralNet extends AntController{
 			if (i == 0) {
 				var prey = this.getNearestEnemyAnt();
 				if (prey != null) {
-					if (prey.canBeInteractedWith()) {
+					if (prey.canBeInteractedWith(this)) {
 						return [ActionType.ATTACK, prey]
 					} else {
 						var fromObjToDirRad = prey.getRotationToObj();
@@ -193,7 +193,7 @@ class AntControllerNeuralNet extends AntController{
 
 				if (nearestFood != null) {
 
-					var canBeHarvested = nearestFood.canBeInteractedWith();
+					var canBeHarvested = nearestFood.canBeInteractedWith(this);
 					var isFull = (this.getFoodStorage() == this.getMaxFoodStorage());
 					var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
 
@@ -220,7 +220,7 @@ class AntControllerNeuralNet extends AntController{
 				if (hive != null){
 
 					// harvest food if possible
-					if(hive.canBeInteractedWith()){
+					if(hive.canBeInteractedWith(this)){
 						actionTuple = [ActionType.GIVEFOOD, hive, foodGivingToHive];
 					} else {
 						// walk towards hive

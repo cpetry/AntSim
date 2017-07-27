@@ -10,10 +10,6 @@ var AntType = {
 	NEURALNET: 2
 }
 
-const _speed = Symbol('speed');
-const _life = Symbol('life');
-const _smellingDistance = Symbol('smellingDistance');
-const _decayProb = Symbol('decayProb');
 const _foodBonusProb = Symbol('foodBonusProb');
 const _foodStorageAnt = Symbol('foodStorageAnt');
 const _foodMaxAnt = Symbol('foodMaxAnt');

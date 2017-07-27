@@ -31,6 +31,11 @@ class NeuralNetwork {
 		this.numHidden = 20;
 		this.numOutputs = 6;
 		
+		this.networkMemory = [];
+		this.trainSet = [];
+		this.realChosen = [];
+		this.firstChoice = [];
+
 		this.initNetwork();
 	}
 
