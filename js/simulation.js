@@ -62,16 +62,26 @@ class Simulation {
 			this.hives[i].iterate(this.allObjects);
 			
 			for (var a = 0; a < this.hives[i].getAnts().length; a++) {
-				if (this.hives[i].getAnts()[a].getLife() <= 0){
-					var pos = this.hives[i].getAnts()[a].getPosition();
-					this.hives[i].removeAnt(this.hives[i].getAnts()[a], a, this.allObjects);
-					this.food.push(new AntDead(this.canvas, pos, this.settings, this.allObjects));
+				var ant = this.hives[i].getAnts()[a];
+				if (ant.getLife() <= 0){
+					this.hives[i].removeAnt(ant, a, this.allObjects);
+					this.food.push(new AntDead(ant, this.settings, this.allObjects));
 				}
 			}
 		}
 		
 		for (var i = 0; i < this.spiders.length; ++i){
-			this.spiders[i].iterate(this.allObjects);
+			var spider = this.spiders[i]
+			spider.iterate(this.allObjects);
+			if (spider.getLife() <= 0){
+				this.food.push(new SpiderDead(spider, this.settings, this.allObjects));
+				for (var a = 0; a < this.allObjects.length; a++){
+					if (allObjects[a] == spider)
+					allObjects.splice(a, 1);
+				}
+				this.spiders.splice(i, 1);
+	
+			}
 		}
 		this.spiderCreation();
 
@@ -148,7 +158,10 @@ class Simulation {
 	}
 
 	clear(){
-		this.canvas.getContext("2d").clearRect(0, 0, this.canvas.width, this.canvas.height);
+		var ctx = this.canvas.getContext("2d")
+		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		ctx.fillStyle = "#e2decf";
+		ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
 	}
 
 	loop(){

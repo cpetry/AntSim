@@ -1,6 +1,9 @@
 class Spider extends Animal {
 	constructor(canvas, enterFromRotation, settings, level, collisionObjs){
 		var spiderSize = settings.getSpiderSize() + settings.getSpiderSizeLevelFactor() * level;
+		
+		// Start position of spider has to be outside of canvas.
+		// It then walks towards the center and becomes "active"
 		var position = { x: canvas.width/2, y: canvas.height/2 };
 		var dir = rotateVector({x:1, y:0}, enterFromRotation);
 		var w = canvas.width/2;
@@ -28,20 +31,20 @@ class Spider extends Animal {
 		this.drawIteration = 0;
 	}
 	
-	iterate(collisionObjs){
+	iterate(allObjects){
 		this.drawIteration+=1;
 		
 		// Spiders enter from outside of the canvas!
 		if (this[_isEntering]){
 			var spiderSizeVec = rotateVector({x:-this.getSize()*2,y:0}, this.getRotation());
 			var posBehindSpider = {x:this.getPosition().x+spiderSizeVec.x, y:this.getPosition().y+spiderSizeVec.y};
-			var collider = this.checkCollision(posBehindSpider, collisionObjs);
+			var collider = this.checkCollision(posBehindSpider, allObjects);
 			// walk towards center 
 			if (collider == null)
-				Action.walk(this, Direction.FORWARD, 0, collisionObjs);
+				Action.walk(this, Direction.FORWARD, 0, allObjects);
 		}
 		else
-			super.iterate(collisionObjs);
+			super.iterate(allObjects);
 	}
 	
 	draw(){

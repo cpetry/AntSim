@@ -19,6 +19,7 @@ class SettingsSimulation
 		this.antMaxPheromones = 10;
 		this.foodAmount = 1000;
 		this.foodAmountDeadAnt = 50;
+		this.foodAmountDeadSpider = 500;
 		this.foodSize = 0.005; // percentage of food amount
 		this.foodCreationPropability = 0.05; // chance for each iteration to create food
 		this.foodMaxSiteNumber = 10; // maximum number of food sites
@@ -31,7 +32,7 @@ class SettingsSimulation
 		this.spiderSpeed = 1;
 		this.spiderSpeedRotation = 0.05; // radians
 		this.spiderAttackDamage = 3;
-		this.spiderDecayProb = 0.05;
+		this.spiderDecayProb = 0.3;
 		this.spiderSmellingDistance = 50;
 		this.spiderVisibilityDistance = 30;
 		this.spiderVisibilityRange = 0.8;
@@ -71,6 +72,7 @@ class SettingsSimulation
 	getFoodSize(){ return this.foodSize; }
 	getFoodAmount(){ return this.foodAmount; }
 	getFoodAmountDeadAnt(){ return this.foodAmountDeadAnt; }
+	getFoodAmountDeadSpider(){ return this.foodAmountDeadSpider; }
 	getFoodCreationPropability(){ return this.foodCreationPropability; }
 	getFoodMaxSiteNumber(){ return this.foodMaxSiteNumber; }
 	getFoodMaxHive(){ return this.foodMaxHive; }

@@ -100,8 +100,10 @@ class Collider {
 	}
 	
 	checkCollision(newPos, colObjs)
-	{		
-		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, w: this.getCanvas().width-15, h: this.getCanvas().height-15 };
+	{
+		// To be able to check if object is inside canvas simply reduce canvas width and height by 3*size!
+		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, 
+							w: this.getCanvas().width-this.getSize()*3, h: this.getCanvas().height - this.getSize()*3};
 		var canvasArea = new Shape(canvasRect, ShapeType.RECTANGLE, 0);
 		var collider = this.collidesWith(canvasArea, newPos);
 		

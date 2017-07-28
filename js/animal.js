@@ -88,7 +88,7 @@ class Animal extends SmellableObject {
 			this[_life]-=1;
 	}
 	
-		// checks and walks if possible
+	// checks and walks if possible
 	move(walkingDirection, allObjects){
 		
 		var newHeading = this.getDirectionVec();
@@ -99,6 +99,7 @@ class Animal extends SmellableObject {
 		
 		// attention: has to be copied!
 		var newPos = { x: this.getPosition().x, y: this.getPosition().y};
+		
 		if (walkingDirection == Direction.FORWARD){
 			newPos.x += newHeading.x * moveSpeed;
 			newPos.y += newHeading.y * moveSpeed;
@@ -107,7 +108,7 @@ class Animal extends SmellableObject {
 			newPos.x -= newHeading.x * moveSpeed;
 			newPos.y -= newHeading.y * moveSpeed;
 		}
-		
+		// Collider
 		var collider = this.setPosition(newPos, allObjects);
 		this[_collidedWithSth] = collider;
 	}

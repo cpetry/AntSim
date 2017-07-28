@@ -1,6 +1,6 @@
 class AntDead extends Food {
-	constructor(canvas, position, settings, collisionObjs){
-		super(canvas, position, settings.getAntSize(), settings, collisionObjs);
+	constructor(ant, settings, collisionObjs){
+		super(ant.getCanvas(), ant.getPosition(), ant.getSize(), settings, collisionObjs);
 		this[_amount] = settings.getFoodAmountDeadAnt();
 	}
 	
