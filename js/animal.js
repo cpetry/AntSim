@@ -23,11 +23,11 @@ class Animal extends SmellableObject {
     * @param {object} position - 2D position of where the object shall be created (if no collision occurs).
     * @param {number} size - Size of the objects collider.
     * @param {number} sizeSmellingFactor - Size of the objects smell.
-    * @param {Objects[]} collisionObjs - Objects in simulation that can collide with this.
+    * @param {Objects[]} allObjects - Objects in simulation.
     * @param {number} [rotation=0]rotation - Rotation of the animal.
 	*/
-	constructor(canvas, position, size, settings, collisionObjs, rotation){
-		super(canvas, position, size, settings.getSizeSmellingFactor(), collisionObjs, rotation);
+	constructor(canvas, position, size, settings, allObjects, rotation){
+		super(canvas, position, size, settings.getSizeSmellingFactor(), allObjects, rotation);
 		
 		if (new.target === Animal) {
 			throw new TypeError("Cannot construct animals directly");
@@ -67,16 +67,16 @@ class Animal extends SmellableObject {
 	hasCollidedWith(){ return this[_collidedWithSth];}
 	wasAttacked(){ return this[_wasAttacked];}
 
-	iterate(collisionObjs){
+	iterate(allObjects){
 		// setting sight and smell
-		this.setVisibleObjects(collisionObjs);
-		this.setSmelledObjects(collisionObjs);
+		this.setVisibleObjects(allObjects);
+		this.setSmelledObjects(allObjects);
 		
 		// get action
 		this[_controller].setAttributes(this);
 		let [action, parameter1, parameter2] = this[_controller].getAction();
 		// apply action
-		Action.apply(this, action, parameter1, parameter2, collisionObjs);
+		Action.apply(this, action, parameter1, parameter2, allObjects);
 
 		// set decay
 		this.age();
@@ -89,7 +89,7 @@ class Animal extends SmellableObject {
 	}
 	
 		// checks and walks if possible
-	move(walkingDirection, colObjs){
+	move(walkingDirection, allObjects){
 		
 		var newHeading = this.getDirectionVec();
 
@@ -108,7 +108,7 @@ class Animal extends SmellableObject {
 			newPos.y -= newHeading.y * moveSpeed;
 		}
 		
-		var collider = this.setPosition(newPos, colObjs);
+		var collider = this.setPosition(newPos, allObjects);
 		this[_collidedWithSth] = collider;
 	}
 	
@@ -128,7 +128,7 @@ class Animal extends SmellableObject {
 		this[_visibleObjs] = {}
 		
 		for (var i=0, l=objects.length; i<l; i++){
-			if (this == objects[i])
+			if (this == objects[i] || objects[i] instanceof Pheromone)
 				continue;
 			var objPos = objects[i].getPosition();
 			var distToObj = getDistance(objPos, this.getPosition());

@@ -32,18 +32,26 @@ class Collider {
 		this[_size] = size;
 		this[_rotation] = rotation;
 		this[_isEntering] = (this instanceof Spider); // only used for spiders
-
-		var tests = 0;
-		var maxTests = 300;
-		while(this.checkCollision(position, colObjs) != null && tests < maxTests){
-			position = { x: position.x + rand(-20,20), y: position.y + rand(-20,20) };
-			tests +=1;
-		}
-		if (tests==maxTests)
-			console.log("ERROR positioning object!");
-		this[_position] = position;
 		
-		colObjs.push(this);
+		// Pheromones can not collide!
+		if (this instanceof Pheromone){
+			this[_position] = position;
+		}
+		else {
+			// try creating the object without colliding with sth
+			var tests = 0;
+			var maxTests = 300;
+			
+			while(this.checkCollision(position, colObjs) != null && tests < maxTests){
+				position = { x: position.x + rand(-20,20), y: position.y + rand(-20,20) };
+				tests +=1;
+			}
+			if (tests==maxTests)
+				console.log("ERROR positioning object!");
+			this[_position] = position;
+			
+			colObjs.push(this);
+		}
 	}
 	
 	static getNewID(){ 
@@ -92,7 +100,7 @@ class Collider {
 	}
 	
 	checkCollision(newPos, colObjs)
-	{
+	{		
 		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, w: this.getCanvas().width-15, h: this.getCanvas().height-15 };
 		var canvasArea = new Shape(canvasRect, ShapeType.RECTANGLE, 0);
 		var collider = this.collidesWith(canvasArea, newPos);

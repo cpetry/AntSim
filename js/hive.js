@@ -30,35 +30,35 @@ class Hive extends SmellableObject {
 	getFoodStorage(){ return this[_foodStorageHive];}
 	getAnts() {return this.ants;}
 
-	iterate(collisionObjs){
+	iterate(allObjects){
 		for (var i = 0; i < this.ants.length; i++) {
-			this.ants[i].iterate(collisionObjs);
+			this.ants[i].iterate(allObjects);
 		}
 	}
 	
-	createAnt(collisionObjs){
+	createAnt(allObjects){
 		var posDistace = this.settings.getAntPositionDistance();
 		var antPos = { x: rand(-posDistace,posDistace) + this.getPosition().x , y: rand(-posDistace,posDistace) + this.getPosition().y };
 		var rotation = rand(0, 3.14*2); // 0 - 360°
 
-		var newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, collisionObjs, this.getID());
+		var newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, allObjects, this.getID());
 		this.ants.push(newAnt);
 	}
 
-	removeAnt(ant, index, collisionObjs){
-		for (var a =0; a < collisionObjs.length; a++){
-			if (collisionObjs[a] == this.ants[index])
-				collisionObjs.splice(a, 1);
+	removeAnt(ant, index, allObjects){
+		for (var a =0; a < allObjects.length; a++){
+			if (allObjects[a] == this.ants[index])
+				allObjects.splice(a, 1);
 		}
 		this.ants.splice(index, 1);
 	}
 
-	receiveFood(amount){
+	receiveFood(amount, allObjects){
 		var additionalFood = amount;
 		if (amount + this.getFoodStorage() >= this.getFoodMaxStorage()){
 			var tooMuch = (amount + this.getFoodStorage()) % this.getFoodMaxStorage();
 			this[_foodStorageHive] = tooMuch;
-			this.createAnt()
+			this.createAnt(allObjects)
 		}
 		this[_foodStorageHive] += additionalFood;
 	}

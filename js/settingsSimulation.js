@@ -16,6 +16,7 @@ class SettingsSimulation
 		this.antSmellingDistance = 50;
 		this.antVisibilityDistance = 30;
 		this.antVisibilityRange = 0.8;
+		this.antMaxPheromones = 10;
 		this.foodAmount = 1000;
 		this.foodAmountDeadAnt = 50;
 		this.foodSize = 0.005; // percentage of food amount
@@ -56,6 +57,7 @@ class SettingsSimulation
 	getAntSmellingDistance() { return this.antSmellingDistance; }
 	getAntVisibilityDistance() { return this.antVisibilityDistance; }
 	getAntVisibilityRange() { return this.antVisibilityRange; }
+	getAntMaxPheromones() { return this.antMaxPheromones; }
 	getSpiderSize() { return this.spiderSize; }
 	getSpiderSizeLevelFactor() { return this.spiderSizeLevelFactor; }
 	getSpiderLife(){ return this.spiderLife; }

@@ -14,6 +14,8 @@ const _foodStorageAnt = Symbol('foodStorageAnt');
 const _foodMaxAnt = Symbol('foodMaxAnt');
 const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
 const _parentID = Symbol('parentID');
+const _pheromones = Symbol('pheromones');
+const _maxPheromones = Symbol('maxPheromones');
 
 const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
@@ -29,11 +31,11 @@ class Ant extends Animal {
     * @param {object} position - 2D position of where the ant shall be created (if no collision occurs).
     * @param {float} rotation - Rotation of the object in radians.
     * @param {SettingsSimulation} settings - Settings of the current simulation.
-    * @param {Objects[]} collisionObjs.
+    * @param {Objects[]} allObjects - All objects inside scene.
     * @param {number} parentID - ID of the ants hive.
 	*/
-	constructor(canvas, position, rotation, settings, collisionObjs, parentID){
-		super(canvas, position, settings.getAntSize(), settings, collisionObjs, rotation);
+	constructor(canvas, position, rotation, settings, allObjects, parentID){
+		super(canvas, position, settings.getAntSize(), settings, allObjects, rotation);
 		
 		// Abilities
 		this[_decayProb]            = settings.getAntDecayProb();
@@ -50,6 +52,8 @@ class Ant extends Animal {
 		this[_life] = settings.getAntLife();
 		this[_foodStorageAnt] = 0;
 		this[_parentID] = parentID;
+		this[_pheromones] = [];
+		this[_maxPheromones] = settings.getAntMaxPheromones();
 		
 		if (settings.getAntType() == AntType.SIMPLE)
 			this[_controller] = new AntControllerSimple(this);
@@ -63,6 +67,40 @@ class Ant extends Animal {
 	getFoodStorage() { return this[_foodStorageAnt]; }
 	getMaxFoodStorage() { return this[_foodMaxAnt]; }
 	getMaxHarvestAmount() { return this[_foodMaxHarvestAmount]; }
+	getPheromones() { return this[_pheromones]; }
+	
+	iterate(allObjects){
+		super.iterate(allObjects);
+		
+		for (var i = 0; i < this[_pheromones].length; i++) {
+			var phero = this[_pheromones][i];
+			phero.age();
+			if (phero.getLife() <= 0)
+				removePheromone(phero, i, allObjects);
+		}
+	}
+	
+	removePheromone(pheromone, index, allObjects){
+		for (var a =0; a < allObjects.length; a++){
+			if (allObjects[a] == this[_pheromones][index])
+				allObjects.splice(a, 1);
+		}
+		this[_pheromones].splice(index, 1);
+	}
+	
+	canSetPheromone(){
+		return (this[_pheromones].length <= this[_maxPheromones]) 
+	}
+	
+	createPheromone(allObjects){
+		if (!this.canSetPheromone()){
+			console.log("Pheromone cannot be created! Check with 'this.canSetPheromone'")
+			return;
+		}
+		var newPheromone = new Pheromone(this.getCanvas(), this.getPosition(), allObjects);
+		this[_pheromones].push(newPheromone);
+		allObjects.push(newPheromone);
+	}
 	
 	age(){
 		var bonus = 0;
@@ -91,7 +129,7 @@ class Ant extends Animal {
 		this[_foodStorageAnt] -= amount;
 	}
 
-	receiveFood(amount){
+	receiveFood(amount, allObjects){
 		var additionalFood = amount;
 		if (amount + this.getFoodStorage() > this.getMaxFoodStorage()){
 			// should not happen!

@@ -10,8 +10,7 @@ class Simulation {
 		Collider.idCounter = null; 		// reset id counter
 		this.hives = [];
 		this.food = [];
-		this.collisionObjects = [];
-		this.environmentObjs = [];
+		this.allObjects = [];
 		this.spiders = [];
 
 		this.settings = new SettingsSimulation(antType);
@@ -47,32 +46,32 @@ class Simulation {
 			var hivePos = hiveConfigurations[numHives-1][i];
 
 			// Create hive
-			this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.collisionObjects)); // i = hiveNumber
+			this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.allObjects)); // i = hiveNumber
 		}
 		
 		// first hives need their ids, then ants can be created
 		for (var i = 0; i < this.hives.length; ++i) 
 			for (var a=0; a < this.settings.getAntStartNumber(); a++)
-				this.hives[i].createAnt(this.collisionObjects);
+				this.hives[i].createAnt(this.allObjects);
 	}
 
 	simulate(){
 
 		// Iterate through all hives
 		for (var i = 0; i < this.hives.length; ++i){
-			this.hives[i].iterate(this.collisionObjects);
+			this.hives[i].iterate(this.allObjects);
 			
 			for (var a = 0; a < this.hives[i].getAnts().length; a++) {
 				if (this.hives[i].getAnts()[a].getLife() <= 0){
 					var pos = this.hives[i].getAnts()[a].getPosition();
-					this.hives[i].removeAnt(this.hives[i].getAnts()[a], a, this.collisionObjects);
-					this.food.push(new AntDead(this.canvas, pos, this.settings, this.collisionObjects));
+					this.hives[i].removeAnt(this.hives[i].getAnts()[a], a, this.allObjects);
+					this.food.push(new AntDead(this.canvas, pos, this.settings, this.allObjects));
 				}
 			}
 		}
 		
 		for (var i = 0; i < this.spiders.length; ++i){
-			this.spiders[i].iterate(this.collisionObjects);
+			this.spiders[i].iterate(this.allObjects);
 		}
 		this.spiderCreation();
 
@@ -90,9 +89,9 @@ class Simulation {
 
 			// remove food if it is "empty"
 			if (this.food[i].isEmpty()){
-				for (var a =0; a < this.collisionObjects.length; a++){
-					if (this.collisionObjects[a] == this.food[i])
-						this.collisionObjects.splice(a, 1);
+				for (var a =0; a < this.allObjects.length; a++){
+					if (this.allObjects[a] == this.food[i])
+						this.allObjects.splice(a, 1);
 				}
 				this.food.splice(i, 1);
 			}
@@ -111,7 +110,7 @@ class Simulation {
 			// food is positioned all over the ground
 			var foodPos = { x: rand(0,this.canvas.width), y: rand(0,this.canvas.height) };
 			var size = this.settings.getFoodAmount() * this.settings.getFoodSize();
-			var newFood = new Food(this.canvas, foodPos, size, this.settings, this.collisionObjects);
+			var newFood = new Food(this.canvas, foodPos, size, this.settings, this.allObjects);
 			this.food.push(newFood);
 		}
 	}
@@ -127,7 +126,7 @@ class Simulation {
 			// spiders are positioned outside of canvas
 			var enterFromRotation = rand(0,2*Math.PI);
 			var level = 1;
-			var newSpider = new Spider(this.canvas, enterFromRotation, this.settings, level, this.collisionObjects);
+			var newSpider = new Spider(this.canvas, enterFromRotation, this.settings, level, this.allObjects);
 			this.spiders.push(newSpider);
 		}
 	}
@@ -205,12 +204,8 @@ class Simulation {
 
 	draw()
 	{
-
-		for (var i = 0; i < this.environmentObjs.length; i++)
-			this.environmentObjs[i].draw();
-
-		for (var i = 0; i < this.collisionObjects.length; i++)
-			this.collisionObjects[i].draw();
+		for (var i = 0; i < this.allObjects.length; i++)
+			this.allObjects[i].draw();
 	}
 
 	updateGraph(){

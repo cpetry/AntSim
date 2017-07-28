@@ -3,8 +3,8 @@ const _agility = Symbol('agility');
 const _sensitivity = Symbol('sensitivity');
 
 class AntGenetic extends Ant {
-	constructor(canvas, position, rotation, settings, newGenes, collisionObjs, parentID){
-		super (canvas, position, rotation, settings, collisionObjs, parentID);
+	constructor(canvas, position, rotation, settings, newGenes, allObjects, parentID){
+		super (canvas, position, rotation, settings, allObjects, parentID);
 		
 		// Genes / attributes
 		// Test if genes are chosen correctly and fair. Correct if not.

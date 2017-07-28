@@ -11,14 +11,14 @@ class SmellableObject extends Collider {
     * @param {object} position - 2D position of where the object shall be created (if no collision occurs).
     * @param {number} size - Size of the objects collider.
     * @param {number} sizeSmellingFactor - Size of the objects smell.
-    * @param {Objects[]} collisionObjs - Objects in simulation that can collide with this.
+    * @param {Objects[]} allObjects - Objects in simulation.
     * @param {number} [rotation=0]rotation - Rotation in radians.
 	*/
-	constructor(canvas, position, size, sizeSmellingFactor, collisionObjs, rotation = 0){
+	constructor(canvas, position, size, sizeSmellingFactor, allObjects, rotation = 0){
 		if (new.target === SmellableObject) {
 			throw new TypeError("Cannot construct SmellableObject instances directly");
 		}
-		super(canvas, position, ShapeType.CIRCLE, size, rotation, collisionObjs);
+		super(canvas, position, ShapeType.CIRCLE, size, rotation, allObjects);
 		this.sizeSmellingFactor = sizeSmellingFactor;
 	}
 
@@ -27,22 +27,22 @@ class SmellableObject extends Collider {
 		return smellingDistance;
 	}
 	
-	canBeSmelledBy(ant)
+	canBeSmelledBy(animal)
 	{
-		var distance = getDistance(this.getPosition(), ant.getPosition());
-		return (distance - this.getSmellDistance() - ant.getSmellingDistance() <= 0);
+		var distance = getDistance(this.getPosition(), animal.getPosition());
+		return (distance - this.getSmellDistance() - animal.getSmellingDistance() <= 0);
 	}
 	
-	smellPositionFrom(ant)
+	smellPositionFrom(animal)
 	{
-		if (!this.canBeSmelledBy(ant)){
+		if (!this.canBeSmelledBy(animal)){
 			// should not be able to smell it.... did someone cheat here?!
 			return math.matrix([rand(-1000,1000), rand(-1000,1000)])
 		}
 		
-		var distance = getDistance(this.getPosition(), ant.getPosition());
+		var distance = getDistance(this.getPosition(), animal.getPosition());
 		// [0, 1] <-> [0, smellingDistance+smellDistance] 
-		var farthest = ant.getSmellingDistance() + this.getSmellDistance();
+		var farthest = animal.getSmellingDistance() + this.getSmellDistance();
 		var nearest  = 0;
 		// [0,1]
 		var smellPos = {x: this.getPosition().x, y:this.getPosition().y }; // clone position
