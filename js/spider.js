@@ -62,17 +62,36 @@ class Spider extends Animal {
 		this._context.fillStyle = '#000000';
 		this._context.fill();
 		
+		// cross on back
+		this._context.lineWidth = 2;
+		this._context.strokeStyle = '#ff6666';
+		this._context.beginPath();
+		this._context.moveTo(pos.x - dir.x * this.getSize()/3, pos.y - dir.y * this.getSize()/3);
+		this._context.lineTo(pos.x + dir.x * this.getSize()/3, pos.y + dir.y * this.getSize()/3);
+		this._context.moveTo(pos.x + dir.y * this.getSize()/4, pos.y - dir.x * this.getSize()/4);
+		this._context.lineTo(pos.x - dir.y * this.getSize()/4, pos.y + dir.x * this.getSize()/4);
+		this._context.stroke();
+		
+
 		// legs
-		var legs = [{d:2, r:-2.2}, {d:5, r:-1.7}, {d:5, r:-1.2}, {d:3, r:-0.8}, 
-					{d:5, r:1.2}, {d:3, r:0.8}, {d:2, r:2.2}, {d:5, r:1.7}];
+		this._context.lineWidth = 2;
+		var legs = [{d:2.5, r:-2.2}, {d:2.8, r:-1.7}, {d:3, r:-1.2}, {d:3, r:-0.8}, 
+					{d:3, r:1.2}, {d:3, r:0.8}, {d:2.5, r:2.2}, {d:2.8, r:1.7}];
 		for (var i=0; i<legs.length;i++){
 			this._context.beginPath();
-			this._context.moveTo(pos.x, pos.y);
 			var rotTime = ((this.drawIteration % 100)-50) / 50 * Math.PI * Math.PI;
-			var legDir = rotateVector(dir, legs[i].r + Math.sin(rotTime) * 0.125 * (i%2 ? -1 : 1));
-			var legSize = (legs[i].d + this.getSize());
+			var legTimeFactor = Math.sin(rotTime) * 0.125 * (i%2 ? -1 : 1);
+			var legRotation = legs[i].r + legTimeFactor/2;
+			var legDir = rotateVector(dir, legRotation);
+			var legSize = (legs[i].d * this.getSize() * 0.3);
 			var part1 = { x: pos.x + legDir.x * legSize, y: pos.y + legDir.y * legSize};
+			this._context.moveTo(pos.x + legDir.x*this.getSize()*0.6, pos.y + legDir.y*this.getSize()*0.6);
 			this._context.lineTo(part1.x,part1.y);
+
+			var legDir = rotateVector(legDir, legs[i].r - (i>=4 ? 1.5 : -1.5) + legTimeFactor/2);
+			var part2 = { x: part1.x + legDir.x * legSize/2, y: part1.y + legDir.y * legSize/2};
+			this._context.lineTo(part2.x,part2.y);
+
 			this._context.strokeStyle = '#000000';
 			this._context.stroke();
 		}
