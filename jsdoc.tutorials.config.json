@@ -1,11 +1,6 @@
 {
     "plugins": [],
     "recurseDepth": 10,
-    "source": {
-        "includePattern": ".+\\.js(doc|x)?$",
-        "excludePattern": "(^|\\/|\\\\)_",
-		"include": ["./js/antController.js"]
-    },
 	"sourceType": "module",
     "tags": {
         "allowUnknownTags": true,
@@ -22,7 +17,7 @@
 	"opts": {
         "template": "templates/default",
         "encoding": "utf8",
-		"destination": "./user-code_doc/",	
+		"destination": "./tutorials_doc/",	
 	    "recurse": true,
         "tutorials": "tutorials" // same as -u path/to/tutorials
  }
