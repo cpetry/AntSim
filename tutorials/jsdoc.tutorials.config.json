@@ -2,7 +2,7 @@
     "Basics": {
         "children": {
             "00_basics": {
-                "title": "<b>Actions</b>"
+                "title": "<b>Basics</b>"
             },
             "01_moving": {
                 "title": "&nbsp;Moving"
