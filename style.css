@@ -48,7 +48,7 @@ div#floatingContainer{
 	position: absolute;
 	display: none;
 	z-index: 10; /* has to be above editor */
-	top: -2.5%;
+	top: 4%;
 	left: -2.5%;
 	width: 105%; /*terrariumContainer + settings*/
 	height: 105%;
@@ -61,7 +61,7 @@ div#options{
 	text-align:center;
 }
 div#settings{
-    border-left: thick solid #ff0000;
+    border-left: thick solid #cceecc;
 	margin:30px;
 	padding: 15px;
 	float:left;
@@ -76,6 +76,13 @@ div#cleared {
 	width: 100%;
 	border: none;
 }
+#message_close{
+	position: relative;
+	z-index: 11; /* has to be above editor */
+	float:right;
+	margin: 20px;
+}
+
 div#message_bottom {
 	margin:10px;
 	width:100%;

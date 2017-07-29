@@ -15,7 +15,6 @@ window.requestAnimationFrame = function() {
         }
 }();
 
-Message.container = document.getElementById('message');
 SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);
 
 Debug.setShowLife(document.getElementById('debugShowLife').checked);
@@ -141,9 +140,8 @@ function startSimulation(){
 	new Simulation(AntType.CUSTOM);
 }
 
-
 function simulationClicked(){
-	Message.hideMessage();
+	document.getElementById('floatingContainer').style.display = 'none';
 	document.getElementById('frame').value = 0;
 	document.getElementById('tutorial').style.visibility = 'hidden';
 	mode = Mode.SIMULATION;
@@ -153,7 +151,7 @@ function simulationClicked(){
 }
 
 function teaserClicked(){
-	Message.hideMessage();
+	document.getElementById('floatingContainer').style.display = 'none';
 	document.getElementById('frame').value = 0;
 	document.getElementById('tutorial').style.visibility = 'hidden';
 	mode = Mode.TEASER;
@@ -162,22 +160,32 @@ function teaserClicked(){
 	startTeaser();
 }
 
+function aboutClicked(){
+	document.getElementById('message').src = "./user-code_doc/index.html";
+	document.getElementById('floatingContainer').style.display = 'block';
+}
+
 function tutorialClicked(){
-	Message.hideMessage();
+	document.getElementById('message').src = "./user-code_doc/tutorial-00_basics.html";
+	document.getElementById('floatingContainer').style.display = 'block';
 	document.getElementById('frame').value = 0;
 	document.getElementById('tutorial').style.visibility = 'visible';
 	mode = Mode.TUTORIAL;
 	selectedTutorialPart = 0;
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
-	Message.tutorial0();
+	document.getElementById('message').src = "./user-code_doc/tutorial-00_basics.html";
 	showEditor();
 }
 
 function editorClicked(){
-	Message.hideMessage();
+	document.getElementById('floatingContainer').style.display = 'none';
 	document.getElementById('frame').value = 0;
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
 	showEditor();
+}
+
+function closeMessage(){
+	document.getElementById('floatingContainer').style.display = 'none';
 }

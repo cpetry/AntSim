@@ -5,7 +5,6 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="./js/external/jquery.fancybox.min.css" type="text/css" media="screen" />
 	</head>
 	<body>
 		<div id="header">
@@ -13,17 +12,17 @@
 		</div>
 		<div style="height:20px;"></div>
 		<div id="options">
-			<input type="button" value="About" onclick="Message.about()">
+			<input type="button" value="About" onclick="aboutClicked()">
 			<input type="button" value="Tutorial" onclick="tutorialClicked()">
 			<input type="button" value="Teaser" onclick="teaserClicked()">
 			<input type="button" value="Simulation" onclick="simulationClicked()">
 		</div>
-		<div id="tutorial">
+		<!--<div id="tutorial">
 			<input type="radio" name="tutorialPart" value="0" onclick="setupTutorialPart(0)">
 			<input type="radio" name="tutorialPart" value="1" onclick="setupTutorialPart(1)">
 			<input type="radio" name="tutorialPart" value="2" onclick="setupTutorialPart(2)">
 			<input type="radio" name="tutorialPart" value="3" onclick="setupTutorialPart(3)">
-		</div>
+		</div>-->
 		<div id="all">
 			<div id="terrariumContainer">
 				<div id="editorButtons">
@@ -58,12 +57,12 @@
 			</div>
 			<div id="cleared"></div>
 			<div id="floatingContainer">
-				<iframe id="message" src="./user-code_doc/tutorial-00_basics.html"></iframe>
+				<iframe id="message" src="./user-code_doc/index.html"></iframe>
+				<input type="button" id="message_close" value="Close" onclick="closeMessage()">
 			</div>
 		</div>
 		
 		<script src="./js/external/jquery/jquery-3.2.1.min.js"></script>
-		<script src="./js/external/jquery.fancybox.min.js"></script>
 		<script src="./js/external/seedrandom/seedrandom.js"></script>
 		<script src="./js/external/flotr2/flotr2.min.js"></script>
 		<script src="./js/external/ace_min_noconflict/ace.js"></script>
@@ -78,7 +77,6 @@
 		<script src="./js/action.js"></script>
 		<script src="./js/debug.js"></script>
 		<script src="./js/helper.js"></script>
-		<script src="./js/message.js"></script>
 		<script src="./js/shape.js"></script>
 		<script src="./js/smellableObjectProxy.js"></script>
 		<script src="./js/visibleObjectProxy.js"></script>
