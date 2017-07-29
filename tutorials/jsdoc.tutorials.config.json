@@ -2,22 +2,22 @@
     "Basics": {
         "children": {
             "00_basics": {
-                "title": "Actions"
+                "title": "<b>Actions</b>"
             },
             "01_moving": {
-                "title": "&nbsp;01 Moving"
+                "title": "&nbsp;Moving"
             },
             "02_harvest": {
-                "title": "&nbsp;02 Harvest"
+                "title": "&nbsp;Harvest"
             },
 			"03_transfer": {
-                "title": "&nbsp;03 Transfer"
+                "title": "&nbsp;Transfer"
             },
 			"04_tag": {
-                "title": "&nbsp;04 Tag (pheromones)"
+                "title": "&nbsp;Tag (pheromones)"
             },
 			"05_attack": {
-                "title": "&nbsp;05 Attack"
+                "title": "&nbsp;Attack"
             }
         }
     },
