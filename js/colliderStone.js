@@ -1,3 +1,5 @@
+define(['collider'], function() {
+
 class ColliderStone extends Collider {
 	constructor(canvas, position, size, colObjs)
 	{
@@ -12,3 +14,5 @@ class ColliderStone extends Collider {
 		this._context.fill();
 	}
 }
+
+});

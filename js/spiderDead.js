@@ -1,16 +1,20 @@
-class AntDead extends Food {
+define(['food'], function(Food) {
+
+return class SpiderDead extends Food {
 	constructor(spider, settings, collisionObjs){
 		super(spider.getCanvas(), spider.getPosition(), spider.getSize(), settings, collisionObjs);
-		this[_amount] = settings.getFoodAmountDeadSpider();
+		this._amount = settings.getFoodAmountDeadSpider();
+		this._maxAmount = this._amount;
 	}
 	
 	draw(){
 		var pos = this.getPosition();
+		var color = "rgba(60,60,60, " + (this._amount/this._maxAmount).toString() + ")";
 
 		// body
 		this._context.beginPath();
 		this._context.arc(pos.x, pos.y, this.getSize()*0.50, 0, 2 * Math.PI, false);
-		this._context.fillStyle = '#aaaaaa';
+		this._context.fillStyle = color;
 		this._context.fill();
 
 		// head
@@ -18,7 +22,7 @@ class AntDead extends Food {
 		var headPos = { x: pos.x + dir.x*this.getSize()*0.65, y: pos.y + dir.y*this.getSize()*0.65 };
 		this._context.beginPath();
 		this._context.arc(headPos.x, headPos.y, this.getSize()*0.25, 0, 2 * Math.PI, false);
-		this._context.fillStyle = '#aaaaaa';
+		this._context.fillStyle = color;
 		this._context.fill();
 		
 		// cross on back
@@ -51,7 +55,7 @@ class AntDead extends Food {
 			var part2 = { x: part1.x + legDir.x * legSize/2, y: part1.y + legDir.y * legSize/2};
 			this._context.lineTo(part2.x,part2.y);
 
-			this._context.strokeStyle = '#000000';
+			this._context.strokeStyle = color;
 			this._context.stroke();
 		}
 		
@@ -60,9 +64,11 @@ class AntDead extends Food {
 			this._context.textAlign = "center";
 			this._context.lineWidth = 1;
 			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getAmount().toString(),pos.x,pos.y); 
+			this._context.strokeText(this.getAmount().toFixed(2),pos.x,pos.y); 
 			this._context.fillStyle = 'black';
-			this._context.fillText(this.getAmount().toString(),pos.x,pos.y);
+			this._context.fillText(this.getAmount().toFixed(2),pos.x,pos.y);
 		}
 	}
 }
+
+});

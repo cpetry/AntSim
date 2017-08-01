@@ -14,7 +14,7 @@
     "templates": {
         "cleverLinks": true,
         "monospaceLinks": false
-    },
+	},
 	"plugins": [
         "plugins/markdown",
         "plugins/summarize"
@@ -25,6 +25,6 @@
 		"destination": "./user-code_doc/",	
 	    "recurse": true,
         "tutorials": "tutorials" // same as -u path/to/tutorials
- }
+    }
 }
 

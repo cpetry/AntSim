@@ -1,6 +1,8 @@
+define(function() {
+
 // a class to contain all attributes the user has !readable! access to.
 // changing these attributes while running won't do anything
-class HiveController {
+return class HiveController {
 	constructor(/*ants ?!*/){
 		this.genes = [0.33,0.33,0.33];
 	}
@@ -13,3 +15,5 @@ class HiveController {
 		return this.genes;
 	}
 }
+
+});

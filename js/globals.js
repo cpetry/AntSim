@@ -1,3 +1,38 @@
+const ActionType = {
+	NONE : 0,
+	WALK : 1,
+	HARVEST : 2,
+	ATTACK : 3,
+	GIVEFOOD: 4,
+	SETPHEROMONE: 5
+};
+
+const DirectionType = {
+  FORWARD: 1,
+  BACKWARD: 2,
+  NONE: 3
+};
+
+const ObjectType = {
+	NONE : 0,
+	HIVE : 1,
+	FOOD : 2,
+	ANT : 3
+};
+
+
+const AntType = {
+	SIMPLE: 0,
+	CUSTOM: 1
+}
+
+const HiveType = {
+	DEFAULT : 0,
+	CUSTOM : 1
+}
+
+const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
+
 
 function rand(min, max){
 	return Math.random() * (max - min) + min;

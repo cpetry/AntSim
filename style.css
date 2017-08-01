@@ -16,7 +16,7 @@ div#tutorial{
 	text-align:center;
 	visibility: hidden;
 }
-div#terrariumContainer{
+div#simulationContainer{
 	margin:auto;
 	width:600px;
 	height:380px;
@@ -33,8 +33,9 @@ div#graphs{
 	height:350px;
 }
 div#customAntContainer{
-	margin: 10px;
 	height:90%;
+	resize: both;
+    overflow: auto;
 }
 div#NoUI{
 	text-align: center;
@@ -101,11 +102,9 @@ p {
 input#closeButton{
 	float: right;
 }
-canvas#terrarium {
+canvas.terrarium {
 	margin-left: auto;
     margin-right: auto;
-	width:600px;
-	height:350px;
 	
 	border-radius: 15px 15px 15px 15px;
 	-moz-border-radius: 15px 15px 15px 15px;

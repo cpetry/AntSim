@@ -1,4 +1,6 @@
-class SpiderController extends Controller {
+define(['controller'], function(Controller) {
+
+return class SpiderController extends Controller {
 	constructor(spider){
 		super(spider);
 	}
@@ -38,8 +40,10 @@ class SpiderController extends Controller {
 			}
 		}
 		if (this.hasCollidedWithID() != -1){
-			return [ActionType.WALK, Direction.FORWARD, 1];
+			return [ActionType.WALK, DirectionType.FORWARD, 1];
 		}
-		return [ActionType.WALK, Direction.FORWARD, rotation];
+		return [ActionType.WALK, DirectionType.FORWARD, rotation];
 	}
 }
+
+});

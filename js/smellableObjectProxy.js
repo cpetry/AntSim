@@ -1,10 +1,6 @@
-var ObjectType = {
-	NONE : 0,
-	HIVE : 1,
-	FOOD : 2,
-	ANT : 3
-}
-class SmellableObjectProxy {
+define(function() {
+	
+return class SmellableObjectProxy {
 	constructor(canvas, parentID, distance, rotation, type){
 		this._context = canvas.getContext("2d");
 		this.parentID = parentID;
@@ -21,3 +17,5 @@ class SmellableObjectProxy {
 	// has to be visible to be interactive
 	canBeInteractedWith() { return false; }
 }
+
+});

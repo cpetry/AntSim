@@ -1,4 +1,6 @@
-class Spider extends Animal {
+define(['animal', 'spiderController', 'action'], function(Animal, SpiderController, Action) {
+
+return class Spider extends Animal {
 	constructor(canvas, enterFromRotation, settings, level, collisionObjs){
 		var spiderSize = settings.getSpiderSize() + settings.getSpiderSizeLevelFactor() * level;
 		
@@ -16,18 +18,18 @@ class Spider extends Animal {
 		super(canvas, position, spiderSize, settings, collisionObjs, enterFromRotation);
 		
 		// Abilities
-		this[_decayProb]          = settings.getSpiderDecayProb();
-		this[_speed]              = settings.getSpiderSpeed();
-		this[_speedRotation]      = settings.getSpiderSpeedRotation();
-		this[_smellingDistance]   = settings.getSpiderSmellingDistance();
-		this[_visibilityDistance] = settings.getSpiderVisibilityDistance();
-		this[_visibilityRangeRad] = settings.getSpiderVisibilityRange();
-		this[_attackDamage]       = settings.getSpiderAttackDamage();
-		this[_interactionDistance]= settings.getInteractionDistance();
+		this._decayProb           = settings.getSpiderDecayProb();
+		this._speed               = settings.getSpiderSpeed();
+		this._speedRotation       = settings.getSpiderSpeedRotation();
+		this._smellingDistance    = settings.getSpiderSmellingDistance();
+		this._visibilityDistance  = settings.getSpiderVisibilityDistance();
+		this._visibilityRangeRad  = settings.getSpiderVisibilityRange();
+		this._attackDamage        = settings.getSpiderAttackDamage();
+		this._interactionDistance = settings.getInteractionDistance();
 
-		this[_life] = settings.getSpiderLife() * level;
+		this._life = settings.getSpiderLife() * level;
 		
-		this[_controller] = new SpiderController(this);
+		this.setController(new SpiderController(this));
 		this.drawIteration = 0;
 	}
 	
@@ -35,13 +37,13 @@ class Spider extends Animal {
 		this.drawIteration+=1;
 		
 		// Spiders enter from outside of the canvas!
-		if (this[_isEntering]){
+		if (this.isEntering()){
 			var spiderSizeVec = rotateVector({x:-this.getSize()*2,y:0}, this.getRotation());
 			var posBehindSpider = {x:this.getPosition().x+spiderSizeVec.x, y:this.getPosition().y+spiderSizeVec.y};
 			var collider = this.checkCollision(posBehindSpider, allObjects);
 			// walk towards center 
 			if (collider == null)
-				Action.walk(this, Direction.FORWARD, 0, allObjects);
+				Action.walk(this, DirectionType.FORWARD, 0, allObjects);
 		}
 		else
 			super.iterate(allObjects);
@@ -100,3 +102,5 @@ class Spider extends Animal {
 		}
 	}
 }
+
+});

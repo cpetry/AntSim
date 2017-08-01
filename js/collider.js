@@ -1,15 +1,9 @@
-const _position = Symbol('position');
-const _size = Symbol('size');
-const _shapeType = Symbol('shapeType');
-const _rotation = Symbol('rotation');
-const _canvas = Symbol('canvas');
-const _id = Symbol('id');
-const _isEntering = Symbol('isEntering');
+define(['shape'], function(Shape) {
 
 /**
  * An object that can collide with another one.
  */
-class Collider {
+return class Collider {
 	
 	/**
 	* Creates a collider object
@@ -25,17 +19,17 @@ class Collider {
 	constructor(canvas, position, shapeType, size, rotation, colObjs)
 	{
 		
-		this[_id] = Collider.getNewID();
-		this[_canvas] = canvas;
+		this._id = Collider.getNewID();
+		this._canvas = canvas;
 		this._context = canvas.getContext("2d");
-		this[_shapeType] = shapeType;
-		this[_size] = size;
-		this[_rotation] = rotation;
-		this[_isEntering] = (this instanceof Spider); // only used for spiders
+		this._shapeType = shapeType;
+		this._size = size;
+		this._rotation = rotation;
+		this._isEntering = this.constructor.name == "Spider"; // only used for spiders
 		
 		// Pheromones can not collide!
-		if (this instanceof Pheromone){
-			this[_position] = position;
+		if (this.constructor.name == "Pheromone"){
+			this._position = position;
 		}
 		else {
 			// try creating the object without colliding with sth
@@ -48,7 +42,7 @@ class Collider {
 			}
 			if (tests==maxTests)
 				console.log("ERROR positioning object!");
-			this[_position] = position;
+			this._position = position;
 			
 			colObjs.push(this);
 		}
@@ -62,13 +56,14 @@ class Collider {
 		return this.idCounter;
 	}
 	
-	getID(){return this[_id];}
-	getCanvas(){return this[_canvas];}	
-	getSize(){return this[_size];}	
-	getPosition() {return this[_position];}
-	getPositionMat() { return convertPointToMat(this[_position]); }
-	getRotation(){return this[_rotation];}
-	getShapeType(){return this[_shapeType]};
+	getID(){return this._id;}
+	getCanvas(){return this._canvas;}	
+	getSize(){return this._size;}	
+	getPosition() {return this._position;}
+	getPositionMat() { return convertPointToMat(this._position); }
+	getRotation(){return this._rotation;}
+	getShapeType(){return this._shapeType};
+	isEntering(){return this._isEntering};
 	
 	canInteractWith(obj){
 		var distance = getDistance(obj.getPosition(),this.getPosition()) - obj.getSize() - this.getSize();
@@ -76,8 +71,8 @@ class Collider {
 	}
 
 	setNewRotation(newRotation){
-		this[_rotation] = newRotation;
-		this[_rotation] = this.getRotation() % (Math.PI*2);
+		this._rotation = newRotation;
+		this._rotation = this.getRotation() % (Math.PI*2);
 	}
 		
 	setPosition(newPos, colObjs)
@@ -90,7 +85,7 @@ class Collider {
 		
 		var collider = this.checkCollision(newPos, colObjs);
 		if (collider == null){
-			this[_position] = newPos;
+			this._position = newPos;
 			return null;
 		}
 		else {
@@ -104,14 +99,14 @@ class Collider {
 		// To be able to check if object is inside canvas simply reduce canvas width and height by 3*size!
 		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, 
 							w: this.getCanvas().width-this.getSize()*3, h: this.getCanvas().height - this.getSize()*3};
-		var canvasArea = new Shape(canvasRect, ShapeType.RECTANGLE, 0);
+		var canvasArea = new Shape(canvasRect, Shape.Type.RECTANGLE, 0);
 		var collider = this.collidesWith(canvasArea, newPos);
 		
 		// spiders spawn from outside the canvas! 
 		// They are not supposed to collide with canvas.
-		if (this instanceof Spider && this[_isEntering]){
+		if (this.constructor.name == "Spider" && this._isEntering){
 			if (collider != null)
-				this[_isEntering] = false;
+				this._isEntering = false;
 			return null;
 		}
 		// every other object has to collide with the canvas.
@@ -138,7 +133,7 @@ class Collider {
 		var colShape = colObj.getShapeType();
 		var thisShape = this.getShapeType();
 		var thisSize = this.getSize();
-		if (colShape == ShapeType.RECTANGLE && thisShape == ShapeType.RECTANGLE){
+		if (colShape == Shape.Type.RECTANGLE && thisShape == Shape.Type.RECTANGLE){
 			try{
 				if (!('w' in colSize)        || !('h' in colSize))        throw "rectangle size has to have two sizes!";
 				if (!('w' in thisSize) || !('h' in thisSize)) throw "rectangle size has to have two sizes!";
@@ -153,7 +148,7 @@ class Collider {
 				console.log(err);
 			}	
 		}
-		else if (colShape == ShapeType.RECTANGLE && thisShape == ShapeType.CIRCLE){
+		else if (colShape == Shape.Type.RECTANGLE && thisShape == Shape.Type.CIRCLE){
 			try{
 				if (!('w' in colSize) || (!'h' in colSize)) throw "rectangle size has to have two sizes!";
 				if (pos.x + thisSize > colPosition.x - colSize.w/2
@@ -168,7 +163,7 @@ class Collider {
 				console.log("Input is " + err);
 			}	
 		}
-		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.RECTANGLE){
+		else if (colShape == Shape.Type.CIRCLE && thisShape == Shape.Type.RECTANGLE){
 			try{
 				if (!('x' in thisSize) || !('x' in thisSize)) throw "rectangle size has to have two sizes!";
 				if (pos.x + thisSize.w/2 > colPosition.x - colSize
@@ -184,7 +179,7 @@ class Collider {
 			}	
 		}
 
-		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.CIRCLE){
+		else if (colShape == Shape.Type.CIRCLE && thisShape == Shape.Type.CIRCLE){
 			var distance = getDistance(pos,colPosition);
 			if (distance < thisSize + colSize)
 				return colObj;
@@ -304,3 +299,5 @@ class Collider {
 		}
 	}
 }
+
+});

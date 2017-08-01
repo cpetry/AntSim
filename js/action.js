@@ -1,14 +1,7 @@
-var ActionType = {
-	NONE : 0,
-	WALK : 1,
-	HARVEST : 2,
-	ATTACK : 3,
-	GIVEFOOD: 4,
-	SETPHEROMONE: 5
-}
+define(function() {
 
+return class Action {
 
-class Action {
 	constructor() {
 		if (new.target === Action) {
 			throw new TypeError("Cannot construct Action instances directly");
@@ -43,6 +36,8 @@ class Action {
 		else if (type == ActionType.SETPHEROMONE){
 			Action.createPheromone(obj, allObjects);
 		}
+		else
+			console.log("ActionType: " + type + " unknown!");
 	}
 
 	static walk(obj, direction, rotation, allObjects){
@@ -63,12 +58,19 @@ class Action {
 		var harvestObj = this.getRealObjOfID(harvestObjProxy.getID(), allObjects);
 		
 		// now check if it can be harvested and grab food
-		if (harvestObj instanceof Food && harvester instanceof Ant){
+		if ((harvestObj.constructor.name == "Food"
+		|| harvestObj.constructor.name == "AntDead"
+		|| harvestObj.constructor.name == "SpiderDead")
+		&& (harvester.constructor.name == "Ant" 
+			|| harvester.constructor.name == "AntGenetic")){
 			var additionalFoodPossibleToCarry = harvester.getMaxFoodStorage() - harvester.getFoodStorage();
 			var foodPossibleToHarvest = Math.min(harvestObj.getAmount(), harvester.getMaxHarvestAmount());
 			var amountBeingHarvested = Math.min(Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest),amount);
 			harvestObj.harvest(amountBeingHarvested);
 			harvester.receiveFood(amountBeingHarvested);
+		}
+		else{
+			console.log("wrong harvester '" + harvester.constructor.name + "' or harvestObj '" + harvestObj.constructor.name + "' ");
 		}
 	}
 	
@@ -80,7 +82,10 @@ class Action {
 
 		var receiver = this.getRealObjOfID(receiverProxy.getID(), allObjects);
 
-		if (receiver instanceof Hive || receiver instanceof Ant){
+		if (receiver.constructor.name == "Hive" 
+		|| receiver.constructor.name == "HiveGenetic"
+		|| receiver.constructor.name == "Ant"
+		|| receiver.constructor.name == "AntGenetic"){
 			var foodPossibleToGive = sender.getFoodStorage();
 			var foodPossibleToReceive = receiver.getFoodMaxStorage() - receiver.getFoodStorage();
 			var amountBeingTransferred = Math.min(Math.min(foodWantingToGiveAway, foodPossibleToGive), foodPossibleToReceive);
@@ -99,8 +104,9 @@ class Action {
 		var prey = this.getRealObjOfID(preyProxy.getID(), allObjects);
 
 		// do we need this check?
-		if (prey instanceof Ant
-		|| prey instanceof Spider)
+		if (prey.constructor.name == "Ant"
+		|| prey.constructor.name == "AntGenetic"
+		|| prey.constructor.name == "Spider")
 			prey.receiveAttack(hunter.getAttackDamage());
 
 	}
@@ -115,3 +121,5 @@ class Action {
 	}
 
 }
+
+});

@@ -1,4 +1,6 @@
-class Pheromone extends SmellableObject {
+define(['smellableObject'], function(SmellableObject) {
+
+return class Pheromone extends SmellableObject {
 	constructor(canvas, position, allObjects){
 		var size = 1;
 		var sizeSmellingFactor = 100;
@@ -15,3 +17,5 @@ class Pheromone extends SmellableObject {
 			this[_life]-=1;
 	}
 }
+
+});

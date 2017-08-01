@@ -1,4 +1,6 @@
-class Graph {
+define(function() {
+
+return class Graph {
 	constructor(){
 		this.container = document.getElementById('graphs');
 		this.d1 = [],
@@ -44,3 +46,5 @@ class Graph {
 			this.g = Flotr.draw(this.container, this.d1, this.options);
 	}
 }
+
+});

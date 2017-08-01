@@ -1,7 +1,9 @@
+define(['collider', 'shape'], function(Collider, Shape) {
+
 /**
  * An abstract class for all smellable objects.
  */
-class SmellableObject extends Collider {
+return class SmellableObject extends Collider {
 	
 	/**
 	* Creates a smellable object
@@ -18,7 +20,7 @@ class SmellableObject extends Collider {
 		if (new.target === SmellableObject) {
 			throw new TypeError("Cannot construct SmellableObject instances directly");
 		}
-		super(canvas, position, ShapeType.CIRCLE, size, rotation, allObjects);
+		super(canvas, position, Shape.Type.CIRCLE, size, rotation, allObjects);
 		this.sizeSmellingFactor = sizeSmellingFactor;
 	}
 
@@ -68,3 +70,5 @@ class SmellableObject extends Collider {
 		}
 	}
 }
+
+});

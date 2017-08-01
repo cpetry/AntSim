@@ -1,6 +1,8 @@
-class SettingsSimulation
+define(function() {
+
+return class SettingsSimulation
 {
-	constructor(antType, hiveType=HiveType.DEFAULT){
+	constructor(antType, hiveType, userAntFunction){
 		this.hiveSize = 14;
 		this.antType = antType;
 		this.hiveType = hiveType;
@@ -17,9 +19,10 @@ class SettingsSimulation
 		this.antVisibilityDistance = 30;
 		this.antVisibilityRange = 0.8;
 		this.antMaxPheromones = 10;
-		this.foodAmount = 1000;
-		this.foodAmountDeadAnt = 50;
-		this.foodAmountDeadSpider = 500;
+		this.foodAmount = 250;
+		this.foodAmountDeadAnt = 25;
+		this.foodAmountDeadSpider = 200;
+		this.foodDecayProb = 0.25; // probability of rotting
 		this.foodSize = 0.005; // percentage of food amount
 		this.foodCreationPropability = 0.05; // chance for each iteration to create food
 		this.foodMaxSiteNumber = 10; // maximum number of food sites
@@ -39,6 +42,7 @@ class SettingsSimulation
 		this.sizeSmellingFactor = 6;
 		this.interactionDistance = 5;
 		this.interactionRange = Math.PI/4;
+		this.userAntFunction = userAntFunction;
 	}
 	// attribute related settings
 	getTerrariumWidth(){ return this.terrariumWidth; }
@@ -73,6 +77,7 @@ class SettingsSimulation
 	getFoodAmount(){ return this.foodAmount; }
 	getFoodAmountDeadAnt(){ return this.foodAmountDeadAnt; }
 	getFoodAmountDeadSpider(){ return this.foodAmountDeadSpider; }
+	getFoodDecayProb(){ return this.foodDecayProb; }
 	getFoodCreationPropability(){ return this.foodCreationPropability; }
 	getFoodMaxSiteNumber(){ return this.foodMaxSiteNumber; }
 	getFoodMaxHive(){ return this.foodMaxHive; }
@@ -81,4 +86,7 @@ class SettingsSimulation
 	getSizeSmellingFactor() { return this.sizeSmellingFactor; }
 	getInteractionDistance() { return this.interactionDistance; }
 	getInteractionRange() { return this.interactionRange; }
+	getUserAntFunction() { return this.userAntFunction; }
 }
+
+});

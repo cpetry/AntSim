@@ -14,7 +14,7 @@
 		<div id="options">
 			<input type="button" value="About" onclick="aboutClicked()">
 			<input type="button" value="Tutorial" onclick="tutorialClicked()">
-			<input type="button" value="Teaser" onclick="teaserClicked()">
+			<input type="button" value="Teaser" id="teaserButton">
 			<input type="button" value="Simulation" onclick="simulationClicked()">
 		</div>
 		<!--<div id="tutorial">
@@ -24,14 +24,16 @@
 			<input type="radio" name="tutorialPart" value="3" onclick="setupTutorialPart(3)">
 		</div>-->
 		<div id="all">
-			<div id="terrariumContainer">
+			<div id="simulationContainer">
 				<div id="editorButtons">
 					<a target="_blank" href="./user-code_doc/AntController.html">API</a>
-					<input type="button" value="Run" onclick="run()">
+					<input type="button" value="Run" id="runButton">
 					<input type="button" value="Editor" onclick="editorClicked()">
 				</div>
 				<div align="center" id="graphs" style="display:none;"></div>
-				<canvas align="center" width="600" height="350" id="terrarium"></canvas>
+				<div id="terrariumContainer" style="display:none;">
+					<canvas align="center" width="600" height="350" class="terrarium" id="canvasSimulation"></canvas>
+				</div>
 				<div id="customAntContainer" style="display:none;">
 					<pre id="editor"></pre>
 				</div>
@@ -61,50 +63,15 @@
 				<input type="button" id="message_close" value="Close" onclick="closeMessage()">
 			</div>
 		</div>
-		
-		<script src="./js/external/jquery/jquery-3.2.1.min.js"></script>
-		<script src="./js/external/seedrandom/seedrandom.js"></script>
+		<!-- doesnt work with requirejs -->
 		<script src="./js/external/flotr2/flotr2.min.js"></script>
 		<script src="./js/external/ace_min_noconflict/ace.js"></script>
 		<script src="./js/external/ace_min_noconflict/ext-language_tools.js"></script>
-		<script src="./js/external/setImmediate/setImmediate.js"></script>
-	
 		<script src="./js/settingsGlobal.js"></script>
-		<script src="./js/settingsSimulation.js"></script>
-		<script src="./js/graph.js"></script>
+		<script data-main="./js/init" src="./js/external/require.js"></script>
 		
 		<!-- undependant -->
-		<script src="./js/action.js"></script>
 		<script src="./js/debug.js"></script>
-		<script src="./js/helper.js"></script>
-		<script src="./js/shape.js"></script>
-		<script src="./js/smellableObjectProxy.js"></script>
-		<script src="./js/visibleObjectProxy.js"></script>
-		
-		<script src="./js/collider.js"></script>
-		<script src="./js/colliderBranch.js"></script>
-		<script src="./js/colliderStone.js"></script>
-		<script src="./js/smellableObject.js"></script>
-		<script src="./js/controller.js"></script>
-
-		<script src="./js/hive.js"></script>
-		<script src="./js/hiveGenetic.js"></script>
-		<script src="./js/hiveController.js"></script>
-		<script src="./js/hiveControllerCustom.js"></script>
-		<script src="./js/food.js"></script>
-		<script src="./js/animal.js"></script>
-		<script src="./js/ant.js"></script>
-		<script src="./js/antDead.js"></script>
-		<script src="./js/antGenetic.js"></script>
-		<script src="./js/antController.js"></script>
-		<script src="./js/antControllerSimple.js"></script>
-		<script src="./js/antControllerCustom.js"></script>
-		<script src="./js/spider.js"></script>
-		<script src="./js/spiderController.js"></script>
-		<script src="./js/pheromone.js"></script>
-		
-		<script src="./js/simulation.js"></script>
-		<script src="./js/tutorial.js"></script>
-		<script src="./js/init.js"></script>
+		<script src="./js/globals.js"></script>
 	</body>
 </html>

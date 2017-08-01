@@ -1,33 +1,27 @@
-var HiveType = {
-	DEFAULT : 0,
-	CUSTOM : 1
-}
+define([ 'smellableObject', 'ant', 'hiveController', 'hiveControllerCustom'], function(SmellableObject, Ant, HiveController, HiveControllerCustom) {
 
-const _foodStorageHive = Symbol('foodStorageHive');
-const _foodMaxHive = Symbol('foodMaxHive');
+return class Hive extends SmellableObject {
 
-class Hive extends SmellableObject {
 	constructor(canvas, position, settings, collisionObjs){
-
 		// Super constructor
 		super(canvas, position, settings.getHiveSize(), settings.getSizeSmellingFactor(), collisionObjs);
 
 		// Hive specific stuff
-		this[_foodStorageHive] = 0;
-		this[_foodMaxHive] = settings.getFoodMaxHive();
+		this._foodStorageHive = 0;
+		this._foodMaxHive = settings.getFoodMaxHive();
 
 		this.ants = [];
 		this.collisionObjs = collisionObjs;
 		this.settings = settings;
 		
-		if (settings.getHiveType() == HiveType.DEFAULT)
-			this.controller = new HiveController();
-		else if (settings.getHiveType() == HiveType.CUSTOM)
+		if (settings.getHiveType() == HiveType.CUSTOM)
 			this.controller = new HiveControllerCustom();
+		else
+			this.controller = new HiveController();
 	}
 	
-	getFoodMaxStorage(){ return this[_foodMaxHive];}
-	getFoodStorage(){ return this[_foodStorageHive];}
+	getFoodMaxStorage(){ return this._foodMaxHive;}
+	getFoodStorage(){ return this._foodStorageHive;}
 	getAnts() {return this.ants;}
 
 	iterate(allObjects){
@@ -57,10 +51,10 @@ class Hive extends SmellableObject {
 		var additionalFood = amount;
 		if (amount + this.getFoodStorage() >= this.getFoodMaxStorage()){
 			var tooMuch = (amount + this.getFoodStorage()) % this.getFoodMaxStorage();
-			this[_foodStorageHive] = tooMuch;
+			this._foodStorageHive = tooMuch;
 			this.createAnt(allObjects)
 		}
-		this[_foodStorageHive] += additionalFood;
+		this._foodStorageHive += additionalFood;
 	}
 
 	draw(){
@@ -90,10 +84,12 @@ class Hive extends SmellableObject {
 			this._context.textAlign = "center";
 			this._context.lineWidth = 1;
 			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getFoodStorage().toString(),pos.x,pos.y);
+			this._context.strokeText(this.getFoodStorage().toFixed(2),pos.x,pos.y);
 			this._context.fillStyle = 'black';
-			this._context.fillText(this.getFoodStorage().toString(),pos.x,pos.y);
+			this._context.fillText(this.getFoodStorage().toFixed(2),pos.x,pos.y);
 		}
 
 	}
 }
+
+});

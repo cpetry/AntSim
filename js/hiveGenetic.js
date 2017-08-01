@@ -1,9 +1,10 @@
-class HiveGenetic extends Hive {
+define(['hive', 'antGenetic'], function(Hive, AntGenetic) {
+
+return class HiveGenetic extends Hive {
 	constructor(canvas, position, settings, allObjects){	
 		// Super constructor
 		super(canvas, position, settings, allObjects);
 	}
-	
 	
 	createAnt(allObjects){
 		var posDistace = this.settings.getAntPositionDistance();
@@ -15,3 +16,5 @@ class HiveGenetic extends Hive {
 		this.ants.push(newAnt);
 	}
 }
+
+});

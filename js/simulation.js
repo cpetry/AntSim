@@ -1,6 +1,9 @@
-class Simulation {
-	constructor(antType){
-		this.canvas = document.getElementById("terrarium");
+define(['settingsSimulation', 'hiveGenetic', 'antDead', 'spider', 'spiderDead', 'collider', 'graph', 'food'], 
+function(SettingsSimulation, HiveGenetic, AntDead, Spider, SpiderDead, Collider, Graph, Food) {
+
+return class Simulation {
+	constructor(canvas, antType, hiveType, userAntFunction){
+		this.canvas = canvas;
 
 		this.now;
 		this.delta;
@@ -13,11 +16,11 @@ class Simulation {
 		this.allObjects = [];
 		this.spiders = [];
 
-		this.settings = new SettingsSimulation(antType);
-		this.graph = new Graph();
+		this.settings = new SettingsSimulation(antType, hiveType, userAntFunction);
 		
 		// simulation constructor is called directly
 		if (new.target === Simulation) {
+			this.graph = new Graph();
 			this.init();
 			this.clear();
 			this.draw();
@@ -87,15 +90,8 @@ class Simulation {
 
 		
 		// Update food (and in case create new one)
-		this.foodDecay();
-		this.foodCreation();
-	}
-
-	foodDecay(){
-
 		for (var i = 0; i < this.food.length; i++) {
-
-			this.food[i].decay();
+			this.food[i].iterate();
 
 			// remove food if it is "empty"
 			if (this.food[i].isEmpty()){
@@ -106,6 +102,12 @@ class Simulation {
 				this.food.splice(i, 1);
 			}
 		}
+
+		this.foodCreation();
+	}
+
+	foodDecay(){
+
 
 	}
 
@@ -160,7 +162,7 @@ class Simulation {
 	clear(){
 		var ctx = this.canvas.getContext("2d")
 		ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		ctx.fillStyle = "#e2decf";
+		ctx.fillStyle = "#f7f6ed";
 		ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
 	}
 
@@ -226,3 +228,5 @@ class Simulation {
 	}
 
 }
+
+});

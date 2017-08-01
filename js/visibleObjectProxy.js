@@ -1,4 +1,6 @@
-class VisibleObjectProxy extends SmellableObjectProxy{
+define(['smellableObjectProxy'], function(SmellableObjectProxy) {
+
+return class VisibleObjectProxy extends SmellableObjectProxy{
 	constructor(canvas, parentID, refID, distance, rotation, size, type){
 		super(canvas, parentID, distance, rotation, type);
 		this.size = size;
@@ -13,3 +15,5 @@ class VisibleObjectProxy extends SmellableObjectProxy{
 	
 	getID(){ return this.refID; }
 }
+
+});

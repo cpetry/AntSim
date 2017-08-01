@@ -1,3 +1,6 @@
+define(['controller'], 
+function(Controller) {
+
 /**
  * The AntController enables the user to program his/hers ants behaviour.<br>
  * It has limited access to some of the ants current values.<br>
@@ -5,18 +8,60 @@
  * @class
  * @augments Controller
  */
-class AntController extends Controller {
-  /**
-   * @ignore 
-   */
-	constructor(ant){
+return class AntController extends Controller {
+    /**
+    * @ignore 
+    */
+	constructor(ant, userAntFunction){
 		super(ant);
 		this.parentID = 0;
 		this.food = 0;
 		this.foodMax = 0;
 		this.canSetPheromone = false;
+		// simulation constructor is called directly
+		if (new.target === AntController)
+			this.userAntFunction = userAntFunction;
 		
 		this.setAttributes(ant);
+	}
+	
+	static createEditor(elementID, defaultValue){
+		var antControllerWordCompleter = {
+			getCompletions: function(editor, session, pos, prefix, callback) {
+				var wordList = AntController.getAutoCompletionWordList();
+				callback(null, wordList.map(function(word) {
+					return {
+						caption: word,
+						value: word,
+						meta: "This ant"
+					};
+				}));
+			}
+		}
+		var globalWordCompleter = {
+			getCompletions: function(editor, session, pos, prefix, callback) {
+				var wordList = ["this."];
+				callback(null, wordList.map(function(word) {
+					return {
+						caption: word,
+						value: word,
+						meta: "global"
+					};
+				}));
+			}
+		}
+		ace.require("ace/ext/language_tools");
+		var customAntEditor = ace.edit(elementID);
+		customAntEditor.$blockScrolling = Infinity;
+		customAntEditor.setTheme("ace/theme/chrome");
+		customAntEditor.session.setMode("ace/mode/javascript");
+		customAntEditor.setOptions({
+			enableBasicAutocompletion: true,
+			enableLiveAutocompletion: true
+		});
+		customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
+		customAntEditor.setValue(defaultValue);
+		return customAntEditor;
 	}
 	
 	static getAutoCompletionWordList(){
@@ -46,9 +91,8 @@ class AntController extends Controller {
 		var result = [ActionType.NONE, 0, 0];
 		try{
 			var newResult;
-			var func = userAntFunction.bind(this);
 			try{
-				newResult = func();
+				newResult = this.userAntFunction.call(this);
 			}
 			catch (runtimeError) {
 				console.error("legal code; unforeseen result: ", runtimeError);
@@ -133,9 +177,9 @@ class AntController extends Controller {
 					hive = this.smelledObjs[id];
 				}
 			}
-		}
-		
+		}	
 		return hive;
 	}
-	
 }
+
+});
