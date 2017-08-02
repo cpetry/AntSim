@@ -22,7 +22,7 @@ div#simulationContainer{
 	height:380px;
 	float:left;
 }
-div#editorButtons{
+div#editorButtons, div#trainingButtons{
 	visibility:hidden;
 	text-align:center;
 	width:100%;
