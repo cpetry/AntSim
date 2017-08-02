@@ -1,4 +1,6 @@
-class VisibleObjectProxy extends SmellableObjectProxy{
+define(['smellableObjectProxy'], function(SmellableObjectProxy) {
+
+return class VisibleObjectProxy extends SmellableObjectProxy{
 	constructor(canvas, parentID, refID, distance, rotation, size, type){
 		super(canvas, parentID, distance, rotation, type);
 		this.size = size;
@@ -6,10 +8,12 @@ class VisibleObjectProxy extends SmellableObjectProxy{
 	}
 
 	canBeInteractedWith(other){
-		var isNearEnough = this.distance - this.size - other.getSize() < 10;
-		var rotatedTowards = Math.abs(this.getRotationToObj()) < Math.PI/4; 
+		var isNearEnough = this.distance - this.size - other.getSize() < other.getInteractionDistance();
+		var rotatedTowards = Math.abs(this.getRotationToObj()) < other.getInteractionRange(); 
 		return (isNearEnough && rotatedTowards);
 	}
 	
 	getID(){ return this.refID; }
 }
+
+});

@@ -1,6 +1,8 @@
-class SettingsSimulation
+define(function() {
+
+return class SettingsSimulation
 {
-	constructor(antType, hiveType, neuralNetwork=undefined){
+	constructor(antType, hiveType, userAntFunction){
 		this.hiveSize = 14;
 		this.antType = antType;
 		this.hiveType = hiveType;
@@ -16,8 +18,11 @@ class SettingsSimulation
 		this.antSmellingDistance = 50;
 		this.antVisibilityDistance = 30;
 		this.antVisibilityRange = 0.8;
-		this.foodAmount = 1000;
-		this.foodAmountDeadAnt = 50;
+		this.antMaxPheromones = 10;
+		this.foodAmount = 250;
+		this.foodAmountDeadAnt = 25;
+		this.foodAmountDeadSpider = 200;
+		this.foodDecayProb = 0.25; // probability of rotting
 		this.foodSize = 0.005; // percentage of food amount
 		this.foodCreationPropability = 0.05; // chance for each iteration to create food
 		this.foodMaxSiteNumber = 10; // maximum number of food sites
@@ -30,12 +35,14 @@ class SettingsSimulation
 		this.spiderSpeed = 1;
 		this.spiderSpeedRotation = 0.05; // radians
 		this.spiderAttackDamage = 3;
-		this.spiderDecayProb = 0.05;
+		this.spiderDecayProb = 0.3;
 		this.spiderSmellingDistance = 50;
 		this.spiderVisibilityDistance = 30;
 		this.spiderVisibilityRange = 0.8;
 		this.sizeSmellingFactor = 6;
-		this.neuralNetwork = neuralNetwork;
+		this.interactionDistance = 5;
+		this.interactionRange = Math.PI/4;
+		this.userAntFunction = userAntFunction;
 	}
 	// attribute related settings
 	getTerrariumWidth(){ return this.terrariumWidth; }
@@ -55,6 +62,7 @@ class SettingsSimulation
 	getAntSmellingDistance() { return this.antSmellingDistance; }
 	getAntVisibilityDistance() { return this.antVisibilityDistance; }
 	getAntVisibilityRange() { return this.antVisibilityRange; }
+	getAntMaxPheromones() { return this.antMaxPheromones; }
 	getSpiderSize() { return this.spiderSize; }
 	getSpiderSizeLevelFactor() { return this.spiderSizeLevelFactor; }
 	getSpiderLife(){ return this.spiderLife; }
@@ -68,10 +76,17 @@ class SettingsSimulation
 	getFoodSize(){ return this.foodSize; }
 	getFoodAmount(){ return this.foodAmount; }
 	getFoodAmountDeadAnt(){ return this.foodAmountDeadAnt; }
+	getFoodAmountDeadSpider(){ return this.foodAmountDeadSpider; }
+	getFoodDecayProb(){ return this.foodDecayProb; }
 	getFoodCreationPropability(){ return this.foodCreationPropability; }
 	getFoodMaxSiteNumber(){ return this.foodMaxSiteNumber; }
 	getFoodMaxHive(){ return this.foodMaxHive; }
 	getFoodMaxAnt(){ return this.foodMaxAnt; }
 	getFoodMaxHarvestAmountAnt(){ return this.foodMaxHarvestAmountAnt; }
 	getSizeSmellingFactor() { return this.sizeSmellingFactor; }
+	getInteractionDistance() { return this.interactionDistance; }
+	getInteractionRange() { return this.interactionRange; }
+	getUserAntFunction() { return this.userAntFunction; }
 }
+
+});

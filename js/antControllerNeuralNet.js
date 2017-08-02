@@ -1,3 +1,5 @@
+define(['antController'], function(AntController) {
+	
 /**
  * AntControllerNeuralNet class
  *
@@ -7,7 +9,7 @@
  * add, remove or completely rewrite. This class is mainly
  * meant as an example and case study.
  */
-class AntControllerNeuralNet extends AntController{
+return class AntControllerNeuralNet extends AntController{
 	constructor(ant, neuralNetwork){
 		super(ant);
 		this.memory = { harvestedFood : false, lastLife : -1 };
@@ -21,33 +23,11 @@ class AntControllerNeuralNet extends AntController{
 		this.realChosen = this.neuralNetwork.realChosen;
 		this.firstChoice = this.neuralNetwork.firstChoice;
 	}
-	
-	
-	argmax(tlist) {
-		var max = -9e8;
-		var maxarg = -1;
-		for (var i = 0; i < tlist.length; ++i) {
-			if (tlist[i] > max) {
-				max = tlist[i];
-				maxarg = i;
-			}
-		}
-		return maxarg;
-	}
-	maxElement(tlist) {
-		var max = -9e8;
-		for (var i = 0; i < tlist.length; ++i) {
-			if (tlist[i] > max) {
-				max = tlist[i];
-			}
-		}
-		return max;
-	}
 
 	createFeatureVector() {
 
 		if (typeof(this.neuralNetwork.network)==='undefined')
-			return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
+			return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
 
 		var visibleObjects = this.getVisibleObjs();
 		var smellableObjects = this.getSmelledObjs();
@@ -140,7 +120,7 @@ class AntControllerNeuralNet extends AntController{
 		 * Chose action
 		 */
 		var networkOutput = networkAnswer.output;
-		var maxAction = this.argmax(networkOutput);
+		var maxAction = argmax(networkOutput);
 
 		/*
 		 * - Attack nearest Ant 					0
@@ -178,15 +158,15 @@ class AntControllerNeuralNet extends AntController{
 						return [ActionType.ATTACK, prey]
 					} else {
 						var fromObjToDirRad = prey.getRotationToObj();
-						actionTuple = [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+						actionTuple = [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
 					}
 				}
 			} else if (i == 1) {
-				actionTuple = [ActionType.WALK, Direction.FORWARD, -30];
+				actionTuple = [ActionType.WALK, DirectionType.FORWARD, -30];
 			} else if (i == 2) {
-				actionTuple = [ActionType.WALK, Direction.FORWARD,   0];
+				actionTuple = [ActionType.WALK, DirectionType.FORWARD,   0];
 			} else if (i == 3) {
-				actionTuple = [ActionType.WALK, Direction.FORWARD,  30];
+				actionTuple = [ActionType.WALK, DirectionType.FORWARD,  30];
 			} else if (i == 4) {
 
 				var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
@@ -206,9 +186,9 @@ class AntControllerNeuralNet extends AntController{
 							// walk towards food
 							var fromObjToDirRad = nearestFood.getRotationToObj();
 							if (this.hasCollidedWithID() != -1){
-								actionTuple = [ActionType.WALK, Direction.FORWARD, 1];
+								actionTuple = [ActionType.WALK, DirectionType.FORWARD, 1];
 							}
-							actionTuple = [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+							actionTuple = [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
 						}
 					}
 				}
@@ -226,9 +206,9 @@ class AntControllerNeuralNet extends AntController{
 						// walk towards hive
 						var fromObjToDirRad = hive.getRotationToObj();
 						if (this.hasCollidedWithID() != -1)
-							actionTuple = [ActionType.WALK, Direction.FORWARD, 1];
+							actionTuple = [ActionType.WALK, DirectionType.FORWARD, 1];
 						else
-							actionTuple = [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+							actionTuple = [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
 					}
 				}
 
@@ -297,12 +277,12 @@ class AntControllerNeuralNet extends AntController{
 		var qLearningGamma = 0.9;
 
 		if (reward != 0 && this.networkMemory.length >= this.batchSize && this.neuralNetwork.shouldTrain) {
-			var lastBest = this.maxElement(networkAnswer.output);
+			var lastBest = maxElement(networkAnswer.output);
 			for (var i = this.networkMemory.length - 1; i >= 0; --i) {
 
 				var originalOutput = this.networkMemory[i].output;
 				var modifiedOutput = originalOutput;
-				var maxIdx = this.argmax(originalOutput);
+				var maxIdx = argmax(originalOutput);
 				var chosenAction = this.networkMemory[i].chosenAction;
 
 				if (chosenAction != -1 && modifiedOutput[chosenAction] > 0.2)
@@ -320,7 +300,7 @@ class AntControllerNeuralNet extends AntController{
 				for (var j = 0; j < modifiedOutput.length; ++j)
 					modifiedOutput[j] = (modifiedOutput[j]) / sum;
 
-				lastBest = this.maxElement(modifiedOutput);
+				lastBest = maxElement(modifiedOutput);
 
 				this.networkMemory[i].output = modifiedOutput;
 
@@ -357,7 +337,9 @@ class AntControllerNeuralNet extends AntController{
 		if (actionTuple.length > 0)
 				return actionTuple;
 		else
-			return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
+			return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
 
 	}
 }
+
+});

@@ -1,4 +1,6 @@
-class SpiderController extends Controller {
+define(['controller'], function(Controller) {
+
+return class SpiderController extends Controller {
 	constructor(spider){
 		super(spider);
 	}
@@ -27,16 +29,21 @@ class SpiderController extends Controller {
 
 	getAction(){
 		var prey = this.getNearestAnt();
+		var rotation = rand(-0.5,0.5);
 		if (prey != null){
 			if (prey.canBeInteractedWith(this)) {
 				return [ActionType.ATTACK, prey]
 			}
 			else {
 				var fromObjToDirRad = prey.getRotationToObj();
-				return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+				rotation = fromObjToDirRad;
 			}
 		}
-
-		return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
+		if (this.hasCollidedWithID() != -1){
+			return [ActionType.WALK, DirectionType.FORWARD, 1];
+		}
+		return [ActionType.WALK, DirectionType.FORWARD, rotation];
 	}
 }
+
+});

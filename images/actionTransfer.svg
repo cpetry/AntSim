@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="47.465157mm"
+   height="59.701302mm"
+   viewBox="0 0 168.18362 211.54004"
+   id="svg4212"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="actionTransfer.svg">
+  <defs
+     id="defs4214" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="-482.54311"
+     inkscape:cy="199.71822"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="5"
+     fit-margin-left="5"
+     fit-margin-right="5"
+     fit-margin-bottom="5"
+     inkscape:window-width="1536"
+     inkscape:window-height="801"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4217">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(580.96907,140.09053)">
+    <circle
+       style="opacity:1;fill:#f8f1e0;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:6.72529602;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path4912-5-8-1-2-9-8-0"
+       cx="-496.87726"
+       cy="-12.642303"
+       r="63.01263" />
+    <g
+       id="g7085"
+       transform="matrix(0.67252959,0,0,0.67252959,-884.06215,-507.5794)">
+      <path
+         sodipodi:nodetypes="ccccccc"
+         inkscape:connector-curvature="0"
+         id="path7053"
+         d="m 526.74576,709.97081 c 29.13875,-34.69841 58.44033,-25.62966 88.43926,-2.69568 l 7.10371,-11.30135 4.52054,44.23674 -47.14281,-11.94715 15.17612,-3.22896 c -25.80983,-19.24977 -47.33988,-24.87072 -68.09682,-15.0636 z"
+         style="fill:#51d4e0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.18700004;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="ccccccc"
+         inkscape:connector-curvature="0"
+         id="path7053-6"
+         d="m 628.47931,761.31524 c -29.13875,34.69842 -58.79747,23.84395 -88.7964,0.90996 l -7.10371,11.30136 -4.52054,-44.23675 47.14281,11.94715 -15.17612,3.22896 c 25.80983,19.24977 47.69702,26.65644 68.45396,16.84932 z"
+         style="fill:#51d4e0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.18700004;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.6264801px;line-height:125%;font-family:'Franklin Gothic Demi';-inkscape-font-specification:'Franklin Gothic Demi';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-556.28497"
+       y="-99.058762"
+       id="text7992-9-4"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan7994-9-1"
+         x="-556.28497"
+         y="-99.058762">Transfer</tspan></text>
+  </g>
+</svg>

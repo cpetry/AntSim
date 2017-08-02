@@ -1,70 +1,64 @@
-var HiveType = {
-	DEFAULT : 0,
-	CUSTOM : 1,
-	NEURALNET : 2
-}
+define([ 'smellableObject', 'ant', 'hiveController', 'hiveControllerCustom'],
+function(SmellableObject, Ant, HiveController, HiveControllerCustom) {
 
-const _foodStorageHive = Symbol('foodStorageHive');
-const _foodMaxHive = Symbol('foodMaxHive');
+return class Hive extends SmellableObject {
 
-class Hive extends SmellableObject {
 	constructor(canvas, position, settings, collisionObjs){
-
 		// Super constructor
 		super(canvas, position, settings.getHiveSize(), settings.getSizeSmellingFactor(), collisionObjs);
 
 		// Hive specific stuff
-		this[_foodStorageHive] = 0;
-		this[_foodMaxHive] = settings.getFoodMaxHive();
+		this._foodStorageHive = 0;
+		this._foodMaxHive = settings.getFoodMaxHive();
 
 		this.ants = [];
 		this.collisionObjs = collisionObjs;
 		this.settings = settings;
-
-		if (settings.getHiveType() == HiveType.NEURALNET)
-			this.controller = new HiveController();
-		else if (settings.getHiveType() == HiveType.CUSTOM)
+		
+		if (settings.getHiveType() == HiveType.CUSTOM)
 			this.controller = new HiveControllerCustom();
+		else if (settings.getHiveType() == HiveType.NEURALNET)
+			this.controller = new HiveController(); // TODO neuralnet hivecontroller
 		else
 			this.controller = new HiveController();
 
 	}
-
-  getFoodMaxStorage(){ return this[_foodMaxHive];}
-	getFoodStorage(){ return this[_foodStorageHive];}
+	
+	getFoodMaxStorage(){ return this._foodMaxHive;}
+	getFoodStorage(){ return this._foodStorageHive;}
 	getAnts() {return this.ants;}
 
-	iterate(collisionObjs){
+	iterate(allObjects){
 		for (var i = 0; i < this.ants.length; i++) {
-			this.ants[i].iterate(collisionObjs);
+			this.ants[i].iterate(allObjects);
 		}
 	}
 	
-	createAnt(collisionObjs){
+	createAnt(allObjects){
 		var posDistace = this.settings.getAntPositionDistance();
 		var antPos = { x: rand(-posDistace,posDistace) + this.getPosition().x , y: rand(-posDistace,posDistace) + this.getPosition().y };
 		var rotation = rand(0, 3.14*2); // 0 - 360°
 
-		var newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, collisionObjs, this.getID());
+		var newAnt = new Ant(this.getCanvas(), antPos, rotation, this.settings, allObjects, this.getID());
 		this.ants.push(newAnt);
 	}
 
-	removeAnt(ant, index, collisionObjs){
-		for (var a =0; a < collisionObjs.length; a++){
-			if (collisionObjs[a] == this.ants[index])
-				collisionObjs.splice(a, 1);
+	removeAnt(ant, index, allObjects){
+		for (var a =0; a < allObjects.length; a++){
+			if (allObjects[a] == this.ants[index])
+				allObjects.splice(a, 1);
 		}
 		this.ants.splice(index, 1);
 	}
 
-	receiveFood(amount){
+	receiveFood(amount, allObjects){
 		var additionalFood = amount;
 		if (amount + this.getFoodStorage() >= this.getFoodMaxStorage()){
 			var tooMuch = (amount + this.getFoodStorage()) % this.getFoodMaxStorage();
-			this[_foodStorageHive] = tooMuch;
-			this.createAnt()
+			this._foodStorageHive = tooMuch;
+			this.createAnt(allObjects)
 		}
-		this[_foodStorageHive] += additionalFood;
+		this._foodStorageHive += additionalFood;
 	}
 
 	draw(){
@@ -94,10 +88,12 @@ class Hive extends SmellableObject {
 			this._context.textAlign = "center";
 			this._context.lineWidth = 1;
 			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getFoodStorage().toString(),pos.x,pos.y);
+			this._context.strokeText(this.getFoodStorage().toFixed(2),pos.x,pos.y);
 			this._context.fillStyle = 'black';
-			this._context.fillText(this.getFoodStorage().toString(),pos.x,pos.y);
+			this._context.fillText(this.getFoodStorage().toFixed(2),pos.x,pos.y);
 		}
 
 	}
 }
+
+});

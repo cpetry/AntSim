@@ -1,5 +1,6 @@
 div#header{
 	margin: auto;
+	padding-top: 10px;
     width: 50%;
 	text-align:center;
 	font-size: 50px;
@@ -7,11 +8,7 @@ div#header{
 div#all{
 	position: relative;
 	margin: auto;
-	width: 840px;
-	border-radius: 15px 15px 15px 15px;
-	-moz-border-radius: 15px 15px 15px 15px;
-	-webkit-border-radius: 15px 15px 15px 15px;
-	border: 3px solid #443300;
+	width: 950px;
 }
 div#tutorial{
 	margin: 10px;
@@ -19,9 +16,9 @@ div#tutorial{
 	text-align:center;
 	visibility: hidden;
 }
-div#terrariumContainer{
-	margin: auto;
-    width:600px;
+div#simulationContainer{
+	margin:auto;
+	width:600px;
 	height:380px;
 	float:left;
 }
@@ -36,8 +33,9 @@ div#graphs{
 	height:350px;
 }
 div#customAntContainer{
-	margin: 10px;
 	height:90%;
+	resize: both;
+    overflow: auto;
 }
 div#NoUI{
 	text-align: center;
@@ -51,7 +49,7 @@ div#floatingContainer{
 	position: absolute;
 	display: none;
 	z-index: 10; /* has to be above editor */
-	top: -2.5%;
+	top: 4%;
 	left: -2.5%;
 	width: 105%; /*terrariumContainer + settings*/
 	height: 105%;
@@ -64,17 +62,28 @@ div#options{
 	text-align:center;
 }
 div#settings{
-	float:right;
-	width:210px;
+    border-left: thick solid #cceecc;
+	margin:30px;
+	padding: 15px;
+	float:left;
+	height:100%;
 }
 div#cleared {
     clear: both;
 }
-div#message {
+#message {
 	position:absolute;
-	margin: 20px;
 	height: 100%;
+	width: 100%;
+	border: none;
 }
+#message_close{
+	position: relative;
+	z-index: 11; /* has to be above editor */
+	float:right;
+	margin: 20px;
+}
+
 div#message_bottom {
 	margin:10px;
 	width:100%;
@@ -93,11 +102,9 @@ p {
 input#closeButton{
 	float: right;
 }
-canvas#terrarium {
+canvas.terrarium {
 	margin-left: auto;
     margin-right: auto;
-	width:600px;
-	height:350px;
 	
 	border-radius: 15px 15px 15px 15px;
 	-moz-border-radius: 15px 15px 15px 15px;

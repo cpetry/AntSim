@@ -1,8 +1,6 @@
-var Mode = {
-	TEASER : 0,
-	TUTORIAL : 1,
-	SIMULATION : 2
-}
+
+var requestID;
+var userAntFunction;
 
 window.requestAnimationFrame = function() {
     return window.requestAnimationFrame ||
@@ -15,7 +13,7 @@ window.requestAnimationFrame = function() {
         }
 }();
 
-Message.container = document.getElementById('message');
+
 SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);
 
 Debug.setShowLife(document.getElementById('debugShowLife').checked);
@@ -25,176 +23,53 @@ Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);
 Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);
 Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);
 
-var mode;
-var requestID;
-var lang = ace.require("ace/ext/language_tools");
-lang.setCompleters();
-var antControllerWordCompleter = {
-    getCompletions: function(editor, session, pos, prefix, callback) {
-		var wordList = AntController.getAutoCompletionWordList();
-		callback(null, wordList.map(function(word) {
-			return {
-				caption: word,
-				value: word,
-				meta: "This ant"
-			};
-		}));
-    }
-}
-var globalWordCompleter = {
-    getCompletions: function(editor, session, pos, prefix, callback) {
-		var wordList = ["this."];
-		callback(null, wordList.map(function(word) {
-			return {
-				caption: word,
-				value: word,
-				meta: "global"
-			};
-		}));
-    }
-}
-var customAntEditor = ace.edit("editor");
-customAntEditor.setTheme("ace/theme/chrome");
-customAntEditor.session.setMode("ace/mode/javascript");
-customAntEditor.setOptions({
-    enableBasicAutocompletion: true,
-});
-customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
-customAntEditor.setValue("return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];");
-
-var userAntFunction = new Function(customAntEditor.getValue());
-var userHiveFunction;
-var selectedTutorialPart = 0;
-window.onload = function(){
-	startTeaser();
-}
-
-var training = new Training();
 
 function showGraph(){
-	document.getElementById('terrarium').style.display = 'none';
+	document.getElementById('terrariumContainer').style.display = 'none';
 	document.getElementById('graphs').style.display = 'block';
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'none';
-	document.getElementById('trainingButtons').style.visibility = 'hidden';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
 function showSimulation(){
-	document.getElementById('terrarium').style.display = 'block';
+	document.getElementById('terrariumContainer').style.display = 'block';
 	document.getElementById('graphs').style.display = 'none';
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'none';
 	document.getElementById('editorButtons').style.visibility = 'hidden';
-	document.getElementById('trainingButtons').style.visibility = 'hidden';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
 function showEditor(){
 	document.getElementById('graphs').style.display = 'none';
-	document.getElementById('terrarium').style.display = 'none';
+	document.getElementById('terrariumContainer').style.display = 'none';
 	document.getElementById('customAntContainer').style.display = 'block';
 	document.getElementById('NoUI').style.display = 'none';
 	document.getElementById('editorButtons').style.visibility = 'visible';
-	document.getElementById('trainingButtons').style.visibility = 'hidden';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
 function showNoUI(){
 	document.getElementById('graphs').style.display = 'none';
-	document.getElementById('terrarium').style.display = 'none';
+	document.getElementById('terrariumContainer').style.display = 'none';
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'block';
 	document.getElementById('editorButtons').style.visibility = 'hidden';
-	document.getElementById('trainingButtons').style.visibility = 'hidden';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
 function showTraining(){
 	document.getElementById('graphs').style.display = 'none';
-	document.getElementById('terrarium').style.display = 'block';
+	document.getElementById('terrariumContainer').style.display = 'block';
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'none';
 	document.getElementById('editorButtons').style.visibility = 'hidden';
-	document.getElementById('trainingButtons').style.visibility = 'visible';
+	document.getElementById('trainingContainer').style.visibility = 'visible';
 }
-
-function setUI(show){
-	var show = document.getElementById('showUI').checked;	SettingsGlobal.setShowUI(show);
-	if (show)
-		showSimulation();
-	else
-		if (Simulation.isFinished)
-			showGraph();
-		else
-			showNoUI();
-}
-
-function run(){
-	userAntFunction = new Function(customAntEditor.getValue());
-
-	if (mode == Mode.TEASER)
-		startTeaser();
-    else if (mode == Mode.TUTORIAL)
-		startTutorialPart(selectedTutorialPart);
-	else if (mode == Mode.SIMULATION)
-		startSimulation();
-}
-
-function startTutorialPart(part){
-	document.getElementById('showUI').checked = true;
-	showSimulation();
-	Math.seedrandom(document.getElementById('seed').value);
-	new Tutorial(part);
-}
-
-function startTeaser(){
-	SettingsGlobal.setShowUI(true);
-	document.getElementById('showUI').checked = true;
-	showSimulation();
-	Math.seedrandom();
-	settings = new SettingsSimulation(AntType.SIMPLE);
-	new Simulation(settings);
-}
-
-function startSimulation(){
-	document.getElementById('showUI').checked = false;
-	Math.seedrandom(document.getElementById('seed').value);
-	settings = new SettingsSimulation(AntType.CUSTOM);
-	new Simulation(settings);
-}
-
 
 function simulationClicked(){
-	Message.hideMessage();
-	document.getElementById('frame').value = 0;
-	document.getElementById('tutorial').style.visibility = 'hidden';
-	mode = Mode.SIMULATION;
-	window.cancelAnimationFrame(requestID);
-	requestID = undefined;
-	showEditor();
-}
-
-function teaserClicked(){
-	Message.hideMessage();
-	document.getElementById('frame').value = 0;
-	document.getElementById('tutorial').style.visibility = 'hidden';
-	mode = Mode.TEASER;
-	window.cancelAnimationFrame(requestID);
-	requestID = undefined;
-	startTeaser();
-}
-
-function tutorialClicked(){
-	Message.hideMessage();
-	document.getElementById('frame').value = 0;
-	document.getElementById('tutorial').style.visibility = 'visible';
-	mode = Mode.TUTORIAL;
-	selectedTutorialPart = 0;
-	window.cancelAnimationFrame(requestID);
-	requestID = undefined;
-	Message.tutorial0();
-	showEditor();
-}
-
-function editorClicked(){
-	Message.hideMessage();
+	document.getElementById('floatingContainer').style.display = 'none';
 	document.getElementById('frame').value = 0;
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
@@ -202,35 +77,101 @@ function editorClicked(){
 }
 
 function trainingClicked(){
-	Message.hideMessage();
+	document.getElementById('floatingContainer').style.display = 'none';
 	document.getElementById('frame').value = 0;
-	document.getElementById('tutorial').style.visibility = 'hidden';
-	//mode = Mode.TEASER;
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
 	showTraining();
 }
 
-function startTraining(){
-	var antType = document.getElementById("AntType").value;
-	if (antType == "Simple")
-		training.start(AntType.SIMPLE);
-	else if (antType == "NeuralNet")
-		training.start(AntType.NEURALNET);
-	else if (antType == "Custom")
-		training.start(AntType.CUSTOM);
+function aboutClicked(){
+	document.getElementById('message').src = "./user-code_doc/index.html";
+	document.getElementById('floatingContainer').style.display = 'block';
 }
 
-function testTraining(){
-	var antType = document.getElementById("AntType").value;
-	if (antType == "Simple")
-		training.test(AntType.SIMPLE);
-	else if (antType == "NeuralNet")
-		training.test(AntType.NEURALNET);
-	else if (antType == "Custom")
-		training.test(AntType.CUSTOM);
+function tutorialClicked(){
+	document.getElementById('message').src = "./user-code_doc/tutorial-00_basics.html";
+	document.getElementById('floatingContainer').style.display = 'block';
 }
 
-function resetTraining(){
-	training.reset();
+function closeMessage(){
+	document.getElementById('floatingContainer').style.display = 'none';
 }
+
+requirejs.config({
+    //By default load any module IDs from js
+    baseUrl: './js',
+    //except, if the module ID starts with "app",
+    //load it from the js/app directory. paths
+    //config is relative to the baseUrl, and
+    //never includes a ".js" extension since
+    //the paths config could be for a directory.
+});
+
+requirejs([ 'external/seedrandom/seedrandom',
+			'external/setImmediate/setImmediate',
+			'simulation','settingsSimulation', 'training','ant','hive','antController'],
+function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant, Hive, AntController) {
+
+	var canvas = document.getElementById('canvasSimulation')
+	var defaultValue = "return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];"
+	var editor = AntController.createEditor("editor", defaultValue)
+
+	var training = new Training(canvas);
+	
+	function startTeaser(){
+		document.getElementById('floatingContainer').style.display = 'none';
+		document.getElementById('frame').value = 0;
+		window.cancelAnimationFrame(requestID);
+		requestID = undefined;
+		SettingsGlobal.setShowUI(true);
+		document.getElementById('showUI').checked = true;
+		showSimulation();
+		Math.seedrandom();
+		var settings = new SettingsSimulation(AntType.SIMPLE, HiveType.DEFAULT);
+		new Simulation(canvas, settings);
+	}
+
+	function run(){
+		userAntFunction = new Function(editor.getValue());
+		//SettingsGlobal.setShowUI(false);
+		showSimulation();
+		Math.seedrandom(document.getElementById('seed').value);
+		var settings = new SettingsSimulation(AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		new Simulation(canvas, settings);
+	}
+
+	function startTraining(){
+		var antType = document.getElementById("AntType").value;
+		if (antType == "Simple")
+			training.start(AntType.SIMPLE);
+		else if (antType == "NeuralNet")
+			training.start(AntType.NEURALNET);
+		else if (antType == "Custom")
+			training.start(AntType.CUSTOM);
+	}
+
+	function testTraining(){
+		var antType = document.getElementById("AntType").value;
+		if (antType == "Simple")
+			training.test(AntType.SIMPLE);
+		else if (antType == "NeuralNet")
+			training.test(AntType.NEURALNET);
+		else if (antType == "Custom")
+			training.test(AntType.CUSTOM);
+	}
+
+	function resetTraining(){
+		training.reset();
+	}
+
+	document.getElementById("runButton").onclick = run;
+	document.getElementById("teaserButton").onclick = startTeaser;
+	document.getElementById("startTrainingButton").onclick = startTraining;
+	document.getElementById("testTrainingButton").onclick = testTraining;
+	document.getElementById("resetTrainingButton").onclick = resetTraining;
+	
+
+	startTeaser();
+
+});

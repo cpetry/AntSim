@@ -1,10 +1,8 @@
-const _strength = Symbol('strength');
-const _agility = Symbol('agility');
-const _sensitivity = Symbol('sensitivity');
+define(['ant'], function(Ant) {
 
-class AntGenetic extends Ant {
-	constructor(canvas, position, rotation, settings, newGenes, collisionObjs, parentID){
-		super (canvas, position, rotation, settings, collisionObjs, parentID);
+return class AntGenetic extends Ant {
+	constructor(canvas, position, rotation, settings, newGenes, allObjects, parentID){
+		super (canvas, position, rotation, settings, allObjects, parentID);
 		
 		// Genes / attributes
 		// Test if genes are chosen correctly and fair. Correct if not.
@@ -13,22 +11,28 @@ class AntGenetic extends Ant {
 		var total = newGenes[0] + newGenes[1] + newGenes[2];
 		var genes = [newGenes[0]/total/aThird, newGenes[1]/total/aThird, newGenes[2]/total/aThird]
 
-		this[_strength]    = genes[0]; // [0.0 - 3.0]
-		this[_agility]     = genes[1]; // [0.0 - 3.0]
-		this[_sensitivity] = genes[2]; // [0.0 - 3.0]
+		this._strength    = genes[0]; // [0.0 - 3.0]
+		this._agility     = genes[1]; // [0.0 - 3.0]
+		this._sensitivity = genes[2]; // [0.0 - 3.0]
 		
 		// Abilities
 		// Strength type
-		this[_decayProb]     *= (1/this[_strength]);
-		this[_foodBonusProb] *= (1/this[_strength]); // less life loss when carrying food
-		this[_foodMaxAnt]    *= this[_strength];
-		this[_foodMaxHarvestAmount] *= this[_strength];
+		this._decayProb     *= (1/this.getStrength());
+		this._foodBonusProb *= (1/this.getStrength()); // less life loss when carrying food
+		this._foodMaxAnt    *= this.getStrength();
+		this._foodMaxHarvestAmount *= this.getStrength();
 		// Agility type
-		this[_speed]        *= this[_agility];
-		this[_speedRotation] *= this[_agility]; // radians
+		this._speed         *= this.getAgility();
+		this._speedRotation *= this.getAgility(); // radians
 		// Sensitivity type
-		this[_smellingDistance]   *= this[_sensitivity];
-		this[_visibilityDistance] *= this[_sensitivity];
-		this[_visibilityRangeRad] *= this[_sensitivity];
+		this._smellingDistance   *= this.getSensitivity();
+		this._visibilityDistance *= this.getSensitivity();
+		this._visibilityRangeRad *= this.getSensitivity();
 	}	
+	getStrength(){return this._strength;}
+	getAgility(){return this._agility;}
+	getSensitivity(){return this._sensitivity;}
+	
 }
+
+});

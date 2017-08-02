@@ -1,27 +1,10 @@
-var Direction = {
-  FORWARD: 1,
-  BACKWARD: 2,
-  NONE: 3
-}
-
-var AntType = {
-	SIMPLE: 0,
-	CUSTOM: 1,
-	NEURALNET: 2
-}
-
-const _foodBonusProb = Symbol('foodBonusProb');
-const _foodStorageAnt = Symbol('foodStorageAnt');
-const _foodMaxAnt = Symbol('foodMaxAnt');
-const _foodMaxHarvestAmount = Symbol('foodMaxHarvestAmount');
-const _parentID = Symbol('parentID');
-
-const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
+define(['animal', 'pheromone', 'antController','antControllerSimple', 'antControllerNeuralNet'], 
+function(Animal, Pheromone, AntController, AntControllerSimple, AntControllerNeuralNet) {
 
 /**
  * Ant
  */
-class Ant extends Animal {
+return class Ant extends Animal {
 
 	/**
 	* Creates an ant and sets its abilities
@@ -30,59 +13,97 @@ class Ant extends Animal {
     * @param {object} position - 2D position of where the ant shall be created (if no collision occurs).
     * @param {float} rotation - Rotation of the object in radians.
     * @param {SettingsSimulation} settings - Settings of the current simulation.
-    * @param {Objects[]} collisionObjs.
+    * @param {Objects[]} allObjects - All objects inside scene.
     * @param {number} parentID - ID of the ants hive.
 	*/
-	constructor(canvas, position, rotation, settings, collisionObjs, parentID){
-		super(canvas, position, settings.getAntSize(), settings.getSizeSmellingFactor(), collisionObjs, rotation);
+	constructor(canvas, position, rotation, settings, allObjects, parentID){
+		super(canvas, position, settings.getAntSize(), settings, allObjects, rotation);
 		
 		// Abilities
-		this[_decayProb]     = settings.getAntDecayProb();
-		this[_foodBonusProb] = settings.getAntFoodBonusProb(); // less life loss when carrying food
-		this[_foodMaxAnt] = settings.getFoodMaxAnt();
-		this[_foodMaxHarvestAmount] = settings.getFoodMaxHarvestAmountAnt();
-		this[_speed] = settings.getAntSpeed();
-		this[_speedRotation] = settings.getAntSpeedRotation();
-		this[_smellingDistance] = settings.getAntSmellingDistance();
-		this[_visibilityDistance] = settings.getAntVisibilityDistance();
-		this[_visibilityRangeRad] = settings.getAntVisibilityRange();
-		this[_attackDamage] = settings.getAntAttackDamage();
+		this._decayProb             = settings.getAntDecayProb();
+		this._speed                 = settings.getAntSpeed();
+		this._speedRotation         = settings.getAntSpeedRotation();
+		this._smellingDistance      = settings.getAntSmellingDistance();
+		this._visibilityDistance    = settings.getAntVisibilityDistance();
+		this._visibilityRangeRad    = settings.getAntVisibilityRange();
+		this._attackDamage          = settings.getAntAttackDamage();
+		this._foodBonusProb         = settings.getAntFoodBonusProb(); // less life loss when carrying food
+		this._foodMaxAnt            = settings.getFoodMaxAnt();
+		this._foodMaxHarvestAmount  = settings.getFoodMaxHarvestAmountAnt();
 
-		this[_life] = settings.getAntLife();
-		this[_foodStorageAnt] = 0;
-		this[_parentID] = parentID;
-		this[_collidedWithSth] = null;
-		this[_wasAttacked] = false;
-		if (settings.getAntType() == AntType.SIMPLE)
-			this[_controller] = new AntControllerSimple(this);
+		this._life = settings.getAntLife();
+		this._foodStorageAnt = 0;
+		this._parentID = parentID;
+		this._pheromones = [];
+		this._maxPheromones = settings.getAntMaxPheromones();
+		this._collidedWithSth = null;
+		this._wasAttacked = false;
+		var controller=null;
+		if (settings.getAntType() == AntType.CUSTOM)
+			controller = new AntController(this, settings.getUserAntFunction())
 		else if (settings.getAntType() == AntType.NEURALNET)
-			this[_controller] = new AntControllerNeuralNet(this, settings.neuralNetwork);
-		else if (settings.getAntType() == AntType.CUSTOM)
-			this[_controller] = new AntControllerCustom(this);
+			controller = new AntControllerNeuralNet(this, settings.neuralNetwork);
+		else
+			controller = new AntControllerSimple(this);
 
+		this.setController(controller);
 	}
 	
 	// getter
-	getParentID() {return this[_parentID]; }
-	getFoodStorage() { return this[_foodStorageAnt]; }
-	getMaxFoodStorage() { return this[_foodMaxAnt]; }
-	getMaxHarvestAmount() { return this[_foodMaxHarvestAmount]; }
+	getParentID() {return this._parentID; }
+	getFoodStorage() { return this._foodStorageAnt; }
+	getMaxFoodStorage() { return this._foodMaxAnt; }
+	getMaxHarvestAmount() { return this._foodMaxHarvestAmount; }
+	getPheromones() { return this._pheromones; }
+	
+	iterate(allObjects){
+		super.iterate(allObjects);
+		
+		for (var i = 0; i < this._pheromones.length; i++) {
+			var phero = this._pheromones[i];
+			phero.age();
+			if (phero.getLife() <= 0)
+				removePheromone(phero, i, allObjects);
+		}
+	}
+	
+	removePheromone(pheromone, index, allObjects){
+		for (var a =0; a < allObjects.length; a++){
+			if (allObjects[a] == this._pheromones[index])
+				allObjects.splice(a, 1);
+		}
+		this._pheromones.splice(index, 1);
+	}
+	
+	canSetPheromone(){
+		return (this._pheromones.length <= this._maxPheromones) 
+	}
+	
+	createPheromone(allObjects){
+		if (!this.canSetPheromone()){
+			console.log("Pheromone cannot be created! Check with 'this.canSetPheromone'")
+			return;
+		}
+		var newPheromone = new Pheromone(this.getCanvas(), this.getPosition(), allObjects);
+		this._pheromones.push(newPheromone);
+		allObjects.push(newPheromone);
+	}
 	
 	age(){
 		var bonus = 0;
 		if(this.getFoodStorage() > 0){
-			bonus = this[_foodBonusProb]; // negative
+			bonus = this._foodBonusProb; // negative
 		}
 
-		if (rand(0,1.0 + this[_decayProb] + bonus) >= 1.0){
+		if (rand(0,1.0 + this._decayProb + bonus) >= 1.0){
 			if (this.getFoodStorage() > 0)
 				this.consumeFood();
-			this[_life]-=1;
+			this._life-=1;
 		}
 	}
 
 	consumeFood(){
-		this[_foodStorageAnt]-=1;
+		this._foodStorageAnt -= 1;
 	}
 
 	giveAwayFood(amount){
@@ -91,10 +112,10 @@ class Ant extends Animal {
 			console.log("ERROR - Too much food to give away!")
 			amount = this.getFoodStorage();
 		}
-		this[_foodStorageAnt] -= amount;
+		this._foodStorageAnt -= amount;
 	}
 
-	receiveFood(amount){
+	receiveFood(amount, allObjects){
 		var additionalFood = amount;
 		if (amount + this.getFoodStorage() > this.getMaxFoodStorage()){
 			// should not happen!
@@ -102,7 +123,7 @@ class Ant extends Animal {
 			var tooMuch = (amount + this.getFoodStorage()) % this.getMaxFoodStorage();
 			additionalFood = amount - tooMuch;
 		}
-		this[_foodStorageAnt] += additionalFood;
+		this._foodStorageAnt += additionalFood;
 	}
 
 	draw(){
@@ -142,3 +163,5 @@ class Ant extends Animal {
 		
 	}
 }
+
+});

@@ -1,4 +1,6 @@
-class AntControllerSimple extends AntController{
+define(['antController'], function(AntController) {
+
+return class AntControllerSimple extends AntController{
 	constructor(ant){
 		super(ant);
 		this.memory = { harvestedFood : false };
@@ -23,7 +25,7 @@ class AntControllerSimple extends AntController{
 					}
 					else {
 						var fromObjToDirRad = prey.getRotationToObj();
-						return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+						return [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
 					}
 				}
 			}
@@ -49,9 +51,9 @@ class AntControllerSimple extends AntController{
 				else if (canHarvestMore){
 					var fromObjToDirRad = nearestFood.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
-						return [ActionType.WALK, Direction.FORWARD, 1];
+						return [ActionType.WALK, DirectionType.FORWARD, 1];
 					}
-					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+					return [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
 				}
 				else
 					this.memory.harvestedFood = true;
@@ -60,9 +62,9 @@ class AntControllerSimple extends AntController{
 			// search for food
 			else{
 				if (this.hasCollidedWithID() != -1){
-					return [ActionType.WALK, Direction.FORWARD, 1];
+					return [ActionType.WALK, DirectionType.FORWARD, 1];
 				}
-				return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
+				return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
 			}
 		}
 
@@ -80,19 +82,21 @@ class AntControllerSimple extends AntController{
 				else {
 					var fromObjToDirRad = hive.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
-						return [ActionType.WALK, Direction.FORWARD, 1];
+						return [ActionType.WALK, DirectionType.FORWARD, 1];
 					}
-					return [ActionType.WALK, Direction.FORWARD, fromObjToDirRad];
+					return [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
 			else{ 
 				if (this.hasCollidedWithID() != -1){
-					return [ActionType.WALK, Direction.FORWARD, 1];
+					return [ActionType.WALK, DirectionType.FORWARD, 1];
 				}
-				return [ActionType.WALK, Direction.FORWARD, rand(-0.5,0.5)];
+				return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
 			}
 			
 		}
-		return [ActionType.WALK, Direction.NONE, rand(-0.5,0.5)];
+		return [ActionType.WALK, DirectionType.NONE, rand(-0.5,0.5)];
 	}
 }
+
+});

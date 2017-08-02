@@ -1,0 +1,33 @@
+ {
+    "Basics": {
+        "children": {
+            "00_basics": {
+                "title": "<b>Basics</b>"
+            },
+            "01_moving": {
+                "title": "&nbsp;Moving"
+            },
+            "02_harvest": {
+                "title": "&nbsp;Harvest"
+            },
+			"03_transfer": {
+                "title": "&nbsp;Transfer"
+            },
+			"04_tag": {
+                "title": "&nbsp;Tag (pheromones)"
+            },
+			"05_attack": {
+                "title": "&nbsp;Attack"
+            }
+        }
+    },
+	
+    "CNN": {
+        "title": "Neural networks",
+		"children": {
+            "10_neuralNetworks": {
+                "title": "Neural networks"
+            }
+		}
+    }
+}

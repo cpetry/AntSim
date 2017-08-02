@@ -1,6 +1,8 @@
-// a class to contain all attributes the user has !readable! access to.
-// changing these attributes while running won't do anything
-class HiveControllerCustom {
+define(function() {
+
+return class HiveControllerCustom {
+	// a class to contain all attributes the user has !readable! access to.
+	// changing these attributes while running won't do anything
 	constructor(/*ants ?!*/){
 	}
 	
@@ -30,3 +32,5 @@ class HiveControllerCustom {
 		return result;
 	}
 }
+
+});

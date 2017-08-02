@@ -1,18 +1,22 @@
+define(['smellableObject'], function(SmellableObject) {
+
 const _amount = Symbol('amount');
 const _foodSize = Symbol('foodSize');
 
-class Food extends SmellableObject {
+return class Food extends SmellableObject {
 	constructor(canvas, position, size, settings, collisionObjs){
 		super(canvas, position, size, settings.getSizeSmellingFactor(), collisionObjs);
-		this[_amount] = settings.getFoodAmount();
-		this[_foodSize] = settings.getFoodSize();
+		this._amount = settings.getFoodAmount();
+		this._foodSize = settings.getFoodSize();
+		this._decayProb = settings.getFoodDecayProb();
 	}
 	
-	getAmount()  {return this[_amount];}
-	getFoodSize(){return this[_foodSize];}
+	getAmount()  {return this._amount;}
+	getFoodSize(){return this._foodSize;}
 	
-	decay(){
-		this[_amount]--;
+	iterate(){
+		if (rand(0,1.0 + this._decayProb) >= 1.0)
+			this._amount--;
 	}
 	
 	isEmpty(){
@@ -22,10 +26,10 @@ class Food extends SmellableObject {
 	harvest(harvestAmount){
 		if (harvestAmount > this.getAmount()){
 			console.log("Error! Harvest food amount not possible!");
-			this[_amount] = 0;
+			this._amount = 0;
 		}
 		else {
-			this[_amount] -= harvestAmount;
+			this._amount -= harvestAmount;
 		}
 	}
 
@@ -45,9 +49,11 @@ class Food extends SmellableObject {
 			this._context.textAlign = "center";
 			this._context.lineWidth = 1;
 			this._context.strokeStyle = '#FFFFFF';
-			this._context.strokeText(this.getAmount().toString(),pos.x,pos.y); 
+			this._context.strokeText(this.getAmount().toFixed(2),pos.x,pos.y); 
 			this._context.fillStyle = 'black';
-			this._context.fillText(this.getAmount().toString(),pos.x,pos.y);
+			this._context.fillText(this.getAmount().toFixed(2),pos.x,pos.y);
 		}
 	}
 }
+
+});

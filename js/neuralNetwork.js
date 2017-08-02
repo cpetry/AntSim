@@ -1,3 +1,6 @@
+define([ 'external/synaptic/synaptic'],
+function(synaptic) {
+
 /**
  *
  * Some comments beforehand:
@@ -17,7 +20,7 @@
  * TODO:
  *  - Add real documentation!
  */
-class NeuralNetwork {
+return class NeuralNetwork {
 	constructor(){
 		this.synaptic = synaptic;
 
@@ -102,3 +105,5 @@ class NeuralNetwork {
 
 	}
 }
+
+});

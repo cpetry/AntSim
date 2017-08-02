@@ -14,7 +14,7 @@
     "templates": {
         "cleverLinks": true,
         "monospaceLinks": false
-    },
+	},
 	"plugins": [
         "plugins/markdown",
         "plugins/summarize"
@@ -23,8 +23,8 @@
         "template": "templates/default",
         "encoding": "utf8",
 		"destination": "./user-code_doc/",	
-	    "recurse": true
-        //"tutorials": "path/to/tutorials", // same as -u path/to/tutorials
- }
+	    "recurse": true,
+        "tutorials": "tutorials" // same as -u path/to/tutorials
+    }
 }
 
