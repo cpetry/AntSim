@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>AntSim unittests</title>
-  <link rel="stylesheet" href="./js/external/qunit/qunit-2.4.0.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>AntSim unittests</title>
+	<link rel="stylesheet" href="./js/external/qunit/qunit-2.4.0.css">
 </head>
 <body>
-  <div id="qunit"></div>
-  <div id="qunit-fixture"></div>
-  <script src="./js/external/qunit/qunit-2.4.0.js"></script>
-  <script src="./js/external/qunit/qunit-assert-close.js"></script>
-  <script src="./js/helper.js"></script>
-  <script src="./js/test/helper.js"></script>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="./js/external/qunit/qunit-2.4.0.js"></script>
+	<script src="./js/external/qunit/qunit-assert-close.js"></script>
+	<script src="./js/external/require.js"></script>
+  
+	<script>
+	// QUnit is not yet loaded here
+	QUnit.config.hidepassed = true;
+	</script>
+  
+	<script src="./js/globals.js"></script>
+	<script src="./js/test/action.js"></script>
+	<script src="./js/test/collider.js"></script>
+	<script src="./js/test/globals.js"></script>
 </body>
 </html>

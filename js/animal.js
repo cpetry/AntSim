@@ -64,9 +64,7 @@ return class Animal extends SmellableObject {
 		
 		// get action
 		this._controller.setAttributes(this);
-		let [action, parameter1, parameter2] = this._controller.getAction();
-		// apply action
-		Action.apply(this, action, parameter1, parameter2, allObjects);
+		Action.apply(this, this._controller.getAction(), allObjects);
 
 		// set decay
 		this.age();
@@ -95,12 +93,14 @@ return class Animal extends SmellableObject {
 			newPos.y += newHeading.y * moveSpeed;
 		}
 		else if (walkingDirection == DirectionType.BACKWARD){
-			newPos.x -= newHeading.x * moveSpeed;
-			newPos.y -= newHeading.y * moveSpeed;
+			newPos.x -= newHeading.x * moveSpeed*0.5;
+			newPos.y -= newHeading.y * moveSpeed*0.5;
 		}
+
 		// Collider
-		var collider = this.setPosition(newPos, allObjects);
-		this._collidedWithSth = collider;
+		this._collidedWithSth = this.checkCollision(newPos, allObjects);
+		if (this._collidedWithSth == null)
+			this.setPosition(newPos);
 	}
 	
 	setNewRotation(newRotation){

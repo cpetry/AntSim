@@ -20,6 +20,12 @@ const ObjectType = {
 	ANT : 3
 };
 
+const ShapeType = {
+	CIRCLE : 1,
+	SQUARE : 2,
+	RECTANGLE : 3
+};
+
 
 const AntType = {
 	SIMPLE: 0,
