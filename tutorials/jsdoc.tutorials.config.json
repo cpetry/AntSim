@@ -13,8 +13,8 @@
 			"03_transfer": {
                 "title": "&nbsp;Transfer"
             },
-			"04_tag": {
-                "title": "&nbsp;Tag (pheromones)"
+			"04_pheromone": {
+                "title": "&nbsp;Pheromones"
             },
 			"05_attack": {
                 "title": "&nbsp;Attack"

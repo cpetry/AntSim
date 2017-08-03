@@ -23,7 +23,7 @@ requirejs([ 'external/seedrandom/seedrandom',
 			'antController'],
 function   (seed, setImmediate, Tutorial, SettingsSimulation, AntController) {
 
-	var defaultValue = "return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];"
+	var defaultValue = "return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];"
 	var editor = AntController.createEditor("editor", defaultValue)
 		
 	function finishedFunc(){
@@ -39,7 +39,7 @@ if (nearestFood !== null){
 	var rotationTowardsFood = nearestFood.getRotationToObj();
 	return [ActionType.MOVE, DirectionType.FORWARD, rotationTowardsFood];
 }
-return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];`)
+return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`)
 	};
 
 	function startTutorial(){

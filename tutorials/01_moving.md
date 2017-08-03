@@ -10,20 +10,20 @@ The direction and rotation are both <b>relative</b> to the ants current location
 
 The command looks like this: 
 ```javascript
-[ActionType.MOVE, <Direction>, <Rotation>];
+[ActionType.MOVE, DirectionType.<Direction>, <Rotation>];
 ```
 The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
-Rotations are always given in radians relative to the ants current heading.
-If you still like to use degree just convert it with 
+Rotations are always given in degree relative to the ants current heading.
+If you like to use radians just convert it with 
 ```javascript 
-var radians = degToRad( degree )
+var degree = radToDeg( radians )
 ```
 
 #### Examples:
 ```javascript
-[ActionType.MOVE, Direction.NONE, degToRad(25)];        // rotate 25° to the left
-[ActionType.MOVE, Direction.FORWARD, degToRad(-15)];    // rotate 15° to the right
-[ActionType.MOVE, Direction.BACKWARD, rand(-0.5, 0.5)]; // walk backward with a random rotation
+[ActionType.MOVE, DirectionType.NONE, 25];        // rotate 25° to the left
+[ActionType.MOVE, DirectionType.FORWARD, -15];    // rotate 15° to the right
+[ActionType.MOVE, DirectionType.BACKWARD, rand(-30, 30)]; // walk backward with a random rotation (-30°,30°)
 ```
 
 ### Maximum rotation
@@ -59,7 +59,8 @@ var rotationTowardsFood = nearestFood.getRotationToObj();
 <script src="../js/globals.js"></script>
 
 <script data-main="../js/initTutorial" src="../js/external/require.js"></script>
-
+A little hands on:<br>
+By default the ant walks randomly around.
 Try to let the ant walk towards the green food source!
 <div style="width:850px;">
 	<div style="width:550px; float:left;">

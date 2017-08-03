@@ -11,7 +11,7 @@ return class SmellableObjectProxy {
 	
 	getParentID(){ return this.parentID; }
 	getDistanceToObj(){ return this.distance; }
-	getRotationToObj() { return this.rotation; }
+	getRotationToObj() { return radToDeg(this.rotation); }
 	getType(){ return this.type; }
 	
 	// has to be visible to be interactive

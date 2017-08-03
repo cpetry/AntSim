@@ -186,7 +186,7 @@ return class AntControllerNeuralNet extends AntController{
 							// MOVE towards food
 							var fromObjToDirRad = nearestFood.getRotationToObj();
 							if (this.hasCollidedWithID() != -1){
-								actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 1];
+								actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 30];
 							}
 							actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 						}
@@ -206,7 +206,7 @@ return class AntControllerNeuralNet extends AntController{
 						// MOVE towards hive
 						var fromObjToDirRad = hive.getRotationToObj();
 						if (this.hasCollidedWithID() != -1)
-							actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 1];
+							actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 30];
 						else
 							actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 					}
@@ -337,7 +337,7 @@ return class AntControllerNeuralNet extends AntController{
 		if (actionTuple.length > 0)
 				return actionTuple;
 		else
-			return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];
+			return [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 
 	}
 }

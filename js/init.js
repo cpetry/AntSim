@@ -114,7 +114,7 @@ requirejs([ 'external/seedrandom/seedrandom',
 function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant, Hive, AntController) {
 
 	var canvas = document.getElementById('canvasSimulation')
-	var defaultValue = "return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];"
+	var defaultValue = "return [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];"
 	var editor = AntController.createEditor("editor", defaultValue)
 
 	var training = new Training(canvas);

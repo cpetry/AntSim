@@ -51,7 +51,7 @@ return class AntControllerSimple extends AntController{
 				else if (canHarvestMore){
 					var fromObjToDirRad = nearestFood.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
-						return [ActionType.MOVE, DirectionType.FORWARD, 1];
+						return [ActionType.MOVE, DirectionType.FORWARD, 30];
 					}
 					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
@@ -62,9 +62,9 @@ return class AntControllerSimple extends AntController{
 			// search for food
 			else{
 				if (this.hasCollidedWithID() != -1){
-					return [ActionType.MOVE, DirectionType.FORWARD, 1];
+					return [ActionType.MOVE, DirectionType.FORWARD, 30];
 				}
-				return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];
+				return [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 			}
 		}
 
@@ -82,7 +82,7 @@ return class AntControllerSimple extends AntController{
 				else {
 					var fromObjToDirRad = hive.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
-						return [ActionType.MOVE, DirectionType.FORWARD, 1];
+						return [ActionType.MOVE, DirectionType.FORWARD, 30];
 					}
 					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
@@ -91,11 +91,11 @@ return class AntControllerSimple extends AntController{
 				if (this.hasCollidedWithID() != -1){
 					return [ActionType.MOVE, DirectionType.FORWARD, 1];
 				}
-				return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];
+				return [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 			}
 			
 		}
-		return [ActionType.MOVE, DirectionType.NONE, rand(-0.5,0.5)];
+		return [ActionType.MOVE, DirectionType.NONE, rand(-30,30)];
 	}
 }
 

@@ -34,12 +34,12 @@ They only know what they see and smell. All other objects are unknown.</p>
 <p>Each ant though can <b>turn around and walk</b> to perceive more of its surroundings.
 The direction and rotation are both <b>relative</b> to the ants current location and rotation.</p>
 <h3>Move command</h3><p>The command looks like this: </p>
-<pre class="prettyprint source lang-javascript"><code>[ActionType.MOVE, &lt;Direction>, &lt;Rotation>];</code></pre><p>The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
-Rotations are always given in radians relative to the ants current heading.
-If you still like to use degree just convert it with </p>
-<pre class="prettyprint source lang-javascript"><code>var radians = degToRad( degree )</code></pre><h4>Examples:</h4><pre class="prettyprint source lang-javascript"><code>[ActionType.MOVE, Direction.NONE, degToRad(25)];        // rotate 25° to the left
-[ActionType.MOVE, Direction.FORWARD, degToRad(-15)];    // rotate 15° to the right
-[ActionType.MOVE, Direction.BACKWARD, rand(-0.5, 0.5)]; // walk backward with a random rotation</code></pre><h3>Maximum rotation</h3><p>The maximum rotation value depends on the direction.
+<pre class="prettyprint source lang-javascript"><code>[ActionType.MOVE, DirectionType.&lt;Direction>, &lt;Rotation>];</code></pre><p>The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
+Rotations are always given in degree relative to the ants current heading.
+If you like to use radians just convert it with </p>
+<pre class="prettyprint source lang-javascript"><code>var degree = radToDeg( radians )</code></pre><h4>Examples:</h4><pre class="prettyprint source lang-javascript"><code>[ActionType.MOVE, DirectionType.NONE, 25];        // rotate 25° to the left
+[ActionType.MOVE, DirectionType.FORWARD, -15];    // rotate 15° to the right
+[ActionType.MOVE, DirectionType.BACKWARD, rand(-30, 30)]; // walk backward with a random rotation (-30°,30°)</code></pre><h3>Maximum rotation</h3><p>The maximum rotation value depends on the direction.
 Standing still allows the most rotation, whereas walking backwards minimizes rotation.<br>
 The exact maximum rotation can be returned by</p>
 <pre class="prettyprint source lang-javascript"><code>var maxRotation = this.getMaximumRotation(&lt;Direction>);</code></pre><h3>Rotation towards objects</h3><p>By moving around the ants perception of the world changes.
@@ -55,9 +55,10 @@ var rotationTowardsFood = nearestFood.getRotationToObj();</code></pre><h1>Try it
 <script src="../js/debug.js"></script>
 <script src="../js/globals.js"></script>
 
-<script data-main="../js/initTutorial" src="../js/external/require.js"></script>
-
-<p>Try to let the ant walk towards the green food source!</p>
+<p><script data-main="../js/initTutorial" src="../js/external/require.js"></script>
+A little hands on:<br>
+By default the ant walks randomly around.
+Try to let the ant walk towards the green food source!</p>
 <div style="width:850px;">
     <div style="width:550px; float:left;">
         <input type="button" value="run" id="runTutorial" >
@@ -82,7 +83,7 @@ var rotationTowardsFood = nearestFood.getRotationToObj();</code></pre><h1>Try it
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">04_pheromone</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li></ul>
 </nav>
 
 <br class="clear">

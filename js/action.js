@@ -57,7 +57,7 @@ return class Action {
 	static move(obj, direction, rotation, allObjects){
 		// check parameters
 		if (!isNaN(rotation)){
-			obj.setNewRotation(obj.getRotation() + rotation);
+			obj.setNewRotation(obj.getRotation() + degToRad(rotation));
 			obj.move(direction, allObjects);
 			return true;
 		}
