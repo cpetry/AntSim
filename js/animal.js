@@ -131,22 +131,13 @@ return class Animal extends SmellableObject {
 				// check inside cone
 				if (Math.abs(fromObjToDirRad) < this.getVisibilityRangeRad()){
 					//console.log("seeing sth!")
-					var type = ObjectType.NONE;
+					var type = objects[i].getObjectType();
 					var parentID = null;
-					if (objects[i].constructor.name == "Hive"
-					|| objects[i].constructor.name == "HiveGenetic"){
-						type = ObjectType.HIVE;
+					if (type == ObjectType.HIVE)
 						parentID = objects[i].getID();
-					}
-					else if (objects[i].constructor.name == "Food"
-					|| objects[i].constructor.name == "AntDead"
-					|| objects[i].constructor.name == "SpiderDead")
-						type = ObjectType.FOOD;
-					else if (objects[i].constructor.name == "Ant"
-					|| objects[i].constructor.name == "AntGenetic"){
-						type = ObjectType.ANT;
+					else if (type == ObjectType.ANT || type == ObjectType.PHEROMONE)
 						parentID = objects[i].getParentID();
-					}
+					
 					this._visibleObjs[objects[i].getID()] = new VisibleObjectProxy(this.getCanvas(), parentID, objects[i].getID(), distToObj, fromObjToDirRad, objects[i].getSize(), type);
 				}
 			}
@@ -165,22 +156,13 @@ return class Animal extends SmellableObject {
 				var pos = objects[i].smellPositionFrom(this);
 				var distance = getDistance(pos, this.getPosition())
 				var rotation = this.getAngleToPos(pos);
-				var type = ObjectType.NONE;
+				var type = objects[i].getObjectType();
 				var parentID = null;
-				if (objects[i].constructor.name == "Hive"
-				|| objects[i].constructor.name == "HiveGenetic"){
-					type = ObjectType.HIVE;
+				if (type == ObjectType.HIVE)
 					parentID = objects[i].getID();
-				}
-				else if (objects[i].constructor.name == "Food"
-					|| objects[i].constructor.name == "AntDead"
-					|| objects[i].constructor.name == "SpiderDead")
-					type = ObjectType.FOOD;
-				else if (objects[i].constructor.name == "Ant"
-				|| objects[i].constructor.name == "AntGenetic"){
+				else if (type == ObjectType.ANT || type == ObjectType.PHEROMONE)
 					parentID = objects[i].getParentID();
-					type = ObjectType.ANT;
-				}
+
 				this._smelledObjs[objects[i].getID()] = new SmellableObjectProxy(this.getCanvas(), parentID, distance, rotation, type);
 			}
 		}

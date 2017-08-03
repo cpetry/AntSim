@@ -1,15 +1,19 @@
 define(['smellableObject'], function(SmellableObject) {
 
 return class Pheromone extends SmellableObject {
-	constructor(canvas, position, ID, parentID, settings, type){
+	constructor(canvas, position, parentID, settings, type){
 		super(canvas, position, settings.getPheromoneSize(), settings.getSizeSmellingFactor(), []);
+		this._objectType = ObjectType.PHEROMONE;
 		this._life = 100;
-		this._creatorID = ID;
-		this._creatorParentID = parentID;
+		this._parentID = parentID;
 		this._maxLife = this._life;
 		this._type = type;
 		this._decayProb = settings.getPheromoneDecayProb();
 	}
+	
+	getType(){ return this._type; }
+	getLife(){ return this._life; }
+	getParentID(){ return this._parentID; }
 	
 	iterate(){
 		this.age();

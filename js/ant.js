@@ -18,7 +18,7 @@ return class Ant extends Animal {
 	*/
 	constructor(canvas, position, rotation, settings, allObjects, parentID){
 		super(canvas, position, settings.getAntSize(), settings, allObjects, rotation);
-		
+		this._objectType = ObjectType.ANT;
 		// Abilities
 		this._decayProb             = settings.getAntDecayProb();
 		this._speed                 = settings.getAntSpeed();

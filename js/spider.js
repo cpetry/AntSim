@@ -16,7 +16,8 @@ return class Spider extends Animal {
 		position.x = position.x + dir.x;
 		position.y = position.y + dir.y;
 		super(canvas, position, spiderSize, settings, collisionObjs, enterFromRotation);
-		
+		this._objectType = ObjectType.SPIDER;
+
 		// Abilities
 		this._decayProb           = settings.getSpiderDecayProb();
 		this._speed               = settings.getSpiderSpeed();

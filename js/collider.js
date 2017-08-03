@@ -17,7 +17,8 @@ return class Collider {
 	* @param {Objects[]} collisionObjs - Objects in simulation that can collide with this.
 	*/
 	constructor(canvas, position, shapeType, size, rotation, colObjs){
-		
+		this._objectType = ObjectType.NONE;
+
 		this._id = Collider.getNewID();
 		this._canvas = canvas;
 		this._context = canvas.getContext("2d");
@@ -59,6 +60,7 @@ return class Collider {
 		return this.idCounter;
 	}
 	
+	getObjectType() {return this._objectType;}
 	getID(){return this._id;}
 	getCanvas(){return this._canvas;}	
 	getSize(){return this._size;}	

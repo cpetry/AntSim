@@ -6,6 +6,7 @@ return class Hive extends SmellableObject {
 	constructor(canvas, position, settings, collisionObjs){
 		// Super constructor
 		super(canvas, position, settings.getHiveSize(), settings.getSizeSmellingFactor(), collisionObjs);
+		this._objectType = ObjectType.HIVE;
 
 		// Hive specific stuff
 		this._foodStorageHive = 0;

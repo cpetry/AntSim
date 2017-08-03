@@ -6,6 +6,7 @@ const _foodSize = Symbol('foodSize');
 return class Food extends SmellableObject {
 	constructor(canvas, position, size, settings, collisionObjs){
 		super(canvas, position, size, settings.getSizeSmellingFactor(), collisionObjs);
+		this._objectType = ObjectType.FOOD;
 		this._amount = settings.getFoodAmount();
 		this._foodSize = settings.getFoodSize();
 		this._decayProb = settings.getFoodDecayProb();

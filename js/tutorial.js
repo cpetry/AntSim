@@ -71,10 +71,7 @@ return class Tutorial extends Simulation {
 		}
 	}
 	
-	simulate(){
-		// Iterate through all hives
-		this.hives[0].iterate(this.allObjects);
-		
+	simulate(){		
 		var firstAnt = this.hives[0].getAnts()[0];
 		if (this.part == 0
 		&& firstAnt.collidesWith(this.checkAreaFood)
@@ -103,6 +100,13 @@ return class Tutorial extends Simulation {
 		&& firstAnt.getFoodStorage() == firstAnt.getMaxFoodStorage()){
 			// Spider has been killed
 			// end the fourth tutorial
+		}
+		
+		// iterate after all deaths have been applied
+		for (var i = 0; i < this.allObjects.length; ++i){
+			var obj = this.allObjects[i];
+			if (obj.iterate)
+				obj.iterate(this.allObjects);
 		}
 	}
 	

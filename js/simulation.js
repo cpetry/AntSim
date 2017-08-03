@@ -92,21 +92,21 @@ return class Simulation {
 			// all living objects can die
 			if (obj.getLife && obj.getLife() <= 0){
 				// is an ant
-				if (obj.getParentID){
+				if (obj.getObjectType() == ObjectType.ANT){
 					var h = this.getHiveIndexFromParentID(obj.getParentID())
 					var a = this.getAntIndexFromID(h, obj.getID())
 					if (obj.wasAttacked()){
-						var p = new Pheromone(this.canvas, obj.getPosition(), obj.getID(), obj.getParentID(), this.settings, PheromoneType.DANGER);
+						var p = new Pheromone(this.canvas, obj.getPosition(), obj.getParentID(), this.settings, PheromoneType.DANGER);
 						this.allObjects.push(p);
 					}
 					this.hives[h].removeAnt(obj, a, this.allObjects);
 					this.food.push(new AntDead(obj, this.settings, this.allObjects));
 				}
-				else if (obj.constructor.name = "Pheromone"){
-					allObjects.splice(i, 1);
+				else if (obj.getObjectType() == ObjectType.PHEROMONE){
+					this.allObjects.splice(i, 1);
 				}
 				// is a spider
-				else {
+				else if (obj.getObjectType() == ObjectType.SPIDER){
 					var s = this.getIndex(this.spiders, obj)
 					this.food.push(new SpiderDead(obj, this.settings, this.allObjects));
 					allObjects.splice(i, 1);
@@ -114,7 +114,7 @@ return class Simulation {
 				}
 			}
 			// is food
-			else if (obj.isEmpty && obj.isEmpty()){
+			else if (obj.getObjectType() == ObjectType.FOOD && obj.isEmpty()){
 				this.allObjects.splice(i, 1);
 				this.food.splice(this.getIndex(this.food, obj), 1);
 			}

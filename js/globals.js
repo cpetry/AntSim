@@ -26,7 +26,9 @@ const ObjectType = {
 	NONE : 0,
 	HIVE : 1,
 	FOOD : 2,
-	ANT : 3
+	ANT : 3,
+	SPIDER : 4,
+	PHEROMONE : 5
 };
 
 const ShapeType = {
