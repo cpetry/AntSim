@@ -1,1 +1,1 @@
-jsdoc -c ./jsdoc.config.json && jsdoc -c ./jsdoc.usercode.config.json
+jsdoc -c ./jsdoc.config.json ./README.md && jsdoc -c ./jsdoc.usercode.config.json ./README.md
