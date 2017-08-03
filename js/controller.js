@@ -85,7 +85,7 @@ return class Controller {
 	* Returns the action the ant should do in the upcoming iteration.<br>
 	* This has to be an array with an ActionType and parameters.<br>
 	* Some examples:<br>
-	* - [ActionType.WALK, Direction.NONE, 0] // walks straight forward<br>
+	* - [ActionType.MOVE, Direction.NONE, 0] // walks straight forward<br>
 	* - [ActionType.HARVEST, foodObj, 10]    // wants to harvest 10 food from foodObj<br>
 	* - [ActionType.GIVEFOOD, hive, 10]      // wants to give 10 food to hive<br>
 	* - [ActionType.ATTACK, enemy]           // wants to attack an enemy<br>

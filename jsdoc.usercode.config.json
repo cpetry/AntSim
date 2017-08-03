@@ -13,7 +13,10 @@
     },
     "templates": {
         "cleverLinks": true,
-        "monospaceLinks": false
+        "monospaceLinks": false,
+		"default": {
+            "includeDate": false
+        }
 	},
 	"plugins": [
         "plugins/markdown",

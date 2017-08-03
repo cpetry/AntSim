@@ -2,8 +2,8 @@ define([ 'simulation', 'ant', 'antGenetic', 'hive', 'hiveGenetic', 'food', 'coll
 function(Simulation, Ant, AntGenetic, Hive, HiveGenetic, Food, Collider, Shape) {
 
 return class Tutorial extends Simulation {
-	constructor(canvas, userAntFunction, finishedFunc, part=0){
-		super(canvas, AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+	constructor(canvas, settings, finishedFunc, part=0){
+		super(canvas, settings);
 		// defines the part of the tutorial
 		this.finishedFunc = finishedFunc;
 		this.isFinished = false;
@@ -36,12 +36,12 @@ return class Tutorial extends Simulation {
 		var hivePos = {x: this.canvas.width / 4, y: this.canvas.height / 2};
 		this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.allObjects));
 		
-		this.checkAreaFood = new Collider(this.canvas, foodPos, Shape.Type.CIRCLE, newFood.getSize()+5, 0, []);
-		this.checkAreaHive = new Collider(this.canvas, hivePos, Shape.Type.CIRCLE, this.hives[0].getSize()+5, 0, []);			
+		this.checkAreaFood = new Collider(this.canvas, foodPos, ShapeType.CIRCLE, newFood.getSize()+5, 0, []);
+		this.checkAreaHive = new Collider(this.canvas, hivePos, ShapeType.CIRCLE, this.hives[0].getSize()+5, 0, []);			
 		
 		// First ant should be some kind of a scout.
 		// Explain vision, smell and basic action concept.
-		// Let it find the food and walk to it.
+		// Let it find the food and MOVE to it.
 		var newGenes = [0.05,0.15,0.8];
 		var antPos = { x: 30 + this.hives[0].getPosition().x , y: this.hives[0].getPosition().y };
 		var rotation = 1.57; // downwards

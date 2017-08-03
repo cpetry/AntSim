@@ -5,7 +5,7 @@ Each iteration ants can execute one specific action:
 	[<img src="../images/actionMove.svg" height="90px">]{@tutorial 01_moving}
 	[<img src="../images/actionHarvest.svg" height="90px">]{@tutorial 02_harvest}
 	[<img src="../images/actionTransfer.svg" height="90px">]{@tutorial 03_transfer}<br>
-	[<img src="../images/actionTag.svg" height="90">]{@tutorial 04_tag}
+	[<img src="../images/actionPheromone.svg" height="90">]{@tutorial 04_pheromone}
 	[<img src="../images/actionAttack.svg" height="90">]{@tutorial 05_attack}
 </div>
 

@@ -19,10 +19,11 @@ SettingsGlobal.setFramesPerSecond(15);
 requirejs([ 'external/seedrandom/seedrandom',
 			'external/setImmediate/setImmediate',
 			'tutorial',
+			'settingsSimulation',
 			'antController'],
-function   (seed, setImmediate, Tutorial, AntController) {
+function   (seed, setImmediate, Tutorial, SettingsSimulation, AntController) {
 
-	var defaultValue = "return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];"
+	var defaultValue = "return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];"
 	var editor = AntController.createEditor("editor", defaultValue)
 		
 	function finishedFunc(){
@@ -36,9 +37,9 @@ function   (seed, setImmediate, Tutorial, AntController) {
 var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
 if (nearestFood !== null){
 	var rotationTowardsFood = nearestFood.getRotationToObj();
-	return [ActionType.WALK, DirectionType.FORWARD, rotationTowardsFood];
+	return [ActionType.MOVE, DirectionType.FORWARD, rotationTowardsFood];
 }
-return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];`)
+return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];`)
 	};
 
 	function startTutorial(){
@@ -50,7 +51,8 @@ return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];`)
 
 		//userAntFunction = new Function(customAntEditor.getValue());
 		var canvas = document.getElementById('canvasTutorial');
-		new Tutorial(canvas, userAntFunction, finishedFunc);
+		var settings = new SettingsSimulation(AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		new Tutorial(canvas, settings, finishedFunc);
 	};
 
 	document.getElementById("showSolution").onclick = showSolution;

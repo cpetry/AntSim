@@ -1,10 +1,10 @@
 const ActionType = {
 	NONE : 0,
-	WALK : 1,
+	MOVE : 1,
 	HARVEST : 2,
 	ATTACK : 3,
-	GIVEFOOD: 4,
-	SETPHEROMONE: 5
+	TRANSFER: 4,
+	PHEROMONE: 5
 };
 
 const DirectionType = {

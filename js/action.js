@@ -10,9 +10,6 @@ return class Action {
 	}
 	
 	static apply(obj, action, allObjects){
-		if (action.length != 3)
-			throw new TypeError("Actions have to be an array of 3 elements!");
-		
 		// create closure function useable only when applying an action
 		// works somewhat like a static private function
 		this.getRealObjOfID = function(objId, allObjects){
@@ -27,27 +24,37 @@ return class Action {
 		
 		let [type, parameter1, parameter2] = action;
 
-		if (type == ActionType.WALK){
-			return Action.walk(obj, parameter1, parameter2, allObjects);
+		if (type == ActionType.MOVE){
+			if (action.length != 3)
+				throw new TypeError("ActionType.MOVE needs a direction and a rotation!");
+			return Action.move(obj, parameter1, parameter2, allObjects);
 		}
 		else if (type == ActionType.HARVEST){
+			if (action.length != 3)
+				throw new TypeError("ActionType.HARVEST needs an object to harvest and the amount to harvest!");
 			return Action.harvest(obj, parameter1, parameter2, allObjects);
 		}
 		else if (type == ActionType.ATTACK){
+			if (action.length != 2)
+				throw new TypeError("ActionType.ATTACK needs an enemy!");
 			return Action.attack(obj, parameter1, allObjects);
 		}
-		else if (type == ActionType.GIVEFOOD){
+		else if (type == ActionType.TRANSFER){
+			if (action.length != 3)
+				throw new TypeError("ActionType.TRANSFER needs a receiver and the amount to transfer!");
 			return Action.transferFood(obj, parameter1, parameter2, allObjects);
 		}
-		else if (type == ActionType.SETPHEROMONE){
+		else if (type == ActionType.PHEROMONE){
+			if (action.length != 1)
+				throw new TypeError("ActionType.PHEROMONE doesn't need an additional argument!");
 			return Action.createPheromone(obj, allObjects);
 		}
 		else
-			throw new TypeError("Unknown ActionType!");
+			throw new TypeError("Unknown ActionType ("+ type +")!");
 		return false;
 	}
 
-	static walk(obj, direction, rotation, allObjects){
+	static move(obj, direction, rotation, allObjects){
 		// check parameters
 		if (!isNaN(rotation)){
 			obj.setNewRotation(obj.getRotation() + rotation);

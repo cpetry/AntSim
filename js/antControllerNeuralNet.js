@@ -27,7 +27,7 @@ return class AntControllerNeuralNet extends AntController{
 	createFeatureVector() {
 
 		if (typeof(this.neuralNetwork.network)==='undefined')
-			return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
+			return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];
 
 		var visibleObjects = this.getVisibleObjs();
 		var smellableObjects = this.getSmelledObjs();
@@ -158,15 +158,15 @@ return class AntControllerNeuralNet extends AntController{
 						return [ActionType.ATTACK, prey]
 					} else {
 						var fromObjToDirRad = prey.getRotationToObj();
-						actionTuple = [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
+						actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 					}
 				}
 			} else if (i == 1) {
-				actionTuple = [ActionType.WALK, DirectionType.FORWARD, -30];
+				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, -30];
 			} else if (i == 2) {
-				actionTuple = [ActionType.WALK, DirectionType.FORWARD,   0];
+				actionTuple = [ActionType.MOVE, DirectionType.FORWARD,   0];
 			} else if (i == 3) {
-				actionTuple = [ActionType.WALK, DirectionType.FORWARD,  30];
+				actionTuple = [ActionType.MOVE, DirectionType.FORWARD,  30];
 			} else if (i == 4) {
 
 				var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
@@ -183,12 +183,12 @@ return class AntControllerNeuralNet extends AntController{
 							var harvestAmount = this.getMaxFoodStorage() - this.getFoodStorage();
 							actionTuple = [ActionType.HARVEST, nearestFood, harvestAmount];
 						} else {
-							// walk towards food
+							// MOVE towards food
 							var fromObjToDirRad = nearestFood.getRotationToObj();
 							if (this.hasCollidedWithID() != -1){
-								actionTuple = [ActionType.WALK, DirectionType.FORWARD, 1];
+								actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 1];
 							}
-							actionTuple = [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
+							actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 						}
 					}
 				}
@@ -201,14 +201,14 @@ return class AntControllerNeuralNet extends AntController{
 
 					// harvest food if possible
 					if(hive.canBeInteractedWith(this)){
-						actionTuple = [ActionType.GIVEFOOD, hive, foodGivingToHive];
+						actionTuple = [ActionType.TRANSFER, hive, foodGivingToHive];
 					} else {
-						// walk towards hive
+						// MOVE towards hive
 						var fromObjToDirRad = hive.getRotationToObj();
 						if (this.hasCollidedWithID() != -1)
-							actionTuple = [ActionType.WALK, DirectionType.FORWARD, 1];
+							actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 1];
 						else
-							actionTuple = [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
+							actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 					}
 				}
 
@@ -337,7 +337,7 @@ return class AntControllerNeuralNet extends AntController{
 		if (actionTuple.length > 0)
 				return actionTuple;
 		else
-			return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
+			return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];
 
 	}
 }

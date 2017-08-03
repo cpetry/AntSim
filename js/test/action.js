@@ -14,52 +14,52 @@ function   (Action, Ant, SettingsSimulation) {
 			this.settings = new SettingsSimulation(AntType.CUSTOM, HiveType.DEFAULT);
 		});
 		
-		QUnit.test( "walk()", function(assert) {
+		QUnit.test( "move()", function(assert) {
 			var success;
 			this.settings.antSpeed = 2;
 			this.settings.antSpeedRotation = Math.PI/2;
 
 			antA = new Ant(this.canvas, {x:10, y:10}, 0, this.settings, this.allObjects, 0);
 			// rotate more than allowed
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.NONE, Math.PI], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.NONE, Math.PI], this.allObjects);
 			assert.equal( antA.getRotation(), Math.PI/2, "Passed!" );
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.NONE, -Math.PI], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.NONE, -Math.PI], this.allObjects);
 			assert.equal( antA.getPosition().x, 10, "Passed!" );
 			assert.equal( antA.getPosition().y, 10, "Passed!" );
 			assert.equal( antA.getRotation(), 0, "Passed!" );
 			// ant is now at {x:10, y:10} with rotation 0 again
 
 			// rotate while walking
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.FORWARD, Math.PI], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.FORWARD, Math.PI], this.allObjects);
 			assert.equal( antA.getPosition().x, 10, "Passed!" );
 			assert.equal( antA.getPosition().y, 12, "Passed!" );
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.BACKWARD, 0], this.allObjects);
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.BACKWARD, 0], this.allObjects);
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.NONE, -Math.PI], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.BACKWARD, 0], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.BACKWARD, 0], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.NONE, -Math.PI], this.allObjects);
 			assert.equal( antA.getPosition().x, 10, "Passed!" );
 			assert.equal( antA.getPosition().y, 10, "Passed!" );
 			assert.equal( antA.getRotation(), 0, "Passed!" );
 			
-			// walk forward
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.FORWARD, 0], this.allObjects);
+			// MOVE forward
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.FORWARD, 0], this.allObjects);
 			assert.equal( success, true, "Passed!" );
 			assert.equal( antA.getPosition().x, 12, "Passed!" );
 			assert.equal( antA.getPosition().y, 10, "Passed!" );
-			// walk backward
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.BACKWARD, 0], this.allObjects);
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.BACKWARD, 0], this.allObjects);
+			// MOVE backward
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.BACKWARD, 0], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.BACKWARD, 0], this.allObjects);
 			assert.equal( success, true, "Passed!" );
 			assert.equal( antA.getPosition().x, 10, "Passed!" );
 			assert.equal( antA.getPosition().y, 10, "Passed!" );
-			// rotate and then walk
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.NONE, Math.PI/2], this.allObjects);
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.FORWARD, 0], this.allObjects);
+			// rotate and then MOVE
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.NONE, Math.PI/2], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.FORWARD, 0], this.allObjects);
 			assert.equal( antA.getPosition().x, 10, "Passed!" );
 			assert.equal( antA.getPosition().y, 12, "Passed!" );
 			assert.equal( success, true, "Passed!" );
-			// rotate and then walk
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.NONE, Math.PI/2], this.allObjects);
-			success = Action.apply(antA, [ActionType.WALK, DirectionType.FORWARD, 0], this.allObjects);
+			// rotate and then MOVE
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.NONE, Math.PI/2], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.FORWARD, 0], this.allObjects);
 			assert.equal( antA.getPosition().x, 8, "Passed!" );
 			assert.equal( antA.getPosition().y, 12, "Passed!" );
 		});

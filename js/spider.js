@@ -41,9 +41,9 @@ return class Spider extends Animal {
 			var spiderSizeVec = rotateVector({x:-this.getSize()*2,y:0}, this.getRotation());
 			var posBehindSpider = {x:this.getPosition().x+spiderSizeVec.x, y:this.getPosition().y+spiderSizeVec.y};
 			var collider = this.checkCollision(posBehindSpider, allObjects);
-			// walk towards center 
+			// MOVE towards center 
 			if (collider == null)
-				Action.walk(this, DirectionType.FORWARD, 0, allObjects);
+				Action.apply(this, [ActionType.MOVE, DirectionType.FORWARD, 0], allObjects);
 		}
 		else
 			super.iterate(allObjects);

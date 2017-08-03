@@ -25,7 +25,7 @@ return class AntControllerSimple extends AntController{
 					}
 					else {
 						var fromObjToDirRad = prey.getRotationToObj();
-						return [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
+						return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 					}
 				}
 			}
@@ -47,13 +47,13 @@ return class AntControllerSimple extends AntController{
 					var harvestAmount = this.getMaxFoodStorage() - this.getFoodStorage();
 					return [ActionType.HARVEST, nearestFood, harvestAmount];
 				}
-				// walk towards food
+				// MOVE towards food
 				else if (canHarvestMore){
 					var fromObjToDirRad = nearestFood.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
-						return [ActionType.WALK, DirectionType.FORWARD, 1];
+						return [ActionType.MOVE, DirectionType.FORWARD, 1];
 					}
-					return [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
+					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 				else
 					this.memory.harvestedFood = true;
@@ -62,9 +62,9 @@ return class AntControllerSimple extends AntController{
 			// search for food
 			else{
 				if (this.hasCollidedWithID() != -1){
-					return [ActionType.WALK, DirectionType.FORWARD, 1];
+					return [ActionType.MOVE, DirectionType.FORWARD, 1];
 				}
-				return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
+				return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];
 			}
 		}
 
@@ -76,26 +76,26 @@ return class AntControllerSimple extends AntController{
 			if (hive != null){
 				// harvest food if possible
 				if(hive.canBeInteractedWith(this)){
-					return [ActionType.GIVEFOOD, hive, foodGivingToHive];
+					return [ActionType.TRANSFER, hive, foodGivingToHive];
 				}
-				// walk towards hive
+				// MOVE towards hive
 				else {
 					var fromObjToDirRad = hive.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
-						return [ActionType.WALK, DirectionType.FORWARD, 1];
+						return [ActionType.MOVE, DirectionType.FORWARD, 1];
 					}
-					return [ActionType.WALK, DirectionType.FORWARD, fromObjToDirRad];
+					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
 			else{ 
 				if (this.hasCollidedWithID() != -1){
-					return [ActionType.WALK, DirectionType.FORWARD, 1];
+					return [ActionType.MOVE, DirectionType.FORWARD, 1];
 				}
-				return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];
+				return [ActionType.MOVE, DirectionType.FORWARD, rand(-0.5,0.5)];
 			}
 			
 		}
-		return [ActionType.WALK, DirectionType.NONE, rand(-0.5,0.5)];
+		return [ActionType.MOVE, DirectionType.NONE, rand(-0.5,0.5)];
 	}
 }
 

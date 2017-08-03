@@ -40,9 +40,9 @@ return class SpiderController extends Controller {
 			}
 		}
 		if (this.hasCollidedWithID() != -1){
-			return [ActionType.WALK, DirectionType.FORWARD, 1];
+			return [ActionType.MOVE, DirectionType.FORWARD, 1];
 		}
-		return [ActionType.WALK, DirectionType.FORWARD, rotation];
+		return [ActionType.MOVE, DirectionType.FORWARD, rotation];
 	}
 }
 

@@ -10,7 +10,7 @@ The direction and rotation are both <b>relative</b> to the ants current location
 
 The command looks like this: 
 ```javascript
-[ActionType.Move, <Direction>, <Rotation>];
+[ActionType.MOVE, <Direction>, <Rotation>];
 ```
 The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
 Rotations are always given in radians relative to the ants current heading.
@@ -21,9 +21,9 @@ var radians = degToRad( degree )
 
 #### Examples:
 ```javascript
-[ActionType.Move, Direction.NONE, degToRad(25)];        // rotate 25° to the left
-[ActionType.Move, Direction.FORWARD, degToRad(-15)];    // rotate 15° to the right
-[ActionType.Move, Direction.BACKWARD, rand(-0.5, 0.5)]; // walk backward with a random rotation
+[ActionType.MOVE, Direction.NONE, degToRad(25)];        // rotate 25° to the left
+[ActionType.MOVE, Direction.FORWARD, degToRad(-15)];    // rotate 15° to the right
+[ActionType.MOVE, Direction.BACKWARD, rand(-0.5, 0.5)]; // walk backward with a random rotation
 ```
 
 ### Maximum rotation

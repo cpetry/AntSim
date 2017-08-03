@@ -93,10 +93,9 @@ return class Collider {
 	checkCollision(newPos, colObjs){
 		// To be able to check if object is inside canvas simply reduce canvas width and height by 3*size!
 		var canvasRect = { x: this.getCanvas().width/2, y: this.getCanvas().height/2, 
-							w: this.getCanvas().width-this.getSize()*3, h: this.getCanvas().height - this.getSize()*3};
+						   w: this.getCanvas().width - this.getSize()*3, h: this.getCanvas().height - this.getSize()*3};
 		var canvasArea = new Shape(canvasRect, ShapeType.RECTANGLE, 0);
 		var collider = this.collidesWith(canvasArea, newPos);
-		
 		// spiders spawn from outside the canvas! 
 		// They are not supposed to collide with canvas.
 		if (this.constructor.name == "Spider" && this._isEntering){
@@ -104,8 +103,11 @@ return class Collider {
 				this._isEntering = false;
 			return null;
 		}
+		
 		// every other object has to collide with the canvas.
+		// Otherwise the object has left it! (should not be possible)
 		else if (collider == null){
+			//console.log("Collided with canvas!")
 			return { getID(){ return -1000;} };
 		}
 		
@@ -144,7 +146,7 @@ return class Collider {
 		else if (colShape == ShapeType.RECTANGLE && thisShape == ShapeType.CIRCLE){
 			try{
 				if (!('w' in colSize) || !('h' in colSize)) throw "rectangle size has to have two size dimensions!";
-				if (Collider.checkRectCircleCollision(pos, thisSize, colPosition, colSize)){
+				if (Collider.checkCircleRectCollision(pos, thisSize, colPosition, colSize)){
 					return colObj;
 				}
 				else
@@ -156,10 +158,7 @@ return class Collider {
 		else if (colShape == ShapeType.CIRCLE && thisShape == ShapeType.RECTANGLE){
 			try{
 				if (!('w' in thisSize) || !('h' in thisSize)) throw "rectangle size has to have two size dimensions!";
-				if (pos.x + thisSize.w/2 > colPosition.x - colSize
-				&&  pos.y + thisSize.h/2 > colPosition.y - colSize
-				&&  pos.x - thisSize.w/2 < colPosition.x + colSize
-				&&  pos.y - thisSize.h/2 < colPosition.y + colSize){
+				if (Collider.checkCircleRectCollision(colPosition, colSize, pos, thisSize)){
 					return colObj;
 				}
 				else
@@ -177,8 +176,8 @@ return class Collider {
 				return null;
 		}
 		else{
-			//console.log(colObj.getShapeType() + " " + this.getShapeType())
-			return null;
+			throw new TypeError("ShapeType incorrect!");
+			return this;
 		}
 	}
 	
@@ -188,18 +187,18 @@ return class Collider {
 		return getDistance(o,p);
 	}
 	
-	static checkRectCircleCollision(circlePos, circleSize, rectPos, rectSize){
+	static checkCircleRectCollision(circlePos, circleSize, rectPos, rectSize){
 		var distX = Math.abs(circlePos.x - rectPos.x);
 		var distY = Math.abs(circlePos.y - rectPos.y);
 
-		if (distX > (rectSize.w + circleSize)
-		||  distY > (rectSize.h + circleSize)) { return false; }
+		if (distX > (rectSize.w/2 + circleSize)
+		||  distY > (rectSize.h/2 + circleSize)) { return false; }
 		
-		if (distX <= (rectSize.w)
-		||  distY <= (rectSize.h)) { return true; } 
+		if (distX <= (rectSize.w/2)
+		||  distY <= (rectSize.h/2)) { return true; } 
 
-		var dx=distX-rectSize.w;
-		var dy=distY-rectSize.h;
+		var dx=distX-rectSize.w/2;
+		var dy=distY-rectSize.h/2;
 		return (dx*dx+dy*dy <= circleSize*circleSize);
 	}
 	

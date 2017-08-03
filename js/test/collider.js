@@ -88,14 +88,21 @@ function   (Collider) {
 			// reset objects
 			this.allObjects = []
 
-			// test collisions on rectangle-rectangle
+			// test collisions on rectangle-CIRCLE
 			var e = new Collider(this.canvas, {x:10, y:10}, ShapeType.CIRCLE, 10, 0, this.allObjects);
 			var f = new Collider(this.canvas, {x:40, y:40}, ShapeType.RECTANGLE, {w:10, h:10}, 0, this.allObjects);
 			assert.equal( f.collidesWith(e, {x:20, y:10}) == e, true, "Passed!" );
 			assert.equal( f.collidesWith(e, {x:10, y:20}) == e, true, "Passed!" );
-			assert.equal( f.collidesWith(e, {x:25, y:25}) == e, false, "Passed!" );
-			assert.equal( f.collidesWith(e, {x:10+Math.sqrt(200), y:10+Math.sqrt(200)}) == e, true, "Passed!" );
-			assert.equal( f.collidesWith(e, {x:11+Math.sqrt(200), y:11+Math.sqrt(200)}) == e, false, "Passed!" );
+			assert.equal( f.collidesWith(e, {x:22, y:22}) == e, true, "Passed!" );
+			assert.equal( f.collidesWith(e, {x:23, y:23}) == e, false, "Passed!" );
+		});
+		
+		QUnit.test("checkCircleRectCollision()", function(assert){
+			circlePos = {x:10, y:10};
+			circleSize = 10;
+			rectPos = {x:50, y:50};
+			rectSize = {w:100, h:100};
+			assert.equal( Collider.checkCircleRectCollision(circlePos,circleSize, rectPos, rectSize), true, "Passed!" );
 		});
 		
 		QUnit.test("setNewRotation()", function(assert){

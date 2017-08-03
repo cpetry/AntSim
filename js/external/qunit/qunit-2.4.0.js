@@ -4552,7 +4552,7 @@
   				break;
   			}
 
-  			// Walk the front path one step.
+  			// MOVE the front path one step.
   			for (k1 = -d + k1start; k1 <= d - k1end; k1 += 2) {
   				k1Offset = vOffset + k1;
   				if (k1 === -d || k1 !== d && v1[k1Offset - 1] < v1[k1Offset + 1]) {
@@ -4589,7 +4589,7 @@
   				}
   			}
 
-  			// Walk the reverse path one step.
+  			// MOVE the reverse path one step.
   			for (k2 = -d + k2start; k2 <= d - k2end; k2 += 2) {
   				k2Offset = vOffset + k2;
   				if (k2 === -d || k2 !== d && v2[k2Offset - 1] < v2[k2Offset + 1]) {
@@ -4858,7 +4858,7 @@
   			var chars, lineStart, lineEnd, lineArrayLength, line;
   			chars = "";
 
-  			// Walk the text, pulling out a substring for each line.
+  			// MOVE the text, pulling out a substring for each line.
   			// text.split('\n') would would temporarily double our memory footprint.
   			// Modifying text would create many large strings to garbage collect.
   			lineStart = 0;

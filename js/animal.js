@@ -99,8 +99,9 @@ return class Animal extends SmellableObject {
 
 		// Collider
 		this._collidedWithSth = this.checkCollision(newPos, allObjects);
-		if (this._collidedWithSth == null)
+		if (this._collidedWithSth === null){
 			this.setPosition(newPos);
+		}
 	}
 	
 	setNewRotation(newRotation){
