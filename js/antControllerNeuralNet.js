@@ -180,8 +180,7 @@ return class AntControllerNeuralNet extends AntController{
 					// harvest food if possible
 					if (canHarvestMore) {
 						if(canBeHarvested){
-							var harvestAmount = this.getMaxFoodStorage() - this.getFoodStorage();
-							actionTuple = [ActionType.HARVEST, nearestFood, harvestAmount];
+							actionTuple = [ActionType.HARVEST, nearestFood];
 						} else {
 							// MOVE towards food
 							var fromObjToDirRad = nearestFood.getRotationToObj();

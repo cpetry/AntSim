@@ -34,8 +34,6 @@ div#graphs{
 }
 div#customAntContainer{
 	height:90%;
-	resize: both;
-    overflow: auto;
 }
 div#NoUI{
 	text-align: center;

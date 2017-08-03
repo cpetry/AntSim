@@ -45,7 +45,6 @@ return class AntController extends Controller {
 		this.parentID = 0;
 		this.food = 0;
 		this.foodMax = 0;
-		this.canSetPheromone = false;
 		// simulation constructor is called directly
 		if (new.target === AntController)
 			this.userAntFunction = userAntFunction;
@@ -88,7 +87,7 @@ return class AntController extends Controller {
 			enableLiveAutocompletion: true
 		});
 		customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
-		customAntEditor.setValue(defaultValue);
+		customAntEditor.setValue(defaultValue, -1); // -1 set cursor to begin
 		return customAntEditor;
 	}
 	
@@ -111,7 +110,6 @@ return class AntController extends Controller {
 		this.parentID = ant.getParentID();
 		this.food = ant.getFoodStorage();
 		this.foodMax = ant.getMaxFoodStorage();
-		this.canSetPheromone = ant.canSetPheromone();
 	}
 	
 	getAction(){
@@ -163,6 +161,10 @@ return class AntController extends Controller {
 	*/
 	getMaxFoodStorage(){return this.foodMax;}
 
+	/**
+	*
+	*/
+	isFull(){return this.food==this.foodMax;}
 	
 	getNearestEnemyAnt(){
 		var minDist = 1000;
@@ -220,7 +222,7 @@ return class AntController extends Controller {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li><li><a href="global.html#isFull">isFull</a></li></ul>
 </nav>
 
 <br class="clear">

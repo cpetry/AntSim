@@ -59,7 +59,7 @@ return class AntController extends Controller {
 			enableLiveAutocompletion: true
 		});
 		customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
-		customAntEditor.setValue(defaultValue);
+		customAntEditor.setValue(defaultValue, -1); // -1 set cursor to begin
 		return customAntEditor;
 	}
 	
@@ -133,6 +133,10 @@ return class AntController extends Controller {
 	*/
 	getMaxFoodStorage(){return this.foodMax;}
 
+	/**
+	*
+	*/
+	isFull(){return this.food==this.foodMax;}
 	
 	getNearestEnemyAnt(){
 		var minDist = 1000;

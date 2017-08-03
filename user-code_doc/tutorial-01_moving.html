@@ -34,7 +34,7 @@ They only know what they see and smell. All other objects are unknown.</p>
 <p>Each ant though can <b>turn around and walk</b> to perceive more of its surroundings.
 The direction and rotation are both <b>relative</b> to the ants current location and rotation.</p>
 <h3>Move command</h3><p>The command looks like this: </p>
-<pre class="prettyprint source lang-javascript"><code>[ActionType.MOVE, DirectionType.&lt;Direction>, &lt;Rotation>];</code></pre><p>The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
+<pre class="prettyprint source lang-javascript"><code>[ActionType.MOVE, DirectionType.&lt;direction>, &lt;rotation>];</code></pre><p>The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
 Rotations are always given in degree relative to the ants current heading.
 If you like to use radians just convert it with </p>
 <pre class="prettyprint source lang-javascript"><code>var degree = radToDeg( radians )</code></pre><h4>Examples:</h4><pre class="prettyprint source lang-javascript"><code>[ActionType.MOVE, DirectionType.NONE, 25];        // rotate 25° to the left
@@ -47,22 +47,16 @@ Distance and rotation to other objects are updated each iteration.</p>
 <p><img src="../images/rotationToObj.svg" width="100%" height="140px"></p>
 <p>The rotation angle towards something can be returned by</p>
 <pre class="prettyprint source lang-javascript"><code>var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
-var rotationTowardsFood = nearestFood.getRotationToObj();</code></pre><h1>Try it yourself!<br></h1><p><link rel="stylesheet" href="../style.css"></p>
-<script src="../js/external/ace_min_noconflict/ace.js"></script>
-<script src="../js/external/ace_min_noconflict/ext-language_tools.js"></script>
+var rotationTowardsFood = nearestFood.getRotationToObj();</code></pre><h1>Try it yourself!<br></h1><link rel="stylesheet" href="../style.css">
 
-<script src="../js/settingsGlobal.js"></script>
-<script src="../js/debug.js"></script>
-<script src="../js/globals.js"></script>
-
-<p><script data-main="../js/initTutorial" src="../js/external/require.js"></script>
-A little hands on:<br>
+<p>A little hands on:<br>
 By default the ant walks randomly around.
 Try to let the ant walk towards the green food source!</p>
 <div style="width:850px;">
     <div style="width:550px; float:left;">
+        <input type="number" value="1" id="tutorialPart" style="display:none">
         <input type="button" value="run" id="runTutorial" >
-        <input type="button" value="cheat" id="showSolution" >
+        <input type="button" value="cheat" id="cheat" >
         <div id="customAntContainer" style="height:150px;margin:10px;">
             <pre id="editor"></pre>
         </div>
@@ -76,6 +70,15 @@ Try to let the ant walk towards the green food source!</p>
     <b>Congratulations!</b><br>
     You can now continue with the <a href="tutorial-02_harvest.html">Harvest</a> tutorial.
 </div>
+
+<script src="../js/external/ace_min_noconflict/ace.js"></script>
+<script src="../js/external/ace_min_noconflict/ext-language_tools.js"></script>
+
+<script src="../js/settingsGlobal.js"></script>
+<script src="../js/debug.js"></script>
+<script src="../js/globals.js"></script>
+
+<script data-main="../js/initTutorial" src="../js/external/require.js"></script>
 </article>
 
 </section>
@@ -83,7 +86,7 @@ Try to let the ant walk towards the green food source!</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li><li><a href="global.html#isFull">isFull</a></li></ul>
 </nav>
 
 <br class="clear">

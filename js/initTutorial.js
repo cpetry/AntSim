@@ -21,8 +21,56 @@ requirejs([ 'external/seedrandom/seedrandom',
 			'antController'],
 function   (seed, setImmediate, Tutorial, SettingsSimulation, AntController) {
 
-	var defaultValue = "return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];"
-	var editor = AntController.createEditor("editor", defaultValue)
+	var tutorialPart = document.getElementById("tutorialPart").value;
+	var defaultValues = ["return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];",
+// MOVE Tutorial
+`var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
+if (nearestFood !== null){
+	var rotationTowardsFood = nearestFood.getRotationToObj();
+	return [ActionType.MOVE, DirectionType.FORWARD, rotationTowardsFood];
+}
+return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`,
+// HARVEST tutorial
+`var hive = this.getOwnHive();
+var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
+if (nearestFood !== null && !this.memory.harvestedFood){
+	if(nearestFood.canBeInteractedWith(this)){
+		if (this.isFull())
+			this.memory.harvestedFood = true;
+		return [ActionType.HARVEST, nearestFood];
+	}
+	else
+		return [ActionType.MOVE, DirectionType.FORWARD, nearestFood.getRotationToObj()];
+}
+if (this.memory.harvestedFood && hive !== null){
+	return [ActionType.MOVE, DirectionType.FORWARD, hive.getRotationToObj()];
+}
+return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`,
+// TRANSFER tutorial
+`var hive = this.getOwnHive();
+var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
+if (nearestFood !== null && !this.memory.harvestedFood){
+	if(nearestFood.canBeInteractedWith(this)){
+		if (this.isFull())
+			this.memory.harvestedFood = true;
+		return [ActionType.HARVEST, nearestFood];
+	}
+	else
+		return [ActionType.MOVE, DirectionType.FORWARD, nearestFood.getRotationToObj()];
+
+}
+if (this.memory.harvestedFood && hive !== null){
+	if(hive.canBeInteractedWith(this)){
+		this.memory.harvestedFood = false;
+		return [ActionType.TRANSFER, hive, this.getMaxFoodStorage()];
+	}
+	else
+		return [ActionType.MOVE, DirectionType.FORWARD, hive.getRotationToObj()];
+}
+return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`
+
+];
+	var editor = AntController.createEditor("editor", defaultValues[tutorialPart-1])
 		
 	function finishedFunc(){
 		document.getElementById('finished').style.display = 'block';
@@ -30,31 +78,25 @@ function   (seed, setImmediate, Tutorial, SettingsSimulation, AntController) {
 		requestID = undefined;
 	};
 	
-	function showSolution(){
-		editor.setValue(`// CHEATER! :)
-var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
-if (nearestFood !== null){
-	var rotationTowardsFood = nearestFood.getRotationToObj();
-	return [ActionType.MOVE, DirectionType.FORWARD, rotationTowardsFood];
-}
-return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`)
+	function cheat(part){
+		editor.setValue("// CHEATER! :)\n" + defaultValues[part], -1); // -1 set cursor to begin
 	};
 
-	function startTutorial(){
+	function startTutorial(part){
 		userAntFunction = new Function(editor.getValue());
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
 		SettingsGlobal.setShowUI(true);
 		Math.seedrandom();
 
-		//userAntFunction = new Function(customAntEditor.getValue());
 		var canvas = document.getElementById('canvasTutorial');
 		var settings = new SettingsSimulation(AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
-		new Tutorial(canvas, settings, finishedFunc);
+		new Tutorial(canvas, settings, finishedFunc, part);
 	};
 
-	document.getElementById("showSolution").onclick = showSolution;
-	document.getElementById("runTutorial").onclick = startTutorial;
+	document.getElementById("cheat").onclick = function(){cheat(tutorialPart)};
+	document.getElementById("runTutorial").onclick = function(){startTutorial(tutorialPart)};
+	
 	// show default behaviour before user has coded
-	startTutorial();
+	startTutorial(tutorialPart);
 });

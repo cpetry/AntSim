@@ -30,9 +30,9 @@ return class Action {
 			return Action.move(obj, parameter1, parameter2, allObjects);
 		}
 		else if (type == ActionType.HARVEST){
-			if (action.length != 3)
-				throw new TypeError("ActionType.HARVEST needs an object to harvest and the amount to harvest!");
-			return Action.harvest(obj, parameter1, parameter2, allObjects);
+			if (action.length != 2)
+				throw new TypeError("ActionType.HARVEST needs an object to harvest!");
+			return Action.harvest(obj, parameter1, allObjects);
 		}
 		else if (type == ActionType.ATTACK){
 			if (action.length != 2)
@@ -67,7 +67,7 @@ return class Action {
 		}
 	}
 
-	static harvest(harvester, harvestObjProxy, amount, allObjects){
+	static harvest(harvester, harvestObjProxy, allObjects){
 		if (!harvestObjProxy.canBeInteractedWith(harvester)){
 			console.log("Trying to harvest out of range!")
 			return false;
@@ -84,7 +84,7 @@ return class Action {
 			|| harvester.constructor.name == "AntGenetic")){
 			var additionalFoodPossibleToCarry = harvester.getMaxFoodStorage() - harvester.getFoodStorage();
 			var foodPossibleToHarvest = Math.min(harvestObj.getAmount(), harvester.getMaxHarvestAmount());
-			var amountBeingHarvested = Math.min(Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest),amount);
+			var amountBeingHarvested = Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest);
 			harvestObj.harvest(amountBeingHarvested);
 			harvester.receiveFood(amountBeingHarvested);
 			return true;

@@ -52,28 +52,28 @@ return class Tutorial extends Simulation {
 		// Tutorial 2 should fortify this concept and the scout is to harvest 
 		// and return back to the hive with food.
 		// Explain that the hive can produce ants.
-		if (this.part >= 1){
+		if (this.part >= 2){
 			
 		}
 
 		// In tutorial 3 create different ants good for harvesting and carrying food.
 		// Introduce queen advising concept to user. This time though decide for "worker type"
 		// Give hive some extra food and create 3 worker ants
-		if (this.part >= 2){
+		if (this.part >= 3){
 			
 		}
 		
 		// For tutorial 4 create strong soldier ants to fight off spider.
 		// The scout ant should help them find the spider and fight it off.
 		// let the user do that by "advising" the queen.
-		if (this.part >= 3){
+		if (this.part >= 4){
 			
 		}
 	}
 	
 	simulate(){		
 		var firstAnt = this.hives[0].getAnts()[0];
-		if (this.part == 0
+		if (this.part == 1
 		&& firstAnt.collidesWith(this.checkAreaFood)
 		&& firstAnt.getAngleToPos(this.checkAreaFood.getPosition()) < 0.1
 		){
@@ -83,20 +83,23 @@ return class Tutorial extends Simulation {
 			this.finishedFunc();
 		}
 		
-		else if (firstAnt.collidesWith(this.checkAreaHive) && this.part == 1
+		else if (firstAnt.collidesWith(this.checkAreaHive) 
+		&& this.part == 2
 		&& firstAnt.getFoodStorage() == firstAnt.getMaxFoodStorage()){
-			// Ant is back at the hive
+			// Ant is full and back at the hive
 			// end the second tutorial
+			this.isFinished = true;
+			this.finishedFunc();
 		}
 		
-		else if (firstAnt.collidesWith(this.checkAreaHive) && this.part == 2
+		else if (firstAnt.collidesWith(this.checkAreaHive) && this.part == 3
 		&& firstAnt.getFoodStorage() == firstAnt.getMaxFoodStorage()){
 			// Ant has "called" other ants with pheromones to food
 			// they have returned all of the food back to the hive
 			// end the third tutorial
 		}
 		
-		else if (firstAnt.collidesWith(this.checkAreaHive) && this.part == 3
+		else if (firstAnt.collidesWith(this.checkAreaHive) && this.part == 4
 		&& firstAnt.getFoodStorage() == firstAnt.getMaxFoodStorage()){
 			// Spider has been killed
 			// end the fourth tutorial

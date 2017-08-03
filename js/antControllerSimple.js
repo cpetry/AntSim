@@ -39,13 +39,11 @@ return class AntControllerSimple extends AntController{
 			
 			if (nearestFood != null ){
 				var canBeHarvested = nearestFood.canBeInteractedWith(this);
-				var isFull = (this.getFoodStorage() == this.getMaxFoodStorage());
 				var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
 					
 				// harvest food if possible
 				if(canBeHarvested && canHarvestMore){
-					var harvestAmount = this.getMaxFoodStorage() - this.getFoodStorage();
-					return [ActionType.HARVEST, nearestFood, harvestAmount];
+					return [ActionType.HARVEST, nearestFood];
 				}
 				// MOVE towards food
 				else if (canHarvestMore){

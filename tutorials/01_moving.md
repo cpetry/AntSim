@@ -10,7 +10,7 @@ The direction and rotation are both <b>relative</b> to the ants current location
 
 The command looks like this: 
 ```javascript
-[ActionType.MOVE, DirectionType.<Direction>, <Rotation>];
+[ActionType.MOVE, DirectionType.<direction>, <rotation>];
 ```
 The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
 Rotations are always given in degree relative to the ants current heading.
@@ -51,21 +51,15 @@ var rotationTowardsFood = nearestFood.getRotationToObj();
 # Try it yourself!<br>
 
 <link rel="stylesheet" href="../style.css">
-<script src="../js/external/ace_min_noconflict/ace.js"></script>
-<script src="../js/external/ace_min_noconflict/ext-language_tools.js"></script>
 
-<script src="../js/settingsGlobal.js"></script>
-<script src="../js/debug.js"></script>
-<script src="../js/globals.js"></script>
-
-<script data-main="../js/initTutorial" src="../js/external/require.js"></script>
 A little hands on:<br>
 By default the ant walks randomly around.
 Try to let the ant walk towards the green food source!
 <div style="width:850px;">
 	<div style="width:550px; float:left;">
+		<input type="number" value="1" id="tutorialPart" style="display:none">
 		<input type="button" value="run" id="runTutorial" >
-		<input type="button" value="cheat" id="showSolution" >
+		<input type="button" value="cheat" id="cheat" >
 		<div id="customAntContainer" style="height:150px;margin:10px;">
 			<pre id="editor"></pre>
 		</div>
@@ -79,3 +73,12 @@ Try to let the ant walk towards the green food source!
 	<b>Congratulations!</b><br>
 	You can now continue with the [Harvest]{@tutorial 02_harvest} tutorial.
 </div>
+
+<script src="../js/external/ace_min_noconflict/ace.js"></script>
+<script src="../js/external/ace_min_noconflict/ext-language_tools.js"></script>
+
+<script src="../js/settingsGlobal.js"></script>
+<script src="../js/debug.js"></script>
+<script src="../js/globals.js"></script>
+
+<script data-main="../js/initTutorial" src="../js/external/require.js"></script>

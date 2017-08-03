@@ -1,0 +1,61 @@
+For the queen to thrive and increase their ant numbers she need food.
+If a certain amount of food is harvested and brought to the hive, a new ant is born.
+
+
+### Harvest command
+The command looks like this: 
+```javascript
+[ActionType.HARVEST, <object>];
+```
+
+#### Examples:
+```javascript
+[ActionType.HARVEST, food];        // harvest food from food source
+[ActionType.HARVEST, dead_spider]; // harvest food from a dead spider
+[ActionType.HARVEST, dead_ant];    // cannibalism
+```
+Note: Normally ants don't cannibalise other ants. In this simulation though, it's a fight for survival!<br>
+
+#### Memory:
+<b>Ants can memorize everything they experience.</b><br>
+Finding a straight way back home for example is achieved by memorizing direction (position of the sun) and walking distance.
+
+#### Nice to know:
+While an ant carries food, it sometimes snacks a bit from it.
+This increases the ants vitality and increases the ants lifespan a bit.
+
+
+# Try it yourself!<br>
+
+<link rel="stylesheet" href="../style.css">
+
+A little hands on:<br>
+By default the ant walks towards the food location.
+This resembles one possible solution to the previous tutorial.<br>
+Try now to enhance the code to let the ant walk back with full hands!
+<div style="width:850px;">
+	<div style="width:550px; float:left;">
+		<input type="number" value="2" id="tutorialPart" style="display:none">
+		<input type="button" value="run" id="runTutorial" >
+		<input type="button" value="cheat" id="cheat" >
+		<div id="customAntContainer" style="height:150px;margin:10px;">
+			<pre id="editor"></pre>
+		</div>
+	</div>
+	<div style="width:250px; float:right;">
+		<canvas width="250" height="200" class="terrarium" id="canvasTutorial"></canvas>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div id="finished" style="display:none;">
+	<b>Congratulations!</b><br>
+	You can now continue with the [Transfer]{@tutorial 03_transfer} tutorial.
+</div>
+<script src="../js/external/ace_min_noconflict/ace.js"></script>
+<script src="../js/external/ace_min_noconflict/ext-language_tools.js"></script>
+
+<script src="../js/settingsGlobal.js"></script>
+<script src="../js/debug.js"></script>
+<script src="../js/globals.js"></script>
+
+<script data-main="../js/initTutorial" src="../js/external/require.js"></script>
