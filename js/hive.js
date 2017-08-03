@@ -27,12 +27,6 @@ return class Hive extends SmellableObject {
 	getFoodMaxStorage(){ return this._foodMaxHive;}
 	getFoodStorage(){ return this._foodStorageHive;}
 	getAnts() {return this.ants;}
-
-	iterate(allObjects){
-		for (var i = 0; i < this.ants.length; i++) {
-			this.ants[i].iterate(allObjects);
-		}
-	}
 	
 	createAnt(allObjects){
 		var posDistace = this.settings.getAntPositionDistance();
@@ -45,7 +39,7 @@ return class Hive extends SmellableObject {
 
 	removeAnt(ant, index, allObjects){
 		for (var a =0; a < allObjects.length; a++){
-			if (allObjects[a] == this.ants[index])
+			if (allObjects[a] == ant)
 				allObjects.splice(a, 1);
 		}
 		this.ants.splice(index, 1);

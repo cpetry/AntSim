@@ -1,10 +1,7 @@
-define(['hiveGenetic', 'antDead', 'spider', 'spiderDead', 'collider', 'graph', 'food'], 
-function(HiveGenetic, AntDead, Spider, SpiderDead, Collider, Graph, Food) {
+define(['hiveGenetic', 'antDead', 'spider', 'spiderDead', 'collider', 'graph', 'food', 'pheromone'], 
+function(HiveGenetic, AntDead, Spider, SpiderDead, Collider, Graph, Food, Pheromone) {
 
 return class Simulation {
-	static __init__(){
-		Simulation.isFinished = false;
-	}
 	constructor(canvas, settings){
 		Simulation.isFinished = false;
 		this.canvas = canvas;
@@ -62,57 +59,73 @@ return class Simulation {
 			for (var a=0; a < this.settings.getAntStartNumber(); a++)
 				this.hives[i].createAnt(this.allObjects);
 	}
-
-	simulate(){
-
-		// Iterate through all hives
-		for (var i = 0; i < this.hives.length; ++i){
-			this.hives[i].iterate(this.allObjects);
-			for (var a = 0; a < this.hives[i].getAnts().length; a++) {
-				var ant = this.hives[i].getAnts()[a];
-				if (ant.getLife() <= 0){
-					this.hives[i].removeAnt(ant, a, this.allObjects);
-					this.food.push(new AntDead(ant, this.settings, this.allObjects));
-				}
-			}
-		}
-		
-		for (var i = 0; i < this.spiders.length; ++i){
-			var spider = this.spiders[i]
-			spider.iterate(this.allObjects);
-			if (spider.getLife() <= 0){
-				this.food.push(new SpiderDead(spider, this.settings, this.allObjects));
-				for (var a = 0; a < this.allObjects.length; a++){
-					if (allObjects[a] == spider)
-					allObjects.splice(a, 1);
-				}
-				this.spiders.splice(i, 1);
 	
-			}
+	getHiveIndexFromParentID(parentID){
+		for (var i = 0; i < this.hives.length; ++i){
+			if (this.hives[i].getID() == parentID)
+				return i;
 		}
-		this.spiderCreation();
-
-		
-		// Update food (and in case create new one)
-		for (var i = 0; i < this.food.length; i++) {
-			this.food[i].iterate();
-
-			// remove food if it is "empty"
-			if (this.food[i].isEmpty()){
-				for (var a =0; a < this.allObjects.length; a++){
-					if (this.allObjects[a] == this.food[i])
-						this.allObjects.splice(a, 1);
-				}
-				this.food.splice(i, 1);
-			}
-		}
-
-		this.foodCreation();
+		throw new TypeError("No hive found that matches ants parentID");
 	}
 
-	foodDecay(){
+	getAntIndexFromID(parentID, ID){
+		var ants = this.hives[parentID].getAnts();
+		for (var i = 0; i < ants.length; ++i){
+			if (ants[i].getID() == ID)
+				return i;
+		}
+		throw new TypeError("No ant found that matches ants ID");
+	}
+	
+	getIndex(array, obj){
+		for (var i = 0; i < array.length; ++i){
+			if (array[i] == obj)
+				return i;
+		}
+		throw new TypeError("No food found that matches obj");
+	}
 
+	simulate(){
+		// Iterate through all objects
+		for (var i = 0; i < this.allObjects.length; ++i){
+			var obj = this.allObjects[i];
+			// all living objects can die
+			if (obj.getLife && obj.getLife() <= 0){
+				// is an ant
+				if (obj.getParentID){
+					var h = this.getHiveIndexFromParentID(obj.getParentID())
+					var a = this.getAntIndexFromID(h, obj.getID())
+					if (obj.wasAttacked()){
+						var p = new Pheromone(this.canvas, obj.getPosition(), obj.getID(), obj.getParentID(), this.settings, PheromoneType.DANGER);
+						this.allObjects.push(p);
+					}
+					this.hives[h].removeAnt(obj, a, this.allObjects);
+					this.food.push(new AntDead(obj, this.settings, this.allObjects));
+				}
+				else if (obj.constructor.name = "Pheromone"){
+					allObjects.splice(i, 1);
+				}
+				// is a spider
+				else {
+					var s = this.getIndex(this.spiders, obj)
+					this.food.push(new SpiderDead(obj, this.settings, this.allObjects));
+					allObjects.splice(i, 1);
+					this.spiders.splice(s, 1);
+				}
+			}
+			// is food
+			else if (obj.isEmpty && obj.isEmpty()){
+				this.allObjects.splice(i, 1);
+				this.food.splice(this.getIndex(this.food, obj), 1);
+			}
+			
+			// iterate after all deaths have been applied
+			if (obj.iterate)
+				obj.iterate(this.allObjects);
+		}
 
+		this.spiderCreation();
+		this.foodCreation();
 	}
 
 	foodCreation(){
@@ -234,5 +247,4 @@ return class Simulation {
 
 }
 
-Simulation.__init__();
 });

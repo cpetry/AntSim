@@ -22,6 +22,7 @@ Debug.setShowCollider(document.getElementById('debugCollider').checked);
 Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);
 Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);
 Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);
+Debug.setShowPheromones(document.getElementById('debugPheromones').checked);
 
 
 function showGraph(){

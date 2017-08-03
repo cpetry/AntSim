@@ -18,7 +18,6 @@ return class SettingsSimulation
 		this.antSmellingDistance = 50;
 		this.antVisibilityDistance = 30;
 		this.antVisibilityRange = 0.8;
-		this.antMaxPheromones = 10;
 		this.foodAmount = 250;
 		this.foodAmountDeadAnt = 25;
 		this.foodAmountDeadSpider = 200;
@@ -39,6 +38,8 @@ return class SettingsSimulation
 		this.spiderSmellingDistance = 50;
 		this.spiderVisibilityDistance = 30;
 		this.spiderVisibilityRange = 0.8;
+		this.pheromoneSize = 15; // sets the smelling distance 
+		this.pheromoneDecayProb = 0.35; 
 		this.sizeSmellingFactor = 6;
 		this.interactionDistance = 5;
 		this.interactionRange = Math.PI/4;
@@ -62,7 +63,6 @@ return class SettingsSimulation
 	getAntSmellingDistance() { return this.antSmellingDistance; }
 	getAntVisibilityDistance() { return this.antVisibilityDistance; }
 	getAntVisibilityRange() { return this.antVisibilityRange; }
-	getAntMaxPheromones() { return this.antMaxPheromones; }
 	getSpiderSize() { return this.spiderSize; }
 	getSpiderSizeLevelFactor() { return this.spiderSizeLevelFactor; }
 	getSpiderLife(){ return this.spiderLife; }
@@ -83,6 +83,8 @@ return class SettingsSimulation
 	getFoodMaxHive(){ return this.foodMaxHive; }
 	getFoodMaxAnt(){ return this.foodMaxAnt; }
 	getFoodMaxHarvestAmountAnt(){ return this.foodMaxHarvestAmountAnt; }
+	getPheromoneSize(){ return this.pheromoneSize; }
+	getPheromoneDecayProb(){ return this.pheromoneDecayProb; }
 	getSizeSmellingFactor() { return this.sizeSmellingFactor; }
 	getInteractionDistance() { return this.interactionDistance; }
 	getInteractionRange() { return this.interactionRange; }

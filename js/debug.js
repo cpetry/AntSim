@@ -37,4 +37,10 @@ class Debug
 	static getShowSmelledObjectsPosition(){
 		return this.showSmelledObjectsPosition;
 	}
+	static setShowPheromones(enabled){
+		this.showPheromones = enabled;
+	}
+	static getShowPheromones(){
+		return this.showPheromones;
+	}
 }

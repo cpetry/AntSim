@@ -13,6 +13,15 @@ const DirectionType = {
   NONE: 3
 };
 
+const PheromoneType = {
+	NONE : 0,
+	ATTACK : 1,
+	DEFEND : 2,
+	FOOD : 3,
+	DANGER: 4
+};
+
+
 const ObjectType = {
 	NONE : 0,
 	HIVE : 1,

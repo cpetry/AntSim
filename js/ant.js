@@ -34,10 +34,9 @@ return class Ant extends Animal {
 		this._life = settings.getAntLife();
 		this._foodStorageAnt = 0;
 		this._parentID = parentID;
-		this._pheromones = [];
-		this._maxPheromones = settings.getAntMaxPheromones();
 		this._collidedWithSth = null;
 		this._wasAttacked = false;
+		
 		var controller=null;
 		if (settings.getAntType() == AntType.CUSTOM)
 			controller = new AntController(this, settings.getUserAntFunction())
@@ -54,39 +53,9 @@ return class Ant extends Animal {
 	getFoodStorage() { return this._foodStorageAnt; }
 	getMaxFoodStorage() { return this._foodMaxAnt; }
 	getMaxHarvestAmount() { return this._foodMaxHarvestAmount; }
-	getPheromones() { return this._pheromones; }
 	
 	iterate(allObjects){
 		super.iterate(allObjects);
-		
-		for (var i = 0; i < this._pheromones.length; i++) {
-			var phero = this._pheromones[i];
-			phero.age();
-			if (phero.getLife() <= 0)
-				removePheromone(phero, i, allObjects);
-		}
-	}
-	
-	removePheromone(pheromone, index, allObjects){
-		for (var a =0; a < allObjects.length; a++){
-			if (allObjects[a] == this._pheromones[index])
-				allObjects.splice(a, 1);
-		}
-		this._pheromones.splice(index, 1);
-	}
-	
-	canSetPheromone(){
-		return (this._pheromones.length <= this._maxPheromones) 
-	}
-	
-	createPheromone(allObjects){
-		if (!this.canSetPheromone()){
-			console.log("Pheromone cannot be created! Check with 'this.canSetPheromone'")
-			return;
-		}
-		var newPheromone = new Pheromone(this.getCanvas(), this.getPosition(), allObjects);
-		this._pheromones.push(newPheromone);
-		allObjects.push(newPheromone);
 	}
 	
 	age(){

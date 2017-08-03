@@ -21,11 +21,11 @@ return class SmellableObject extends Collider {
 			throw new TypeError("Cannot construct SmellableObject instances directly");
 		}
 		super(canvas, position, ShapeType.CIRCLE, size, rotation, allObjects);
-		this.sizeSmellingFactor = sizeSmellingFactor;
+		this._sizeSmellingFactor = sizeSmellingFactor;
 	}
 
 	getSmellDistance(){
-		var smellingDistance = this.getSize() * this.sizeSmellingFactor;
+		var smellingDistance = this.getSize() * this._sizeSmellingFactor;
 		return smellingDistance;
 	}
 	

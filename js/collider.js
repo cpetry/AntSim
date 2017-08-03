@@ -25,36 +25,30 @@ return class Collider {
 		this._size = size;
 		this._rotation = rotation;
 		this._isEntering = this.constructor.name == "Spider"; // only used for spiders
+				
+		// try creating the object without colliding with sth
+		// Spiral around original position with increasing distance
+		// If the distance gets too big (>100) then break and give an error
+		var dist = 10;
+		var rotation = 0;
+		var origPos = position;
+		while(this.checkCollision(position, colObjs) != null && dist < 100){
+			rotation += 30 + rand(-10,10);
+			if (rotation >= 360){
+				rotation = 30;
+				dist += 10;
+			}
+				
+			var relativePos = rotateVector({ x: dist, y:0}, degToRad(rotation));
+			position = { x: origPos.x + relativePos.x, y: origPos.y + relativePos.y };
+		}
+		if (dist == 100){
+			console.log("ERROR positioning object!");
+			return null;
+		}
+		this._position = position;
 		
-		// Pheromones can not collide!
-		if (this.constructor.name == "Pheromone"){
-			this._position = position;
-		}
-		else {
-			// try creating the object without colliding with sth
-			// Spiral around original position with increasing distance
-			// If the distance gets too big (>100) then break and give an error
-			var dist = 10;
-			var rotation = 0;
-			var origPos = position;
-			while(this.checkCollision(position, colObjs) != null && dist < 100){
-				rotation += 30 + rand(-10,10);
-				if (rotation >= 360){
-					rotation = 30;
-					dist += 10;
-				}
-					
-				var relativePos = rotateVector({ x: dist, y:0}, degToRad(rotation));
-				position = { x: origPos.x + relativePos.x, y: origPos.y + relativePos.y };
-			}
-			if (dist == 100){
-				console.log("ERROR positioning object!");
-				return null;
-			}
-			this._position = position;
-			
-			colObjs.push(this);
-		}
+		colObjs.push(this);
 	}
 	
 	static getNewID(){ 
@@ -113,7 +107,7 @@ return class Collider {
 		
 		for (var i=0; i < colObjs.length; i++)
 		{
-			if (this != colObjs[i]){
+			if (this != colObjs[i] && colObjs[i].constructor.name != "Pheromone"){
 				collider = this.collidesWith(colObjs[i], newPos);
 				if (collider != null)
 					return collider;

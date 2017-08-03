@@ -13,8 +13,6 @@ window.requestAnimationFrame = function() {
 }();
 
 SettingsGlobal.setFramesPerSecond(15);
-//Debug.setVisibility(true);
-//Debug.setShowSmellingDistance(true);
 
 requirejs([ 'external/seedrandom/seedrandom',
 			'external/setImmediate/setImmediate',
