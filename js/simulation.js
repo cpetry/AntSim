@@ -1,23 +1,26 @@
-define(['settingsSimulation', 'hiveGenetic', 'antDead', 'spider', 'spiderDead', 'collider', 'graph', 'food'], 
-function(SettingsSimulation, HiveGenetic, AntDead, Spider, SpiderDead, Collider, Graph, Food) {
+define(['hiveGenetic', 'antDead', 'spider', 'spiderDead', 'collider', 'graph', 'food'], 
+function(HiveGenetic, AntDead, Spider, SpiderDead, Collider, Graph, Food) {
 
 return class Simulation {
-	constructor(canvas, antType, hiveType, userAntFunction){
+	static __init__(){
+		Simulation.isFinished = false;
+	}
+	constructor(canvas, settings){
+		Simulation.isFinished = false;
 		this.canvas = canvas;
 
 		this.now;
 		this.delta;
 		this.then = Date.now();
 		this.iteration = 0;
-		
+
 		Collider.idCounter = null; 		// reset id counter
 		this.hives = [];
 		this.food = [];
 		this.allObjects = [];
 		this.spiders = [];
+		this.settings = settings;
 
-		this.settings = new SettingsSimulation(antType, hiveType, userAntFunction);
-		
 		// simulation constructor is called directly
 		if (new.target === Simulation) {
 			this.graph = new Graph();
@@ -31,7 +34,9 @@ return class Simulation {
 	init(numHives=2) {
 		var hiveConfigurations = [
 						[{x: this.canvas.width / 2, y: this.canvas.height / 2}], // One hive
-						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}] // Two hives
+						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}], // Two hives
+						[{x: this.canvas.width * 1 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width * 2 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width / 2, y: this.canvas.height * 1 / 3}], // Three hives
+						[{x: this.canvas.width * 1 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 1 / 4, y: this.canvas.height * 1 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 1 / 4}]  // Four hives
 						// TODO ... to be continued, but actually there should be found a better way to do this.
 					];
 
@@ -51,7 +56,7 @@ return class Simulation {
 			// Create hive
 			this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.allObjects)); // i = hiveNumber
 		}
-		
+
 		// first hives need their ids, then ants can be created
 		for (var i = 0; i < this.hives.length; ++i) 
 			for (var a=0; a < this.settings.getAntStartNumber(); a++)
@@ -63,7 +68,6 @@ return class Simulation {
 		// Iterate through all hives
 		for (var i = 0; i < this.hives.length; ++i){
 			this.hives[i].iterate(this.allObjects);
-			
 			for (var a = 0; a < this.hives[i].getAnts().length; a++) {
 				var ant = this.hives[i].getAnts()[a];
 				if (ant.getLife() <= 0){
@@ -177,6 +181,7 @@ return class Simulation {
 		if (numLivingHives == 1 && this.hives.length > 1
 			  || numLivingHives == 0)
 		{
+			Simulation.isFinished = true;
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
@@ -196,7 +201,7 @@ return class Simulation {
 				this.draw();
 				for (var i = 0; i < this.hives.length; ++i)
 					this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
-				
+
 				this.iteration++;
 				document.getElementById('frame').value = this.iteration;
 			}
@@ -208,11 +213,11 @@ return class Simulation {
 			this.simulate();
 			for (var i = 0; i < this.hives.length; ++i)
 				this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
-			
+
 			this.iteration++;
 			if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
 				document.getElementById('frame').value = this.iteration;
-			
+
 			window.setImmediate(this.loop.bind(this));
 		}
 	}
@@ -229,4 +234,5 @@ return class Simulation {
 
 }
 
+Simulation.__init__();
 });

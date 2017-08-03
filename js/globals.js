@@ -86,3 +86,25 @@ function normalize(vec){
 	var normalizedVec = {x: vec.x/length, y: vec.y/length};
 	return normalizedVec;
 }
+
+
+function argmax(tlist) {
+	var max = -9e8;
+	var maxarg = -1;
+	for (var i = 0; i < tlist.length; ++i) {
+		if (tlist[i] > max) {
+			max = tlist[i];
+			maxarg = i;
+		}
+	}
+	return maxarg;
+}
+function maxElement(tlist) {
+	var max = -9e8;
+	for (var i = 0; i < tlist.length; ++i) {
+		if (tlist[i] > max) {
+			max = tlist[i];
+		}
+	}
+	return max;
+}

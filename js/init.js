@@ -29,6 +29,7 @@ function showGraph(){
 	document.getElementById('graphs').style.display = 'block';
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'none';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
 function showSimulation(){
@@ -37,6 +38,7 @@ function showSimulation(){
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'none';
 	document.getElementById('editorButtons').style.visibility = 'hidden';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
 function showEditor(){
@@ -45,6 +47,7 @@ function showEditor(){
 	document.getElementById('customAntContainer').style.display = 'block';
 	document.getElementById('NoUI').style.display = 'none';
 	document.getElementById('editorButtons').style.visibility = 'visible';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
 function showNoUI(){
@@ -53,17 +56,17 @@ function showNoUI(){
 	document.getElementById('customAntContainer').style.display = 'none';
 	document.getElementById('NoUI').style.display = 'block';
 	document.getElementById('editorButtons').style.visibility = 'hidden';
+	document.getElementById('trainingContainer').style.visibility = 'hidden';
 }
 
-function setUI(show){
-	var show = document.getElementById('showUI').checked;	
-	SettingsGlobal.setShowUI(show);
-	if (show)
-		showSimulation();
-	else
-		showNoUI();
+function showTraining(){
+	document.getElementById('graphs').style.display = 'none';
+	document.getElementById('terrariumContainer').style.display = 'block';
+	document.getElementById('customAntContainer').style.display = 'none';
+	document.getElementById('NoUI').style.display = 'none';
+	document.getElementById('editorButtons').style.visibility = 'hidden';
+	document.getElementById('trainingContainer').style.visibility = 'visible';
 }
-
 
 function simulationClicked(){
 	document.getElementById('floatingContainer').style.display = 'none';
@@ -71,6 +74,14 @@ function simulationClicked(){
 	window.cancelAnimationFrame(requestID);
 	requestID = undefined;
 	showEditor();
+}
+
+function trainingClicked(){
+	document.getElementById('floatingContainer').style.display = 'none';
+	document.getElementById('frame').value = 0;
+	window.cancelAnimationFrame(requestID);
+	requestID = undefined;
+	showTraining();
 }
 
 function aboutClicked(){
@@ -99,15 +110,15 @@ requirejs.config({
 
 requirejs([ 'external/seedrandom/seedrandom',
 			'external/setImmediate/setImmediate',
-			'simulation',
-			'ant',
-			'hive',
-			'antController'],
-function   (seed, setImmediate, Simulation, Ant, Hive, AntController) {
+			'simulation','settingsSimulation', 'training','ant','hive','antController'],
+function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant, Hive, AntController) {
 
+	var canvas = document.getElementById('canvasSimulation')
 	var defaultValue = "return [ActionType.WALK, DirectionType.FORWARD, rand(-0.5,0.5)];"
 	var editor = AntController.createEditor("editor", defaultValue)
 
+	var training = new Training(canvas);
+	
 	function startTeaser(){
 		document.getElementById('floatingContainer').style.display = 'none';
 		document.getElementById('frame').value = 0;
@@ -117,8 +128,8 @@ function   (seed, setImmediate, Simulation, Ant, Hive, AntController) {
 		document.getElementById('showUI').checked = true;
 		showSimulation();
 		Math.seedrandom();
-		var canvas = document.getElementById('canvasSimulation')
-		new Simulation(canvas, AntType.SIMPLE, HiveType.DEFAULT);
+		var settings = new SettingsSimulation(AntType.SIMPLE, HiveType.DEFAULT);
+		new Simulation(canvas, settings);
 	}
 
 	function run(){
@@ -126,12 +137,40 @@ function   (seed, setImmediate, Simulation, Ant, Hive, AntController) {
 		//SettingsGlobal.setShowUI(false);
 		showSimulation();
 		Math.seedrandom(document.getElementById('seed').value);
-		var canvas = document.getElementById('canvasSimulation')
-		new Simulation(canvas, AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		new Simulation(canvas, settings);
+	}
+
+	function startTraining(){
+		var antType = document.getElementById("AntType").value;
+		if (antType == "Simple")
+			training.start(AntType.SIMPLE);
+		else if (antType == "NeuralNet")
+			training.start(AntType.NEURALNET);
+		else if (antType == "Custom")
+			training.start(AntType.CUSTOM);
+	}
+
+	function testTraining(){
+		var antType = document.getElementById("AntType").value;
+		if (antType == "Simple")
+			training.test(AntType.SIMPLE);
+		else if (antType == "NeuralNet")
+			training.test(AntType.NEURALNET);
+		else if (antType == "Custom")
+			training.test(AntType.CUSTOM);
+	}
+
+	function resetTraining(){
+		training.reset();
 	}
 
 	document.getElementById("runButton").onclick = run;
 	document.getElementById("teaserButton").onclick = startTeaser;
+	document.getElementById("startTrainingButton").onclick = startTraining;
+	document.getElementById("testTrainingButton").onclick = testTraining;
+	document.getElementById("resetTrainingButton").onclick = resetTraining;
+	
 
 	startTeaser();
 
