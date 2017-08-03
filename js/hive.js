@@ -1,4 +1,5 @@
-define([ 'smellableObject', 'ant', 'hiveController', 'hiveControllerCustom'], function(SmellableObject, Ant, HiveController, HiveControllerCustom) {
+define([ 'smellableObject', 'ant', 'hiveController', 'hiveControllerCustom'],
+function(SmellableObject, Ant, HiveController, HiveControllerCustom) {
 
 return class Hive extends SmellableObject {
 
@@ -16,8 +17,11 @@ return class Hive extends SmellableObject {
 		
 		if (settings.getHiveType() == HiveType.CUSTOM)
 			this.controller = new HiveControllerCustom();
+		else if (settings.getHiveType() == HiveType.NEURALNET)
+			this.controller = new HiveController(); // TODO neuralnet hivecontroller
 		else
 			this.controller = new HiveController();
+
 	}
 	
 	getFoodMaxStorage(){ return this._foodMaxHive;}

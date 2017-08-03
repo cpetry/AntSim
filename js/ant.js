@@ -1,5 +1,5 @@
-define(['animal', 'pheromone', 'antController','antControllerSimple'], 
-function(Animal, Pheromone, AntController, AntControllerSimple) {
+define(['animal', 'pheromone', 'antController','antControllerSimple', 'antControllerNeuralNet'], 
+function(Animal, Pheromone, AntController, AntControllerSimple, AntControllerNeuralNet) {
 
 /**
  * Ant
@@ -36,10 +36,13 @@ return class Ant extends Animal {
 		this._parentID = parentID;
 		this._pheromones = [];
 		this._maxPheromones = settings.getAntMaxPheromones();
-		
+		this._collidedWithSth = null;
+		this._wasAttacked = false;
 		var controller=null;
 		if (settings.getAntType() == AntType.CUSTOM)
 			controller = new AntController(this, settings.getUserAntFunction())
+		else if (settings.getAntType() == AntType.NEURALNET)
+			controller = new AntControllerNeuralNet(this, settings.neuralNetwork);
 		else
 			controller = new AntControllerSimple(this);
 
@@ -91,18 +94,17 @@ return class Ant extends Animal {
 		if(this.getFoodStorage() > 0){
 			bonus = this._foodBonusProb; // negative
 		}
-		
+
 		if (rand(0,1.0 + this._decayProb + bonus) >= 1.0){
 			if (this.getFoodStorage() > 0)
 				this.consumeFood();
 			this._life-=1;
 		}
 	}
-	
+
 	consumeFood(){
 		this._foodStorageAnt -= 1;
 	}
-	
 
 	giveAwayFood(amount){
 		if (amount > this.getFoodStorage()){

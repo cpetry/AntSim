@@ -28,8 +28,7 @@ return class AntGenetic extends Ant {
 		this._smellingDistance   *= this.getSensitivity();
 		this._visibilityDistance *= this.getSensitivity();
 		this._visibilityRangeRad *= this.getSensitivity();
-	}
-	
+	}	
 	getStrength(){return this._strength;}
 	getAgility(){return this._agility;}
 	getSensitivity(){return this._sensitivity;}
