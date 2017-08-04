@@ -86,17 +86,20 @@ return class Animal extends SmellableObject {
 	move(direction, rotation, allObjects){
 		var rotationDiff = Math.min(Math.abs(rotation), this.getSpeedRotation());
 		var possibleRotation = Math.sign(rotation) * rotationDiff;
-		// moving + rotating -> 0.5*rotation!
-		if(direction != DirectionType.NONE)
-			possibleRotation *= 0.5;
 		super.setNewRotation(this.getRotation() + possibleRotation);
 
 		
 		var newHeading = this.getDirectionVec();
 
 		var moveSpeed = this.getSpeed();
+		// being attacked -> 0.5*moveSpeed!
 		if (this.wasAttacked())
-			moveSpeed /= 2;
+			moveSpeed *= 0.5;
+		
+		if(direction != DirectionType.NONE){
+			var rotationPercentage = 1 - (rotationDiff / this.getSpeedRotation());
+			moveSpeed *= (0.5+0.5*rotationPercentage);
+		}
 		
 		// attention: has to be copied!
 		var newPos = { x: this.getPosition().x, y: this.getPosition().y};
