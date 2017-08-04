@@ -29,8 +29,9 @@ function   (Action, Ant, SettingsSimulation) {
 			assert.equal( antA.getRotation(), 0, "Passed!" );
 			// ant is now at {x:10, y:10} with rotation 0 again
 
-			// rotate while walking
-			success = Action.apply(antA, [ActionType.MOVE, DirectionType.FORWARD, 90], this.allObjects);
+			// moving and then rotating
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.NONE, 90], this.allObjects);
+			success = Action.apply(antA, [ActionType.MOVE, DirectionType.FORWARD, 0], this.allObjects);
 			assert.equal( antA.getPosition().x, 10, "Passed!" );
 			assert.equal( antA.getPosition().y, 12, "Passed!" );
 			success = Action.apply(antA, [ActionType.MOVE, DirectionType.BACKWARD, 0], this.allObjects);
