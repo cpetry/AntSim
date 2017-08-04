@@ -60,12 +60,11 @@ return class Action {
 	static move(obj, direction, rotation, allObjects){
 		// check parameters
 		if (!isNaN(rotation)){
-			obj.setNewRotation(degToRad(rotation));
-			obj.move(direction, allObjects);
+			obj.move(direction, rotation, allObjects);
 			return true;
 		}
 		else{
-			console.log("Rotation is not set: (" + rotation + ")")			
+			throw new TypeError("MOVE command: direction ("+direction+") and/or rotation ("+rotation+") not set correctly!");
 			return false;
 		}
 	}

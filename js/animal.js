@@ -58,6 +58,9 @@ return class Animal extends SmellableObject {
 	setController(controller) {this._controller = controller;}
 	
 	iterate(allObjects){
+		if (this.getLife() <= 0)
+			throw new TypeError("Dead animals shouldn't be able to do anything! - We don't like zombies!");
+		
 		// setting sight and smell
 		this.setVisibleObjects(allObjects);
 		this.setSmelledObjects(allObjects);
@@ -76,8 +79,18 @@ return class Animal extends SmellableObject {
 			this._life-=1;
 	}
 	
-	// checks and walks if possible
-	move(walkingDirection, allObjects){
+	/**
+	* checks and walks if possible
+	* rotation is given in relative radians to current heading
+	*/
+	move(direction, rotation, allObjects){
+		var rotationDiff = Math.min(Math.abs(rotation), this.getSpeedRotation());
+		var possibleRotation = Math.sign(rotation) * rotationDiff;
+		// moving + rotating -> 0.5*rotation!
+		if(direction != DirectionType.NONE)
+			possibleRotation *= 0.5;
+		super.setNewRotation(this.getRotation() + possibleRotation);
+
 		
 		var newHeading = this.getDirectionVec();
 
@@ -88,11 +101,11 @@ return class Animal extends SmellableObject {
 		// attention: has to be copied!
 		var newPos = { x: this.getPosition().x, y: this.getPosition().y};
 		
-		if (walkingDirection == DirectionType.FORWARD){
+		if (direction == DirectionType.FORWARD){
 			newPos.x += newHeading.x * moveSpeed;
 			newPos.y += newHeading.y * moveSpeed;
 		}
-		else if (walkingDirection == DirectionType.BACKWARD){
+		else if (direction == DirectionType.BACKWARD){
 			newPos.x -= newHeading.x * moveSpeed*0.5;
 			newPos.y -= newHeading.y * moveSpeed*0.5;
 		}
@@ -103,16 +116,7 @@ return class Animal extends SmellableObject {
 			this.setPosition(newPos);
 		}
 	}
-	
-	/**
-	* rotation is given in relative radians to current heading
-	*/
-	setNewRotation(rotation){
-		var rotationDiff = Math.min(Math.abs(rotation), this.getSpeedRotation());
-		var sign = Math.sign(rotation);
-		super.setNewRotation(this.getRotation() + sign * rotationDiff);
-	}
-	
+		
 	setVisibleObjects(objects){
 		this._visibleObjs = {}
 		

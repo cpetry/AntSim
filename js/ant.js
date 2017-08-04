@@ -53,6 +53,7 @@ return class Ant extends Animal {
 	getFoodStorage() { return this._foodStorageAnt; }
 	getMaxFoodStorage() { return this._foodMaxAnt; }
 	getMaxHarvestAmount() { return this._foodMaxHarvestAmount; }
+	getMaxRotation() { return this._speedRotation; }
 	
 	iterate(allObjects){
 		super.iterate(allObjects);

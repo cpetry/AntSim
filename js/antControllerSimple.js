@@ -51,6 +51,8 @@ return class AntControllerSimple extends AntController{
 					if (this.hasCollidedWithID() != -1){
 						return [ActionType.MOVE, DirectionType.FORWARD, 30];
 					}
+					if (Math.abs(fromObjToDirRad) > 10)
+						return [ActionType.MOVE, DirectionType.NONE, fromObjToDirRad];
 					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 				else
@@ -82,6 +84,9 @@ return class AntControllerSimple extends AntController{
 					if (this.hasCollidedWithID() != -1){
 						return [ActionType.MOVE, DirectionType.FORWARD, 30];
 					}
+					if (Math.abs(fromObjToDirRad) > 10)
+						return [ActionType.MOVE, DirectionType.NONE, fromObjToDirRad];
+
 					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}

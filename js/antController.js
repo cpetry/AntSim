@@ -82,6 +82,7 @@ return class AntController extends Controller {
 		this.parentID = ant.getParentID();
 		this.food = ant.getFoodStorage();
 		this.foodMax = ant.getMaxFoodStorage();
+		this.maxRotation = ant.getMaxRotation();
 	}
 	
 	getAction(){
@@ -138,9 +139,7 @@ return class AntController extends Controller {
 	*/
 	isFull(){return this.food==this.foodMax;}
 	
-	getMaximumRotation(directionType){
-		return 0;
-	}
+	getMaximumRotation(){ return this.maxRotation;}
 	
 	getNearestEnemyAnt(){
 		var minDist = 1000;

@@ -39,17 +39,19 @@ return class SmellableObject extends Collider {
 	{
 		if (!this.canBeSmelledBy(animal)){
 			// should not be able to smell it.... did someone cheat here?!
-			return math.matrix([rand(-1000,1000), rand(-1000,1000)])
+			throw new TypeError("Shouldn't be able to get position from object too far away!")
 		}
 		
 		var distance = getDistance(this.getPosition(), animal.getPosition());
+		if (distance <= 0)
+			throw new TypeError("Distance (" + distance + ") incorrect!")
 		// [0, 1] <-> [0, smellingDistance+smellDistance] 
 		var farthest = animal.getSmellingDistance() + this.getSmellDistance();
 		var nearest  = 0;
 		// [0,1]
 		var smellPos = {x: this.getPosition().x, y:this.getPosition().y }; // clone position
 		if (distance > nearest){
-			var percentage = distance / (farthest-nearest);
+			var percentage = distance / Math.max(farthest-nearest, 0.01);
 			var smellPosDist = percentage * percentage * this.getSmellDistance(); // distance from actual position
 			var addVec = rotateVector({x: smellPosDist, y:0}, rand(0, Math.PI*2));
 			var smellPos = { x: this.getPosition().x + addVec.x, 

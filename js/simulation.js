@@ -89,6 +89,7 @@ return class Simulation {
 		// Iterate through all objects
 		for (var i = 0; i < this.allObjects.length; ++i){
 			var obj = this.allObjects[i];
+			
 			// all living objects can die
 			if (obj.getLife && obj.getLife() <= 0){
 				// is an ant
@@ -109,18 +110,18 @@ return class Simulation {
 				else if (obj.getObjectType() == ObjectType.SPIDER){
 					var s = this.getIndex(this.spiders, obj)
 					this.food.push(new SpiderDead(obj, this.settings, this.allObjects));
-					allObjects.splice(i, 1);
+					this.allObjects.splice(i, 1);
 					this.spiders.splice(s, 1);
 				}
 			}
-			// is food
+			// is empty food
 			else if (obj.getObjectType() == ObjectType.FOOD && obj.isEmpty()){
 				this.allObjects.splice(i, 1);
 				this.food.splice(this.getIndex(this.food, obj), 1);
 			}
 			
-			// iterate after all deaths have been applied
-			if (obj.iterate)
+			// all living objects that can do sth now do it!
+			else if (obj.iterate)
 				obj.iterate(this.allObjects);
 		}
 
