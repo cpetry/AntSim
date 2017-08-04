@@ -104,23 +104,20 @@ return class Animal extends SmellableObject {
 		}
 	}
 	
+	/**
+	* rotation is given in absolute radians
+	*/
 	setNewRotation(newRotation){
-		if (Math.abs(this.getRotation() - newRotation) > this.getSpeedRotation()){
-			//console.log("new heading too much! Reducing according to attribute.")
-			if (newRotation > this.getRotation())
-				super.setNewRotation(this.getRotation()+this.getSpeedRotation());
-			else
-				super.setNewRotation(this.getRotation()-this.getSpeedRotation());
-		}
-		else
-			super.setNewRotation(newRotation);
+		var rotationDiff = Math.min(Math.abs(this.getRotation() - newRotation), this.getSpeedRotation());
+		var sign = Math.sign(this.getRotation() - newRotation);
+		super.setNewRotation(this.getRotation() - sign * rotationDiff);
 	}
 	
 	setVisibleObjects(objects){
 		this._visibleObjs = {}
 		
 		for (var i=0, l=objects.length; i<l; i++){
-			if (this == objects[i] || objects[i].constructor.name == "Pheromone")
+			if (this == objects[i] || objects[i].getObjectType() == ObjectType.PHEROMONE)
 				continue;
 			var objPos = objects[i].getPosition();
 			var distToObj = getDistance(objPos, this.getPosition());

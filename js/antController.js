@@ -138,6 +138,10 @@ return class AntController extends Controller {
 	*/
 	isFull(){return this.food==this.foodMax;}
 	
+	getMaximumRotation(directionType){
+		return 0;
+	}
+	
 	getNearestEnemyAnt(){
 		var minDist = 1000;
 		var prey = null;

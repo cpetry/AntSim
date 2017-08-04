@@ -12,7 +12,9 @@ The command looks like this:
 ```javascript
 [ActionType.MOVE, DirectionType.<direction>, <rotation>];
 ```
-The direction parameter can be Direction.FORWARD | BACKWARD | NONE.
+The <direction> parameter can be FORWARD, BACKWARD or NONE.<br>
+<b>Keep in mind</b>: Ants can't move backwards as fast as they move forwards.
+
 Rotations are always given in degree relative to the ants current heading.
 If you like to use radians just convert it with 
 ```javascript 
