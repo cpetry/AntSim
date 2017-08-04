@@ -77,11 +77,8 @@ return class Action {
 		var harvestObj = this.getRealObjOfID(harvestObjProxy.getID(), allObjects);
 		
 		// now check if it can be harvested and grab food
-		if ((harvestObj.constructor.name == "Food"
-		|| harvestObj.constructor.name == "AntDead"
-		|| harvestObj.constructor.name == "SpiderDead")
-		&& (harvester.constructor.name == "Ant" 
-			|| harvester.constructor.name == "AntGenetic")){
+		if (harvestObj.getObjectType() == ObjectType.FOOD
+		&&  harvester.getObjectType() == ObjectType.ANT){
 			var additionalFoodPossibleToCarry = harvester.getMaxFoodStorage() - harvester.getFoodStorage();
 			var foodPossibleToHarvest = Math.min(harvestObj.getAmount(), harvester.getMaxHarvestAmount());
 			var amountBeingHarvested = Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest);
@@ -103,10 +100,8 @@ return class Action {
 
 		var receiver = this.getRealObjOfID(receiverProxy.getID(), allObjects);
 
-		if (receiver.constructor.name == "Hive" 
-		|| receiver.constructor.name == "HiveGenetic"
-		|| receiver.constructor.name == "Ant"
-		|| receiver.constructor.name == "AntGenetic"){
+		if (receiver.getObjectType() == ObjectType.HIVE
+		|| receiver.getObjectType() == ObjectType.ANT){
 			var foodPossibleToGive = sender.getFoodStorage();
 			var foodPossibleToReceive = receiver.getFoodMaxStorage() - receiver.getFoodStorage();
 			var amountBeingTransferred = Math.min(Math.min(foodWantingToGiveAway, foodPossibleToGive), foodPossibleToReceive);
