@@ -105,12 +105,12 @@ return class Animal extends SmellableObject {
 	}
 	
 	/**
-	* rotation is given in absolute radians
+	* rotation is given in relative radians to current heading
 	*/
-	setNewRotation(newRotation){
-		var rotationDiff = Math.min(Math.abs(this.getRotation() - newRotation), this.getSpeedRotation());
-		var sign = Math.sign(this.getRotation() - newRotation);
-		super.setNewRotation(this.getRotation() - sign * rotationDiff);
+	setNewRotation(rotation){
+		var rotationDiff = Math.min(Math.abs(rotation), this.getSpeedRotation());
+		var sign = Math.sign(rotation);
+		super.setNewRotation(this.getRotation() + sign * rotationDiff);
 	}
 	
 	setVisibleObjects(objects){

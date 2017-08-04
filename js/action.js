@@ -54,10 +54,13 @@ return class Action {
 		return false;
 	}
 
+	/**
+	* rotation is in degree relative to current heading
+	*/
 	static move(obj, direction, rotation, allObjects){
 		// check parameters
 		if (!isNaN(rotation)){
-			obj.setNewRotation(obj.getRotation() + degToRad(rotation));
+			obj.setNewRotation(degToRad(rotation));
 			obj.move(direction, allObjects);
 			return true;
 		}
