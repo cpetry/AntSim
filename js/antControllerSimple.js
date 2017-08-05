@@ -49,7 +49,7 @@ return class AntControllerSimple extends AntController{
 				else if (canHarvestMore){
 					var fromObjToDirRad = nearestFood.getRotationToObj();
 					if (this.hasCollidedWithID() != -1){
-						return [ActionType.MOVE, DirectionType.FORWARD, 30];
+						return [ActionType.MOVE, DirectionType.FORWARD, 45];
 					}
 					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
@@ -60,7 +60,7 @@ return class AntControllerSimple extends AntController{
 			// search for food
 			else{
 				if (this.hasCollidedWithID() != -1){
-					return [ActionType.MOVE, DirectionType.FORWARD, 30];
+					return [ActionType.MOVE, DirectionType.FORWARD, 45];
 				}
 				return [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 			}
@@ -79,8 +79,8 @@ return class AntControllerSimple extends AntController{
 				// MOVE towards hive
 				else {
 					var fromObjToDirRad = hive.getRotationToObj();
-					if (this.hasCollidedWithID() != -1 && hive.getDistanceToObj() > 10){
-						return [ActionType.MOVE, DirectionType.FORWARD, 30];
+					if (this.hasCollidedWithID() != -1){
+						return [ActionType.MOVE, DirectionType.FORWARD, 45];
 					}
 
 					return [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];

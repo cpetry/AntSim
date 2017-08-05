@@ -42,7 +42,7 @@ return class SettingsSimulation
 		this.pheromoneDecayProb = 0.35; 
 		this.sizeSmellingFactor = 6;
 		this.interactionDistance = 5;
-		this.interactionRange = Math.PI/4;
+		this.interactionRange = Math.PI*0.25;
 		this.userAntFunction = userAntFunction;
 	}
 	// attribute related settings
