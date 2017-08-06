@@ -34,6 +34,7 @@ return class Animal extends SmellableObject {
 		this._attackDamage = 0;
 		this._interactionDistance = settings.getInteractionDistance();
 		this._interactionRange = settings.getInteractionRange();
+		this._rotationSpeedReduction = settings.getRotationSpeedReduction();
 		
 		this._visibleObjs = {};
 		this._smelledObjs = {};
@@ -89,21 +90,23 @@ return class Animal extends SmellableObject {
 		super.setNewRotation(this.getRotation() + possibleRotation);
 
 		
-		var newHeading = this.getDirectionVec();
-
+		
 		var moveSpeed = this.getSpeed();
 		// being attacked -> 0.5*moveSpeed!
 		if (this.wasAttacked())
 			moveSpeed *= 0.5;
 		
+		// rotation reduces move speed a bit!
 		if(direction != DirectionType.NONE){
-			var rotationPercentage = 1 - (rotationDiff / this.getSpeedRotation());
-			moveSpeed *= (0.5+0.5*rotationPercentage);
+			//console.log(rotationDiff)
+			var rotationPercentage = 1.0 - (rotationDiff / this.getSpeedRotation());
+			moveSpeed *= ((1.0-this._rotationSpeedReduction) + this._rotationSpeedReduction*rotationPercentage);
 		}
 		
 		// attention: has to be copied!
 		var newPos = { x: this.getPosition().x, y: this.getPosition().y};
-		
+		var newHeading = this.getDirectionVec();
+
 		if (direction == DirectionType.FORWARD){
 			newPos.x += newHeading.x * moveSpeed;
 			newPos.y += newHeading.y * moveSpeed;

@@ -60,7 +60,7 @@ return class Action {
 	static move(obj, direction, rotation, allObjects){
 		// check parameters
 		if (!isNaN(rotation)){
-			obj.move(direction, rotation, allObjects);
+			obj.move(direction, degToRad(rotation), allObjects);
 			return true;
 		}
 		else{

@@ -30,17 +30,26 @@
 <article>
     <p>For the queen to thrive and increase their ant numbers she need food.
 If a certain amount of food is harvested and brought to the hive, a new ant is born.</p>
+<p><img src="../images/tutorial_02harvest.svg" width="100%" height="180px"></p>
 <h3>Harvest command</h3><p>The command looks like this: </p>
-<pre class="prettyprint source lang-javascript"><code>[ActionType.HARVEST, &lt;object>];</code></pre><h4>Examples:</h4><pre class="prettyprint source lang-javascript"><code>[ActionType.HARVEST, food];        // harvest food from food source
+<pre class="prettyprint source lang-javascript"><code>[ActionType.HARVEST, &lt;object>];
+
+// examples:
+[ActionType.HARVEST, food];        // harvest food from food source
 [ActionType.HARVEST, dead_spider]; // harvest food from a dead spider
 [ActionType.HARVEST, dead_ant];    // cannibalism</code></pre><p>Note: Normally ants don't cannibalise other ants. In this simulation though, it's a fight for survival!<br></p>
-<h4>Memory:</h4><p><b>Ants can memorize everything they experience.</b><br>
-Finding a straight way back home for example is achieved by memorizing direction (position of the sun) and walking distance.</p>
-<h4>Nice to know:</h4><p>While an ant carries food, it sometimes snacks a bit from it.
+<h5>Nice to know:</h5><p>While an ant carries food, it sometimes snacks a bit from it.
 This increases the ants vitality and increases the ants lifespan a bit.</p>
-<h1>Try it yourself!<br></h1><link rel="stylesheet" href="../style.css">
+<h4>Memory:</h4><p><b>Ants can memorize everything they experience.</b><br>
+Finding a straight way back home for example is achieved by memorizing direction (position of the sun) and walking distance.<br>
+In this simulation though an ant can memorize everything you want with</p>
+<pre class="prettyprint source lang-javascript"><code>this.memory.&lt;some topic> = &lt;value>;
 
-<p>A little hands on:<br>
+// examples:
+this.memory.carryingFoodHome = true; // Ant wants to bring food home
+this.memory.totalFoodCarried = 200; // Ant counts how many food was carried
+this.memory.distanceToHive = 10; // Ant tracks distace to hive</code></pre><h1>Try it yourself!<br></h1><p><link rel="stylesheet" href="../style.css">
+A little hands on:<br>
 By default the ant walks towards the food location.
 This resembles one possible solution to the previous tutorial.<br>
 Try now to enhance the code to let the ant walk back with full hands!</p>
@@ -77,7 +86,7 @@ Try now to enhance the code to let the ant walk back with full hands!</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li><li><a href="global.html#isFull">isFull</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li><li><a href="tutorial-11_advanced_moving.html">11_advanced_moving</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li><li><a href="global.html#isFull">isFull</a></li></ul>
 </nav>
 
 <br class="clear">

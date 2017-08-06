@@ -43,6 +43,7 @@ return class SettingsSimulation
 		this.sizeSmellingFactor = 6;
 		this.interactionDistance = 5;
 		this.interactionRange = Math.PI*0.25;
+		this.rotationSpeedReduction = 0.5; // 50% of speed is reduced when rotation is max
 		this.userAntFunction = userAntFunction;
 	}
 	// attribute related settings
@@ -88,6 +89,7 @@ return class SettingsSimulation
 	getSizeSmellingFactor() { return this.sizeSmellingFactor; }
 	getInteractionDistance() { return this.interactionDistance; }
 	getInteractionRange() { return this.interactionRange; }
+	getRotationSpeedReduction() { return this.rotationSpeedReduction; }
 	getUserAntFunction() { return this.userAntFunction; }
 }
 

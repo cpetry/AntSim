@@ -101,7 +101,6 @@ return class AntController extends Controller {
 			}
 			//console.log(result);
 			if (newResult == null) {throw "no result value given!"; }
-			if (newResult.length != 3){throw "User input incorrect - return value needs 3 elements!"; }
 			if (newResult[0] < 0 || newResult[0] > 4){throw "User input incorrect - First element has to be a ActionType!"; }
 			else
 				result = newResult;

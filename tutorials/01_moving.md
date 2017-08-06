@@ -1,13 +1,13 @@
 Ants in this simulation do not know where they are exactly.<br>
 They only know what they see and smell. All other objects are unknown.
 
-<img src="../images/sight_smell.svg" width="100%" height="140px">
+<img src="../images/tutorial_01move.svg" width="100%" height="140px">
 
 Each ant though can <b>turn around and walk</b> to perceive more of its surroundings.
 The direction and rotation are both <b>relative</b> to the ants current location and rotation.
 
-### Move command
 
+### Move command
 The command looks like this: 
 ```javascript
 [ActionType.MOVE, DirectionType.<direction>, <rotation>];
@@ -24,21 +24,11 @@ var degree = radToDeg( radians )
 #### Examples:
 ```javascript
 [ActionType.MOVE, DirectionType.NONE, 25];        // rotate 25° to the left
-[ActionType.MOVE, DirectionType.FORWARD, -15];    // rotate 15° to the right
+[ActionType.MOVE, DirectionType.FORWARD, radToDeg(-0.7854)];    // rotate 45° to the right
 [ActionType.MOVE, DirectionType.BACKWARD, rand(-30, 30)]; // walk backward with a random rotation (-30°,30°)
 ```
 
-### Maximum rotation
-
-The maximum rotation value depends on the direction.
-Standing still allows the most rotation, whereas walking backwards minimizes rotation.<br>
-The exact maximum rotation can be returned by
-```javascript 
-var maxRotation = this.getMaximumRotation(<Direction>);
-```
-
 ### Rotation towards objects
-
 By moving around the ants perception of the world changes.
 Distance and rotation to other objects are updated each iteration.
 
@@ -51,9 +41,7 @@ var rotationTowardsFood = nearestFood.getRotationToObj();
 ```
 
 # Try it yourself!<br>
-
 <link rel="stylesheet" href="../style.css">
-
 A little hands on:<br>
 By default the ant walks randomly around.
 Try to let the ant walk towards the green food source!
