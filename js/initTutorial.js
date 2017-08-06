@@ -12,6 +12,28 @@ window.requestAnimationFrame = function() {
         }
 }();
 
+
+var child = document.createElement('div');
+child.innerHTML = `
+<div style="width:850px;">
+	<div style="width:550px; float:left;">
+		<input type="button" value="run" id="runTutorial" >
+		<input type="button" value="cheat" id="cheat" >
+		<div id="customAntContainer" style="height:150px;margin:10px;">
+			<pre id="editor"></pre>
+		</div>
+	</div>
+	<div style="width:250px; float:right; text-align:center;">
+		<canvas width="250" height="200" class="terrarium" id="canvasTutorial"></canvas>
+		<input type="checkbox" value="speedUp" id="speedUp">SpeedUp!
+		<input type="checkbox" value="debug"   id="debug">debug
+	</div>
+	<div style="clear:both;"></div>
+</div>`
+
+var insertNode = document.getElementById("tutorialPart");	
+insertNode.parentNode.insertBefore(child, insertNode);
+
 SettingsGlobal.setFramesPerSecond(15);
 
 requirejs([ 'external/seedrandom/seedrandom',
@@ -80,7 +102,18 @@ return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`
 	
 	function cheat(part){
 		editor.setValue("// CHEATER! :)\n" + defaultValues[part], -1); // -1 set cursor to begin
+		startTutorial(part);
 	};
+	
+	function speedUp(enabled){
+		SettingsGlobal.setFramesPerSecond(enabled ? 60 : 15);
+	}
+	
+	function debug(enabled){
+		Debug.setVisibility(enabled);
+		Debug.setShowFoodAmount(enabled);
+		Debug.setShowSmellingDistance(enabled);
+	}
 
 	function startTutorial(part){
 		userAntFunction = new Function(editor.getValue());
@@ -96,6 +129,8 @@ return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`
 
 	document.getElementById("cheat").onclick = function(){cheat(tutorialPart)};
 	document.getElementById("runTutorial").onclick = function(){startTutorial(tutorialPart)};
+	document.getElementById("speedUp").onclick = function(){ speedUp(document.getElementById("speedUp").checked) };
+	document.getElementById("debug").onclick = function(){ debug(document.getElementById("debug").checked) };
 	
 	// show default behaviour before user has coded
 	startTutorial(tutorialPart);

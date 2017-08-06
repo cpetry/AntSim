@@ -42,7 +42,7 @@ return class Tutorial extends Simulation {
 		// First ant should be some kind of a scout.
 		// Explain vision, smell and basic action concept.
 		// Let it find the food and MOVE to it.
-		var newGenes = [0.05,0.15,0.8];
+		var newGenes = [0.15,0.15,0.7];
 		var antPos = { x: 30 + this.hives[0].getPosition().x , y: this.hives[0].getPosition().y };
 		var rotation = 1.57; // downwards
 		var newAnt = new AntGenetic(this.canvas, antPos, rotation, this.settings, newGenes, this.allObjects, this.hives[0].getID());
@@ -52,15 +52,18 @@ return class Tutorial extends Simulation {
 		// Tutorial 2 should fortify this concept and the scout is to harvest 
 		// and return back to the hive with food.
 		// Explain that the hive can produce ants.
-		if (this.part >= 2){
-			
-		}
 
 		// In tutorial 3 create different ants good for harvesting and carrying food.
 		// Introduce queen advising concept to user. This time though decide for "worker type"
 		// Give hive some extra food and create 3 worker ants
-		if (this.part >= 3){
-			
+		if (this.part == 4){
+			var newGenes = [0.8,0.15,0.05];
+			var antPos = { x: -30 + this.hives[0].getPosition().x , y: this.hives[0].getPosition().y };
+			var rotation = 3.14; // left
+			for (var i=0; i<3;i++){
+				var newAnt = new AntGenetic(this.canvas, antPos, rotation, this.settings, newGenes, this.allObjects, this.hives[0].getID());
+				this.hives[0].ants.push(newAnt);
+			}
 		}
 		
 		// For tutorial 4 create strong soldier ants to fight off spider.
@@ -83,8 +86,8 @@ return class Tutorial extends Simulation {
 			this.finishedFunc();
 		}
 		
-		else if (firstAnt.collidesWith(this.checkAreaHive) 
-		&& this.part == 2
+		else if (this.part == 2
+		&& firstAnt.collidesWith(this.checkAreaHive) 
 		&& firstAnt.getFoodStorage() == firstAnt.getMaxFoodStorage()){
 			// Ant is full and back at the hive
 			// end the second tutorial
@@ -92,11 +95,18 @@ return class Tutorial extends Simulation {
 			this.finishedFunc();
 		}
 		
-		else if (firstAnt.collidesWith(this.checkAreaHive) && this.part == 3
-		&& firstAnt.getFoodStorage() == firstAnt.getMaxFoodStorage()){
-			// Ant has "called" other ants with pheromones to food
-			// they have returned all of the food back to the hive
+		else if (this.part == 3
+		&& this.hives[0].ants.length == 2){
+			// Another ant was created! woohoo!
 			// end the third tutorial
+			this.isFinished = true;
+			this.finishedFunc();
+		}
+
+		else if (this.part == 4
+		&& this.hives[0].ants.length > 4){
+			this.isFinished = true;
+			this.finishedFunc();
 		}
 		
 		else if (firstAnt.collidesWith(this.checkAreaHive) && this.part == 4

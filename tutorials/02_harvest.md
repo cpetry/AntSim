@@ -16,10 +16,6 @@ The command looks like this:
 ```
 Note: Normally ants don't cannibalise other ants. In this simulation though, it's a fight for survival!<br>
 
-##### Nice to know:
-While an ant carries food, it sometimes snacks a bit from it.
-This increases the ants vitality and increases the ants lifespan a bit.
-
 
 #### Memory:
 <b>Ants can memorize everything they experience.</b><br>
@@ -40,29 +36,16 @@ A little hands on:<br>
 By default the ant walks towards the food location.
 This resembles one possible solution to the previous tutorial.<br>
 Try now to enhance the code to let the ant walk back with full hands!
-<div style="width:850px;">
-	<div style="width:550px; float:left;">
-		<input type="number" value="2" id="tutorialPart" style="display:none">
-		<input type="button" value="run" id="runTutorial" >
-		<input type="button" value="cheat" id="cheat" >
-		<div id="customAntContainer" style="height:150px;margin:10px;">
-			<pre id="editor"></pre>
-		</div>
-	</div>
-	<div style="width:250px; float:right;">
-		<canvas width="250" height="200" class="terrarium" id="canvasTutorial"></canvas>
-	</div>
-	<div style="clear:both;"></div>
-</div>
+
+<script src="../js/external/ace_min_noconflict/ace.js"></script>
+<script src="../js/external/ace_min_noconflict/ext-language_tools.js"></script>
+<script src="../js/settingsGlobal.js"></script>
+<script src="../js/debug.js"></script>
+<script src="../js/globals.js"></script>
+<script data-main="../js/initTutorial" src="../js/external/require.js"></script>
+<input type="number" value="2" id="tutorialPart" style="display:none">
+
 <div id="finished" style="display:none;">
 	<b>Congratulations!</b><br>
 	You can now continue with the [Transfer]{@tutorial 03_transfer} tutorial.
 </div>
-<script src="../js/external/ace_min_noconflict/ace.js"></script>
-<script src="../js/external/ace_min_noconflict/ext-language_tools.js"></script>
-
-<script src="../js/settingsGlobal.js"></script>
-<script src="../js/debug.js"></script>
-<script src="../js/globals.js"></script>
-
-<script data-main="../js/initTutorial" src="../js/external/require.js"></script>
