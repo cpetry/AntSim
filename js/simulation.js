@@ -126,7 +126,7 @@ return class Simulation {
 	}
 
 	simulate(){
-		iterate();
+		this.iterate();
 
 		this.spiderCreation();
 		this.foodCreation();
