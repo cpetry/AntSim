@@ -1,5 +1,5 @@
-define(['animal', 'pheromone', 'antController','antControllerSimple', 'antControllerNeuralNet'], 
-function(Animal, Pheromone, AntController, AntControllerSimple, AntControllerNeuralNet) {
+define(['animal', 'pheromone', 'antController','antControllerNeuralNet'], 
+function(Animal, Pheromone, AntController, AntControllerNeuralNet) {
 
 /**
  * Ant
@@ -43,13 +43,11 @@ return class Ant extends Animal {
 		this._pheromoneDecayProb = settings.getPheromoneDecayProb();
 		
 		var controller=null;
-		if (settings.getAntType() == AntType.CUSTOM)
-			controller = new AntController(this, settings.getUserAntFunction())
-		else if (settings.getAntType() == AntType.NEURALNET)
-			controller = new AntControllerNeuralNet(this, settings.neuralNetwork);
+		if (settings.getAntType() == AntType.NEURALNET)
+			controller = new AntControllerNeuralNet(this, settings.neuralNetwork, settings.getUserAntFunction());
 		else
-			controller = new AntControllerSimple(this);
-
+			controller = new AntController(this, settings.getUserAntFunction())
+		
 		this.setController(controller);
 	}
 	

@@ -18,8 +18,7 @@ return class AntController extends Controller {
 		this.food = 0;
 		this.foodMax = 0;
 		// simulation constructor is called directly
-		if (new.target === AntController)
-			this.userAntFunction = userAntFunction;
+		this.userAntFunction = userAntFunction;
 		
 		this.setAttributes(ant);
 	}

@@ -20,26 +20,12 @@
 		</div>
 		<div id="all">
 			<div id="simulationContainer">
-				<!-- Editor stuff -->
-				<div id="editorButtons">
-					<a target="_blank" href="./user-code_doc/AntController.html">API</a>
-					<input type="button" value="Run" id="runButton">
-					<input type="button" value="Editor" onclick="editorClicked()">
-				</div>
-				
-				<div id="customAntContainer" style="display:none;">
-					<pre id="editor"></pre>
-				</div>
-				
-				<!-- Graphs -->
-				<div align="center" id="graphs" style="display:none;"></div>
-				
 				<!-- Training view -->
 				<div id="trainingContainer">
 					AntType<select id="AntType" size="1"> 
+						<option selected>Custom</option> 
 						<option>Simple</option> 
-						<option>Custom</option> 
-						<option selected>NeuralNet</option>
+						<option>NeuralNet</option>
 					</select>
 					HiveType<select id="HiveType" size="1"> 
 						<option selected>Default</option> 
@@ -49,6 +35,22 @@
 					<input type="button" value="test"  id="testTrainingButton">
 					<input type="button" value="reset" id="resetTrainingButton">
 				</div>
+				
+				<!-- Editor stuff -->
+				<div id="editorButtons">
+					<a target="_blank" href="./user-code_doc/AntController.html">API</a>
+					<input type="button" value="Run" id="runButton">
+					<input type="button" value="Editor" onclick="editorClicked()">
+					<input type="checkbox" id="showUI"  checked /> ShowUI <br/>
+				</div>
+				
+				<div id="customAntContainer" style="display:none;">
+					<pre id="editor"></pre>
+				</div>
+				
+				<!-- Graphs -->
+				<div align="center" id="graphs" style="display:none;"></div>
+				
 				<!-- Simulation view -->
 				<div id="terrariumContainer" style="display:none;">
 					<canvas align="center" width="600" height="350" class="terrarium" id="canvasSimulation"></canvas>
@@ -61,9 +63,8 @@
 			</div>
 			<div id="settings">Settings<br/>
 				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
-				<input type="checkbox" id="showUI"  onchange="setUI()" checked /> ShowUI <br/>
 				Frame<input type="number" id="frame" style="width:50px" value="0" readonly/><br/>
-				FPS<input type="number" id="fps" style="width:50px" value="15" max="60" min="1" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
+				FPS<input type="number" id="fps" style="width:50px" value="30" max="60" min="1" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
 				<div>Debug stuff<br/>
 					<input type="checkbox" id="debugShowLife" onchange="Debug.setShowLife(document.getElementById('debugShowLife').checked);" /> Show life <br/>
 					<input type="checkbox" id="debugVisibility" onchange="Debug.setVisibility(document.getElementById('debugVisibility').checked);" /> Show visibility <br/>
@@ -90,5 +91,7 @@
 		<!-- undependant -->
 		<script src="./js/debug.js"></script>
 		<script src="./js/globals.js"></script>
+		<script src="./exampleAnts/simpleAnt.js"></script>
+		<script src="./exampleAnts/neuralNetworkAnt.js"></script>
 	</body>
 </html>
