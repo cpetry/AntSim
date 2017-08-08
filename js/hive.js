@@ -53,7 +53,8 @@ return class Hive extends SmellableObject {
 			this._foodStorageHive = tooMuch;
 			this.createAnt(allObjects)
 		}
-		this._foodStorageHive += additionalFood;
+		else
+			this._foodStorageHive += additionalFood;
 	}
 
 	draw(){

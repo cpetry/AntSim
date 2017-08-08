@@ -38,8 +38,8 @@ return class SettingsSimulation
 		this.spiderSmellingDistance = 50;
 		this.spiderVisibilityDistance = 30;
 		this.spiderVisibilityRange = 0.8;
-		this.pheromoneSize = 15; // sets the smelling distance 
-		this.pheromoneDecayProb = 0.35; 
+		this.pheromoneSize = 12; // sets the smelling distance 
+		this.pheromoneDecayProb = 0.12; 
 		this.sizeSmellingFactor = 6;
 		this.interactionDistance = 5;
 		this.interactionRange = Math.PI*0.25;

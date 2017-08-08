@@ -17,17 +17,18 @@ return class AntGenetic extends Ant {
 		
 		// Abilities
 		// Strength type
-		this._decayProb     *= (1/this.getStrength());
-		this._foodBonusProb *= (1/this.getStrength()); // less life loss when carrying food
-		this._foodMaxAnt    *= this.getStrength();
-		this._foodMaxHarvestAmount *= this.getStrength();
+		var str = this.getStrength();
+		this._decayProb     *= (1/str);
+		this._foodBonusProb *= (1/str); // less life loss when carrying food
+		this._foodMaxAnt    *= str*str;
+		this._foodMaxHarvestAmount *= str*str;
 		// Agility type
 		this._speed         *= this.getAgility();
 		this._speedRotation *= this.getAgility(); // radians
 		// Sensitivity type
-		this._smellingDistance   *= this.getSensitivity();
-		this._visibilityDistance *= this.getSensitivity();
-		this._visibilityRangeRad *= this.getSensitivity();
+		this._smellingDistance   = this._smellingDistance * 0.8 * (0.25 + this.getSensitivity());
+		this._visibilityDistance = this._visibilityDistance * 0.5 * (1 + this.getSensitivity());
+		this._visibilityRangeRad = this._visibilityRangeRad * 0.5 * (1 + this.getSensitivity());
 	}	
 	getStrength(){return this._strength;}
 	getAgility(){return this._agility;}

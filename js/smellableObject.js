@@ -43,7 +43,7 @@ return class SmellableObject extends Collider {
 		}
 		
 		var distance = getDistance(this.getPosition(), animal.getPosition());
-		if (distance <= 0)
+		if (distance < 0)
 			throw new TypeError("Distance (" + distance + ") incorrect!")
 		// [0, 1] <-> [0, smellingDistance+smellDistance] 
 		var farthest = animal.getSmellingDistance() + this.getSmellDistance();

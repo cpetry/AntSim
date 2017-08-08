@@ -37,6 +37,11 @@ return class Ant extends Animal {
 		this._collidedWithSth = null;
 		this._wasAttacked = false;
 		
+		// as pheromones are created by ants, settings reside here
+		this._pheromoneSize = settings.getPheromoneSize();
+		this._pheromoneSmellingFactor = settings.getSizeSmellingFactor();
+		this._pheromoneDecayProb = settings.getPheromoneDecayProb();
+		
 		var controller=null;
 		if (settings.getAntType() == AntType.CUSTOM)
 			controller = new AntController(this, settings.getUserAntFunction())
@@ -79,7 +84,7 @@ return class Ant extends Animal {
 	giveAwayFood(amount){
 		if (amount > this.getFoodStorage()){
 			// should not happen!
-			console.log("ERROR - Too much food to give away!")
+			throw new TypeError("ERROR - Too much food to give away! (" + amount + ")")
 			amount = this.getFoodStorage();
 		}
 		this._foodStorageAnt -= amount;
@@ -94,6 +99,12 @@ return class Ant extends Animal {
 			additionalFood = amount - tooMuch;
 		}
 		this._foodStorageAnt += additionalFood;
+	}
+	
+	createPheromone(type, allObjects){
+		var p = new Pheromone(this.getCanvas(), this.getPosition(), this.getParentID(), 
+			this._pheromoneSize, this._pheromoneSmellingFactor, this._pheromoneDecayProb, type);
+		allObjects.push(p);
 	}
 
 	draw(){

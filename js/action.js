@@ -45,9 +45,9 @@ return class Action {
 			return Action.transferFood(obj, parameter1, parameter2, allObjects);
 		}
 		else if (type == ActionType.PHEROMONE){
-			if (action.length != 1)
-				throw new TypeError("ActionType.PHEROMONE doesn't need an additional argument!");
-			return Action.createPheromone(obj, allObjects);
+			if (action.length != 2)
+				throw new TypeError("ActionType.PHEROMONE needs an additional PheromoneType argument!");
+			return Action.createPheromone(obj, parameter1, allObjects);
 		}
 		else
 			throw new TypeError("Unknown ActionType ("+ type +")!");
@@ -137,10 +137,14 @@ return class Action {
 		}
 	}
 	
-	static createPheromone(animal, allObjects){
+	static createPheromone(animal, type, allObjects){
 		// is animal able to create pheromones?
-		if (animal.createPheromone){
-			animal.createPheromone(allObjects);
+		if (animal.createPheromone
+		&& (type == PheromoneType.ATTACK
+		|| type == PheromoneType.DEFEND
+		|| type == PheromoneType.FOOD
+		|| type == PheromoneType.DANGER)){
+			animal.createPheromone(type, allObjects);
 			return true;
 		}
 		else {

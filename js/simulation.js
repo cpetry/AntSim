@@ -84,8 +84,8 @@ return class Simulation {
 		}
 		throw new TypeError("No food found that matches obj");
 	}
-
-	simulate(){
+	
+	iterate(){
 		// Iterate through all objects
 		for (var i = 0; i < this.allObjects.length; ++i){
 			var obj = this.allObjects[i];
@@ -97,8 +97,7 @@ return class Simulation {
 					var h = this.getHiveIndexFromParentID(obj.getParentID())
 					var a = this.getAntIndexFromID(h, obj.getID())
 					if (obj.wasAttacked()){
-						var p = new Pheromone(this.canvas, obj.getPosition(), obj.getParentID(), this.settings, PheromoneType.DANGER);
-						this.allObjects.push(p);
+						obj.createPheromone(PheromoneType.DANGER, this.allObjects);
 					}
 					this.hives[h].removeAnt(obj, a, this.allObjects);
 					this.food.push(new AntDead(obj, this.settings, this.allObjects));
@@ -124,6 +123,10 @@ return class Simulation {
 			else if (obj.iterate)
 				obj.iterate(this.allObjects);
 		}
+	}
+
+	simulate(){
+		iterate();
 
 		this.spiderCreation();
 		this.foodCreation();

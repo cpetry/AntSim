@@ -26,8 +26,7 @@ return class Food extends SmellableObject {
 	
 	harvest(harvestAmount){
 		if (harvestAmount > this.getAmount()){
-			console.log("Error! Harvest food amount not possible!");
-			this._amount = 0;
+			throw new TypeError("Error! Harvest food amount not possible!");
 		}
 		else {
 			this._amount -= harvestAmount;

@@ -57,10 +57,10 @@ return class Tutorial extends Simulation {
 		// Introduce queen advising concept to user. This time though decide for "worker type"
 		// Give hive some extra food and create 3 worker ants
 		if (this.part == 4){
-			var newGenes = [0.8,0.15,0.05];
-			var antPos = { x: -30 + this.hives[0].getPosition().x , y: this.hives[0].getPosition().y };
+			var newGenes = [0.7,0.15,0.15];
+			var antPos = { x: this.hives[0].getPosition().x , y: 30 + this.hives[0].getPosition().y };
 			var rotation = 3.14; // left
-			for (var i=0; i<3;i++){
+			for (var i=0; i<2;i++){
 				var newAnt = new AntGenetic(this.canvas, antPos, rotation, this.settings, newGenes, this.allObjects, this.hives[0].getID());
 				this.hives[0].ants.push(newAnt);
 			}
@@ -104,7 +104,8 @@ return class Tutorial extends Simulation {
 		}
 
 		else if (this.part == 4
-		&& this.hives[0].ants.length > 4){
+		&& this.hives[0].ants.length == 5
+		&& this.iteration < 1500){
 			this.isFinished = true;
 			this.finishedFunc();
 		}
@@ -115,12 +116,7 @@ return class Tutorial extends Simulation {
 			// end the fourth tutorial
 		}
 		
-		// iterate after all deaths have been applied
-		for (var i = 0; i < this.allObjects.length; ++i){
-			var obj = this.allObjects[i];
-			if (obj.iterate)
-				obj.iterate(this.allObjects);
-		}
+		super.iterate();
 	}
 	
 	loop(){
@@ -132,6 +128,7 @@ return class Tutorial extends Simulation {
 			this.simulate();
 			this.clear();
 			this.draw();
+			this.iteration++;
 		}
 		requestID = requestAnimationFrame( this.loop.bind(this) );		
 	}

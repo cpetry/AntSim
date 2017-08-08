@@ -51,6 +51,19 @@ return class AntController extends Controller {
 		
 		this.setAttributes(ant);
 	}
+
+	setAttributes(ant){
+		super.setAttributes(ant);
+		this.parentID = ant.getParentID();
+		this.food = ant.getFoodStorage();
+		this.foodMax = ant.getMaxFoodStorage();
+		this.maxRotation = ant.getMaxRotation();
+		this.genes = { 
+			'strength' : ant.getStrength(),
+			'agility' : ant.getAgility(),
+			'sensitivity' : ant.getSensitivity()
+		};
+	}
 	
 	static createEditor(elementID, defaultValue){
 		var antControllerWordCompleter = {
@@ -105,13 +118,6 @@ return class AntController extends Controller {
 				];
 	}
 	
-	setAttributes(ant){
-		super.setAttributes(ant);
-		this.parentID = ant.getParentID();
-		this.food = ant.getFoodStorage();
-		this.foodMax = ant.getMaxFoodStorage();
-		this.maxRotation = ant.getMaxRotation();
-	}
 	
 	getAction(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
@@ -162,17 +168,25 @@ return class AntController extends Controller {
 	getMaxFoodStorage(){return this.foodMax;}
 
 	/**
-	*
+	* Checks if the ant has food capacity left or not.
+	* @return {bool} is full.
 	*/
 	isFull(){return this.food==this.foodMax;}
 	
 	getMaximumRotation(){ return this.maxRotation;}
 	
+	/**
+	* Gets this ants genetic configuration. Access the attributes strength, agility and sensitivity like this:
+	* &lt;ant>.getGenes().strength.
+	* @return {dict} gene dictionary.
+	*/
+	getGenes() {return this.genes;}
+	
 	getNearestEnemyAnt(){
 		var minDist = 1000;
 		var prey = null;
 		for (var id in this.visibleObjs){
-			if(this.visibleObjs[id].getType() == ObjectType.ANT
+			if(this.visibleObjs[id].getObjectType() == ObjectType.ANT
 			&amp;&amp; this.visibleObjs[id].getParentID() != this.getParentID()
 			&amp;&amp; this.visibleObjs[id].getDistanceToObj() &lt; minDist){
 				minDist = this.visibleObjs[id].getDistanceToObj();
@@ -181,7 +195,7 @@ return class AntController extends Controller {
 		}
 		if(prey==null){
 			for (var id in this.smelledObjs){
-				if(this.smelledObjs[id].getType() == ObjectType.ANT
+				if(this.smelledObjs[id].getObjectType() == ObjectType.ANT
 				&amp;&amp; this.smelledObjs[id].getParentID() != this.getParentID()
 				&amp;&amp; this.smelledObjs[id].getDistanceToObj() &lt; minDist){
 					minDist = this.smelledObjs[id].getDistanceToObj();
@@ -189,13 +203,26 @@ return class AntController extends Controller {
 				}
 			}
 		}
-		return prey;		
+		return prey;
+	}
+	
+	getFarthestPheromoneOfType(type){
+		var maxDist = 0;
+		var pheromone = null;
+		for (var id in this.smelledObjs){
+			if(this.smelledObjs[id].getObjectType() == ObjectType.PHEROMONE
+			&amp;&amp; this.smelledObjs[id].getPheromoneType() == type){
+				maxDist = this.smelledObjs[id].getDistanceToObj();
+				var pheromone = this.smelledObjs[id];
+			}
+		}
+		return pheromone;
 	}
 	
 	getOwnHive(){
 		var hive = null;
 		for (var id in this.visibleObjs){
-			if (this.visibleObjs[id].getType() == ObjectType.HIVE
+			if (this.visibleObjs[id].getObjectType() == ObjectType.HIVE
 			&amp;&amp; this.visibleObjs[id].getParentID() == this.getParentID()){
 				hive = this.visibleObjs[id];
 			}
@@ -204,7 +231,7 @@ return class AntController extends Controller {
 		// no food visible -> try smelling
 		if (hive == null){
 			for (var id in this.smelledObjs){
-				if (this.smelledObjs[id].getType() == ObjectType.HIVE
+				if (this.smelledObjs[id].getObjectType() == ObjectType.HIVE
 				&amp;&amp; this.smelledObjs[id].getParentID() == this.getParentID()){
 					hive = this.smelledObjs[id];
 				}
@@ -224,7 +251,7 @@ return class AntController extends Controller {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li><li><a href="tutorial-11_advanced_moving.html">11_advanced_moving</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li><li><a href="global.html#isFull">isFull</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li><li><a href="tutorial-11_advanced_moving.html">11_advanced_moving</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getGenes">getGenes</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li><li><a href="global.html#isFull">isFull</a></li></ul>
 </nav>
 
 <br class="clear">

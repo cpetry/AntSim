@@ -130,7 +130,7 @@ return class Animal extends SmellableObject {
 			if (this == objects[i] || objects[i].getObjectType() == ObjectType.PHEROMONE)
 				continue;
 			var objPos = objects[i].getPosition();
-			var distToObj = getDistance(objPos, this.getPosition());
+			var distToObj = getDistance(objPos, this.getPosition()) - objects[i].getSize();
 			// check distance
 			if (distToObj < this.getVisibilityDistance()){
 				// TODO some error in calculating radians
@@ -164,13 +164,16 @@ return class Animal extends SmellableObject {
 				var distance = getDistance(pos, this.getPosition())
 				var rotation = this.getAngleToPos(pos);
 				var type = objects[i].getObjectType();
+				var pheromoneType = PheromoneType.NONE;
 				var parentID = null;
 				if (type == ObjectType.HIVE)
 					parentID = objects[i].getID();
 				else if (type == ObjectType.ANT || type == ObjectType.PHEROMONE)
 					parentID = objects[i].getParentID();
+				if (type == ObjectType.PHEROMONE)
+					pheromoneType = objects[i].getPheromoneType();
 
-				this._smelledObjs[objects[i].getID()] = new SmellableObjectProxy(this.getCanvas(), parentID, distance, rotation, type);
+				this._smelledObjs[objects[i].getID()] = new SmellableObjectProxy(this.getCanvas(), parentID, distance, rotation, type, pheromoneType);
 			}
 		}
 	}

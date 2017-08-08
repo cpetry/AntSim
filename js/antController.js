@@ -23,6 +23,19 @@ return class AntController extends Controller {
 		
 		this.setAttributes(ant);
 	}
+
+	setAttributes(ant){
+		super.setAttributes(ant);
+		this.parentID = ant.getParentID();
+		this.food = ant.getFoodStorage();
+		this.foodMax = ant.getMaxFoodStorage();
+		this.maxRotation = ant.getMaxRotation();
+		this.genes = { 
+			'strength' : ant.getStrength(),
+			'agility' : ant.getAgility(),
+			'sensitivity' : ant.getSensitivity()
+		};
+	}
 	
 	static createEditor(elementID, defaultValue){
 		var antControllerWordCompleter = {
@@ -77,13 +90,6 @@ return class AntController extends Controller {
 				];
 	}
 	
-	setAttributes(ant){
-		super.setAttributes(ant);
-		this.parentID = ant.getParentID();
-		this.food = ant.getFoodStorage();
-		this.foodMax = ant.getMaxFoodStorage();
-		this.maxRotation = ant.getMaxRotation();
-	}
 	
 	getAction(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
@@ -101,7 +107,7 @@ return class AntController extends Controller {
 			}
 			//console.log(result);
 			if (newResult == null) {throw "no result value given!"; }
-			if (newResult[0] < 0 || newResult[0] > 4){throw "User input incorrect - First element has to be a ActionType!"; }
+			if (newResult[0] < 0 || newResult[0] > ActionType.length){throw "User input incorrect - First element has to be a ActionType!"; }
 			else
 				result = newResult;
 		}
@@ -134,17 +140,25 @@ return class AntController extends Controller {
 	getMaxFoodStorage(){return this.foodMax;}
 
 	/**
-	*
+	* Checks if the ant has food capacity left or not.
+	* @return {bool} is full.
 	*/
 	isFull(){return this.food==this.foodMax;}
 	
 	getMaximumRotation(){ return this.maxRotation;}
 	
+	/**
+	* Gets this ants genetic configuration. Access the attributes strength, agility and sensitivity like this:
+	* <ant>.getGenes().strength.
+	* @return {dict} gene dictionary.
+	*/
+	getGenes() {return this.genes;}
+	
 	getNearestEnemyAnt(){
 		var minDist = 1000;
 		var prey = null;
 		for (var id in this.visibleObjs){
-			if(this.visibleObjs[id].getType() == ObjectType.ANT
+			if(this.visibleObjs[id].getObjectType() == ObjectType.ANT
 			&& this.visibleObjs[id].getParentID() != this.getParentID()
 			&& this.visibleObjs[id].getDistanceToObj() < minDist){
 				minDist = this.visibleObjs[id].getDistanceToObj();
@@ -153,7 +167,7 @@ return class AntController extends Controller {
 		}
 		if(prey==null){
 			for (var id in this.smelledObjs){
-				if(this.smelledObjs[id].getType() == ObjectType.ANT
+				if(this.smelledObjs[id].getObjectType() == ObjectType.ANT
 				&& this.smelledObjs[id].getParentID() != this.getParentID()
 				&& this.smelledObjs[id].getDistanceToObj() < minDist){
 					minDist = this.smelledObjs[id].getDistanceToObj();
@@ -161,13 +175,27 @@ return class AntController extends Controller {
 				}
 			}
 		}
-		return prey;		
+		return prey;
+	}
+	
+	getNextPheromoneOfType(type){
+		var minRot = 360;
+		var pheromone = null;
+		for (var id in this.smelledObjs){
+			if(this.smelledObjs[id].getObjectType() == ObjectType.PHEROMONE
+			&& this.smelledObjs[id].getPheromoneType() == type
+			&& Math.abs(this.smelledObjs[id].getRotationToObj()) < minRot){
+				minRot = Math.abs(this.smelledObjs[id].getRotationToObj())
+				var pheromone = this.smelledObjs[id];
+			}
+		}
+		return pheromone;
 	}
 	
 	getOwnHive(){
 		var hive = null;
 		for (var id in this.visibleObjs){
-			if (this.visibleObjs[id].getType() == ObjectType.HIVE
+			if (this.visibleObjs[id].getObjectType() == ObjectType.HIVE
 			&& this.visibleObjs[id].getParentID() == this.getParentID()){
 				hive = this.visibleObjs[id];
 			}
@@ -176,7 +204,7 @@ return class AntController extends Controller {
 		// no food visible -> try smelling
 		if (hive == null){
 			for (var id in this.smelledObjs){
-				if (this.smelledObjs[id].getType() == ObjectType.HIVE
+				if (this.smelledObjs[id].getObjectType() == ObjectType.HIVE
 				&& this.smelledObjs[id].getParentID() == this.getParentID()){
 					hive = this.smelledObjs[id];
 				}

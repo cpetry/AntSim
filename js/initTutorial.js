@@ -89,9 +89,62 @@ if (this.memory.harvestedFood && hive !== null){
 	else
 		return [ActionType.MOVE, DirectionType.FORWARD, hive.getRotationToObj()];
 }
-return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`
+return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`,
+// PHEROMONE tutorial
+`var hive = this.getOwnHive();
+var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
+var isScout = (this.getGenes().sensitivity > 0.7);
+var nextPheromone = this.getNextPheromoneOfType(PheromoneType.FOOD);
+// ant has collided with sth -> try to walk around it
+if (this.hasCollidedWithID() != -1){
+	return [ActionType.MOVE, DirectionType.FORWARD, 45];
+}
 
-];
+// return food if ant harvested some but doesn't see food source anymore
+if (nearestFood === null && !this.memory.harvestedFood && this.getFoodStorage() > 0)
+	this.memory.harvestedFood = true;
+	
+// try to find food
+if ((nearestFood !== null || (nextPheromone !== null && !isScout)) && !this.memory.harvestedFood){
+	if(nearestFood !== null && nearestFood.canBeInteractedWith(this)){
+		this.memory.harvestedFood = this.isFull();
+		this.memory.lastPheromoneSet = 0;
+		return [ActionType.HARVEST, nearestFood];
+	}
+	else {
+		if (nearestFood !== null)
+			return [ActionType.MOVE, DirectionType.FORWARD, nearestFood.getRotationToObj()];
+		else if (nextPheromone !== null)
+			return [ActionType.MOVE, DirectionType.FORWARD, nextPheromone.getRotationToObj()+15];
+	}
+
+}
+
+// bring food back home
+if (this.memory.harvestedFood && hive !== null){
+	if (isScout)
+		this.memory.lastPheromoneSet +=1;
+	if (this.memory.lastPheromoneSet > 25){
+		this.memory.lastPheromoneSet = 0;
+		return [ActionType.PHEROMONE, PheromoneType.FOOD];
+	}
+	if(hive.canBeInteractedWith(this)){
+		this.memory.harvestedFood = false;
+		return [ActionType.TRANSFER, hive, this.getMaxFoodStorage()];
+	}
+	else {
+		return [ActionType.MOVE, DirectionType.FORWARD, hive.getRotationToObj()];
+	}
+}
+
+else if (this.memory.harvestedFood && nextPheromone !== null)
+	return [ActionType.MOVE, DirectionType.FORWARD, nextPheromone.getRotationToObj()];
+
+if (isScout)
+	return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];
+
+return [ActionType.MOVE, DirectionType.NONE, rand(-60,60)];`];
+
 	var editor = AntController.createEditor("editor", defaultValues[tutorialPart-1])
 		
 	function finishedFunc(){
@@ -110,9 +163,14 @@ return [ActionType.MOVE, DirectionType.FORWARD, rand(-60,60)];`
 	}
 	
 	function debug(enabled){
-		Debug.setVisibility(enabled);
-		Debug.setShowFoodAmount(enabled);
-		Debug.setShowSmellingDistance(enabled);
+		if (tutorialPart == 1){
+			Debug.setVisibility(enabled);
+			Debug.setShowSmellingDistance(enabled);
+		}
+		if (tutorialPart == 4){
+			Debug.setShowFoodAmount(enabled);
+			Debug.setShowPheromones(enabled);
+		}
 	}
 
 	function startTutorial(part){

@@ -120,7 +120,7 @@ return class Controller {
 		var minDist = 1000;
 		var nearestOfObjType = null;
 		for (var id in this.visibleObjs){
-			if (this.visibleObjs[id].getType() == objType
+			if (this.visibleObjs[id].getObjectType() == objType
 			&& this.visibleObjs[id].getDistanceToObj() < minDist){
 				minDist = this.visibleObjs[id].getDistanceToObj();
 				nearestOfObjType = this.visibleObjs[id];
@@ -129,7 +129,7 @@ return class Controller {
 		
 		if (nearestOfObjType == null){
 			for (var id in this.smelledObjs){
-				if (this.smelledObjs[id].getType() == objType
+				if (this.smelledObjs[id].getObjectType() == objType
 				&& this.smelledObjs[id].getDistanceToObj() < minDist){
 					minDist = this.smelledObjs[id].getDistanceToObj();
 					nearestOfObjType = this.smelledObjs[id];
