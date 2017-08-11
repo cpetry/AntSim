@@ -73,7 +73,7 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 	
 	function getMessage(e){
 		if ((window.location.protocol != 'file:') 
-		&& e.origin != "https://cpetry.github.io/AntSim/index.html"){
+		&& e.origin != "https://cpetry.github.io"){
 			console.log("Message blocked from: " + e.origin)
 			return;
 		}
