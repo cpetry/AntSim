@@ -53,10 +53,10 @@ div#graphAnts, div#graphStats{
 	height:320px;
 }
 div#graphStats{
-	float:left;
+	float:right;
 }
 div#graphAnts{
-	float:right;
+	float:left;
 }
 div#editorContainer{
 	display:none; /* at first hide it */

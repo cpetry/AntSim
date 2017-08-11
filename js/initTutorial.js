@@ -145,8 +145,8 @@ if (isScout)
 
 return [ActionType.MOVE, DirectionType.NONE, rand(-60,60)];`];
 
-	var editor = AntController.createEditor("editor", defaultValues[tutorialPart-1])
-		
+	var editor = createEditor("editor", defaultValues[tutorialPart-1])
+
 	function finishedFunc(){
 		document.getElementById('finished').style.display = 'block';
 		window.cancelAnimationFrame(requestID);

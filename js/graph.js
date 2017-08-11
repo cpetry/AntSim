@@ -48,7 +48,9 @@ return class Graph {
 		// Draw the graph.
 		var graph = Flotr.draw(document.getElementById('graphStats'), stats, {
 		colors: _FILL_STYLE_TABLE, // table defined in globals
-		radar : { show : true}, 
+		fontSize : 12,
+		resolution : 2,
+		radar : { show : true }, 
 		grid  : { circular : true, minorHorizontalLines : true}, 
 		yaxis : { min : 0, max : 1.2, minorTickFreq : 1, noTicks : 1}, 
 		xaxis : { ticks : ticks}
@@ -58,9 +60,11 @@ return class Graph {
 	updateView(){
 		var options = {
 			colors: _FILL_STYLE_TABLE, // table defined in globals
-		  xaxis: {
-			minorTickFreq: 4
-		  },
+			fontSize : 12,
+			resolution : 2,
+			xaxis: {
+				minorTickFreq: 4
+			},
 		}
 		//console.log(this.d1)
 		var graph = Flotr.draw(document.getElementById('graphAnts'), this.d1, options);

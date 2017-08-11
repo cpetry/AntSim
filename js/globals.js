@@ -119,3 +119,44 @@ function maxElement(tlist) {
 	}
 	return max;
 }
+
+
+
+function createEditor(elementID, defaultValue){
+	var antControllerWordCompleter = {
+		getCompletions: function(editor, session, pos, prefix, callback) {
+			var wordList = AntController.getAutoCompletionWordList();
+			callback(null, wordList.map(function(word) {
+				return {
+					caption: word,
+					value: word,
+					meta: "This ant"
+				};
+			}));
+		}
+	}
+	var globalWordCompleter = {
+		getCompletions: function(editor, session, pos, prefix, callback) {
+			var wordList = ["this."];
+			callback(null, wordList.map(function(word) {
+				return {
+					caption: word,
+					value: word,
+					meta: "global"
+				};
+			}));
+		}
+	}
+	ace.require("ace/ext/language_tools");
+	var customAntEditor = ace.edit(elementID);
+	customAntEditor.$blockScrolling = Infinity;
+	customAntEditor.setTheme("ace/theme/chrome");
+	customAntEditor.session.setMode("ace/mode/javascript");
+	customAntEditor.setOptions({
+		enableBasicAutocompletion: true,
+		enableLiveAutocompletion: true
+	});
+	customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
+	customAntEditor.setValue(defaultValue, -1); // -1 set cursor to begin
+	return customAntEditor;
+}
