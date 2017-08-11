@@ -198,11 +198,18 @@ return class Simulation {
 		if (numLivingClans == 1 && this.hives.length > 1
 		  || numLivingClans == 0)
 		{
+			// create a list of hive stats
+			var hiveStats = [];
+			for (var i = 0; i < this.hives.length; ++i){
+				this.hives[i].sumupStats();
+				hiveStats.push(this.hives[i]._stats);
+			}			
 			Simulation.isFinished = true;
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
 			showGraph(true);
+			this.graph.setStats(hiveStats);
 			this.updateGraph();
 			return;
 		}

@@ -86,6 +86,7 @@ return class Action {
 			var amountBeingHarvested = Math.min(additionalFoodPossibleToCarry, foodPossibleToHarvest);
 			harvestObj.harvest(amountBeingHarvested);
 			harvester.receiveFood(amountBeingHarvested);
+			harvester._stats.harvested += amountBeingHarvested;
 			return true;
 		}
 		else{
@@ -109,6 +110,9 @@ return class Action {
 			var amountBeingTransferred = Math.min(Math.min(foodWantingToGiveAway, foodPossibleToGive), foodPossibleToReceive);
 			receiver.receiveFood(amountBeingTransferred, allObjects);
 			sender.giveAwayFood(amountBeingTransferred);
+			sender._stats.transferred += amountBeingTransferred;
+			if (receiver._stats)
+				receiver._stats.received  += amountBeingTransferred;
 			return true;
 		}
 		else{
@@ -128,7 +132,10 @@ return class Action {
 
 		// check if prey can be attacked
 		if (prey.receiveAttack){
+			hunter._stats.attacked++;
 			prey.receiveAttack(hunter.getAttackDamage());
+			if (prey.getLife()<=0)
+				hunter._stats.killed++;
 			return true;
 		}
 		else{
@@ -145,6 +152,7 @@ return class Action {
 		|| type == PheromoneType.FOOD
 		|| type == PheromoneType.DANGER)){
 			animal.createPheromone(type, allObjects);
+			animal._stats.pheromones++;
 			return true;
 		}
 		else {

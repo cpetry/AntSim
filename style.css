@@ -43,8 +43,20 @@ div#types{
 
 div#graphs{
 	margin: auto;
-	width:600px;
+	padding:20px;
+	width:800px;
 	height:350px;
+}
+div#graphAnts, div#graphStats{
+	margin: auto;
+	width:45%;
+	height:320px;
+}
+div#graphStats{
+	float:left;
+}
+div#graphAnts{
+	float:right;
 }
 div#editorContainer{
 	display:none; /* at first hide it */

@@ -22,12 +22,20 @@ return class Hive extends SmellableObject {
 			this.controller = new HiveController(); // TODO neuralnet hivecontroller
 		else
 			this.controller = new HiveController();
-
+		
+		this._stats = { movedDistance: 0, harvested: 0, transferred: 0, received: 0, 
+						attacked: 0, killed: 0, pheromones: 0, failedActions: 0};
 	}
 	
 	getFoodMaxStorage(){ return this._foodMaxHive;}
 	getFoodStorage(){ return this._foodStorageHive;}
 	getAnts() {return this.ants;}
+	
+	sumupStats(){
+		for (var ant in this.ants)
+			for (var stat in ant._stats)
+				this._stats[stat] += ant._stats[stat];
+	}
 	
 	createAnt(allObjects){
 		var posDistace = this.settings.getAntPositionDistance();
@@ -39,6 +47,9 @@ return class Hive extends SmellableObject {
 	}
 
 	removeAnt(ant, index, allObjects){
+		for (var stat in ant._stats)
+			this._stats[stat] += ant._stats[stat];
+		
 		for (var a =0; a < allObjects.length; a++){
 			if (allObjects[a] == ant)
 				allObjects.splice(a, 1);

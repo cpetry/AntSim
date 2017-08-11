@@ -38,6 +38,10 @@ return class Animal extends SmellableObject {
 		
 		this._visibleObjs = {};
 		this._smelledObjs = {};
+		
+		// stats
+		this._stats = { movedDistance: 0, harvested: 0, transferred: 0, received: 0, 
+						attacked: 0, killed: 0, pheromones: 0, failedActions: 0};
 	}
 
 	getLife(){	return this._life;}
@@ -68,8 +72,11 @@ return class Animal extends SmellableObject {
 		
 		// get action
 		this._controller.setAttributes(this);
-		Action.apply(this, this._controller.getAction(), allObjects);
+		var success = Action.apply(this, this._controller.getAction(), allObjects);
 
+		if (!success)
+			this._stats.failedActions++;
+		
 		// set decay
 		this.age();
 		this._wasAttacked = false;
@@ -102,7 +109,7 @@ return class Animal extends SmellableObject {
 			var rotationPercentage = 1.0 - (rotationDiff / this.getSpeedRotation());
 			moveSpeed *= ((1.0-this._rotationSpeedReduction) + this._rotationSpeedReduction*rotationPercentage);
 		}
-		
+				
 		// attention: has to be copied!
 		var newPos = { x: this.getPosition().x, y: this.getPosition().y};
 		var newHeading = this.getDirectionVec();
@@ -119,6 +126,7 @@ return class Animal extends SmellableObject {
 		// Collider
 		this._collidedWithSth = this.checkCollision(newPos, allObjects);
 		if (this._collidedWithSth === null){
+			this._stats.movedDistance += moveSpeed;
 			this.setPosition(newPos);
 		}
 	}
