@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<!-- Graphs -->
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body style="margin: 0">
+		<div id="simulationContainer">
+			<div id="frameCounter">
+				Frame<input type="number" id="frame" style="width:50px" value="0" readonly /><br/>
+			</div>
+			<div align="center" id="graphs" style="display:none;"></div>
+			<div id="canvasContainer">
+				<canvas align="center" width="600" height="350" class="terrarium" id="canvasSimulation"></canvas>
+			</div>
+			<div id="settings">Settings<br/>
+				FPS<input type="number" id="fps" style="width:50px" value="30" max="60" min="1" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
+				<div id="debugContainer">Debug stuff<br>
+					<input type="checkbox" id="debugShowLife" onchange="Debug.setShowLife(document.getElementById('debugShowLife').checked);" /> Show life <br/>
+					<input type="checkbox" id="debugVisibility" onchange="Debug.setVisibility(document.getElementById('debugVisibility').checked);" /> Show visibility <br/>
+					<input type="checkbox" id="debugCollider" onchange="Debug.setShowCollider(document.getElementById('debugCollider').checked);" /> Show collider <br/>
+					<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
+					<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
+					<input type="checkbox" id="debugSmelledObjectsPosition" onchange="Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);" /> Show smelled object distance <br/>
+					<input type="checkbox" id="debugPheromones" onchange="Debug.setShowPheromones(document.getElementById('debugPheromones').checked);" /> Show pheromones <br/>
+				</div>
+			</div>
+			
+			<!-- no ui -->
+			<div id="NoUI" style="display:none;">...Simulating...</div>
+		</div>
+		<script src="./js/external/flotr2/flotr2.min.js"></script>
+		<script src="./js/settingsGlobal.js"></script>
+
+		<script src="./exampleAnts/simpleAnt.js"></script>
+
+		<!-- undependant -->
+		<script src="./js/debug.js"></script>
+		<script src="./js/globals.js"></script>
+		<script src="./js/external/require.js"></script>
+		<script src="./js/initSimulation.js"></script> 
+	</body>
+</html>	

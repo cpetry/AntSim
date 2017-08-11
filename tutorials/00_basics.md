@@ -1,3 +1,5 @@
+What is AntSim? See the <a href="./index.html">Introduction</a>.
+
 Goal of this first tutorial is to understand programming ants.<br>
 Each iteration ants can execute one specific action:
 

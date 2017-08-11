@@ -190,19 +190,19 @@ return class Simulation {
 	loop(){
 
 		// Check for game ended
-		var numLivingHives = 0
+		var numLivingClans = 0
 		for (var i = 0; i < this.hives.length; ++i)
 			if (this.hives[i].getAnts().length > 0)
-				++numLivingHives;
+				++numLivingClans;
 
-		if (numLivingHives == 1 && this.hives.length > 1
-			  || numLivingHives == 0)
+		if (numLivingClans == 1 && this.hives.length > 1
+		  || numLivingClans == 0)
 		{
 			Simulation.isFinished = true;
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
-			showGraph();
+			showGraph(true);
 			this.updateGraph();
 			return;
 		}
@@ -216,11 +216,12 @@ return class Simulation {
 				this.simulate();
 				this.clear();
 				this.draw();
+				this.iteration++;
+				document.getElementById('frame').value = this.iteration;
+				
 				for (var i = 0; i < this.hives.length; ++i)
 					this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
 
-				this.iteration++;
-				document.getElementById('frame').value = this.iteration;
 			}
 
 			requestID = requestAnimationFrame(this.loop.bind(this));
@@ -228,13 +229,13 @@ return class Simulation {
 		}
 		else {
 			this.simulate();
+			this.iteration++;
+			document.getElementById('frame').value = this.iteration;
+			
 			for (var i = 0; i < this.hives.length; ++i)
 				this.graph.addPoint(this.iteration, i, this.getNumAnts(i));
 
-			this.iteration++;
-			if (SettingsGlobal.getShowUI() || this.iteration % 50 == 0 )
-				document.getElementById('frame').value = this.iteration;
-
+			
 			window.setImmediate(this.loop.bind(this));
 		}
 	}

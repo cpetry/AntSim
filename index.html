@@ -7,91 +7,72 @@
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
+		<div id="info_buttons">
+			<input type="button" value="About" onclick="aboutClicked()">
+		</div>
 		<div id="header">
 			<img src="./images/ant150px.png" />AntSim <img class="flipped" src="./images/ant150px.png" />
 		</div>
 		<div style="height:20px;"></div>
 		<div id="options">
-			<input type="button" value="About" onclick="aboutClicked()">
 			<input type="button" value="Tutorial" onclick="tutorialClicked()">
 			<input type="button" value="Teaser" id="teaserButton">
 			<input type="button" value="Simulation" onclick="simulationClicked()">
 			<input type="button" value="Training" onclick="trainingClicked()">
 		</div>
 		<div id="all">
-			<div id="simulationContainer">
+			<p id="mode"></p>
+			<div id="allContainer">
 				<!-- Training view -->
-				<div id="trainingContainer">
-					AntType<select id="AntType" size="1"> 
-						<option selected>Custom</option> 
-						<option>Simple</option> 
-						<option>NeuralNet</option>
-					</select>
-					HiveType<select id="HiveType" size="1"> 
-						<option selected>Default</option> 
-						<option>Custom</option> 
-					</select>
-					<input type="button" value="train" id="startTrainingButton">
-					<input type="button" value="test"  id="testTrainingButton">
-					<input type="button" value="reset" id="resetTrainingButton">
+				<div id="simulationOptions">
+					<div id="simulationButtons">
+						<input type="button" value="API" onclick="apiClicked()">
+						<input type="checkbox" id="showUI"  checked /> ShowUI
+						<input type="button" value="Run" id="runButton">
+					</div>
+					<div id="types">
+						AntType<select id="AntType" size="1"> 
+							<option selected>Custom</option> 
+							<option>Simple</option> 
+							<option>NeuralNet</option>
+						</select>
+						HiveType<select id="HiveType" size="1"> 
+							<option selected>Default</option> 
+							<option>Custom</option> 
+						</select>
+					</div>
+					<div id="trainingButtons">
+						<input type="button" value="train" id="startTrainingButton">
+						<input type="button" value="test"  id="testTrainingButton">
+						<input type="button" value="reset" id="resetTrainingButton">
+						Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
+					</div>
+					
+					<!-- Editor stuff -->
 				</div>
 				
-				<!-- Editor stuff -->
-				<div id="editorButtons">
-					<a target="_blank" href="./user-code_doc/AntController.html">API</a>
-					<input type="button" value="Run" id="runButton">
-					<input type="button" value="Editor" onclick="editorClicked()">
-					<input type="checkbox" id="showUI"  checked /> ShowUI <br/>
-				</div>
-				
-				<div id="customAntContainer" style="display:none;">
+				<div id="editorContainer">
 					<pre id="editor"></pre>
 				</div>
 				
-				<!-- Graphs -->
-				<div align="center" id="graphs" style="display:none;"></div>
-				
 				<!-- Simulation view -->
-				<div id="terrariumContainer" style="display:none;">
-					<canvas align="center" width="600" height="350" class="terrarium" id="canvasSimulation"></canvas>
-				</div>
-				
-				<!-- no ui -->
-				<div id="NoUI" style="display:none;">...Simulating...</div>
+				<iframe sandbox='allow-scripts allow-same-origin' id='simulationSandbox' src='simulation.html'></iframe>
 
 				<div id="cleared"></div>
-			</div>
-			<div id="settings">Settings<br/>
-				Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
-				Frame<input type="number" id="frame" style="width:50px" value="0" readonly/><br/>
-				FPS<input type="number" id="fps" style="width:50px" value="30" max="60" min="1" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
-				<div>Debug stuff<br/>
-					<input type="checkbox" id="debugShowLife" onchange="Debug.setShowLife(document.getElementById('debugShowLife').checked);" /> Show life <br/>
-					<input type="checkbox" id="debugVisibility" onchange="Debug.setVisibility(document.getElementById('debugVisibility').checked);" /> Show visibility <br/>
-					<input type="checkbox" id="debugCollider" onchange="Debug.setShowCollider(document.getElementById('debugCollider').checked);" /> Show collider <br/>
-					<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
-					<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
-				    <input type="checkbox" id="debugSmelledObjectsPosition" onchange="Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);" /> Show smelled object distance <br/>
-				    <input type="checkbox" id="debugPheromones" onchange="Debug.setShowPheromones(document.getElementById('debugPheromones').checked);" /> Show pheromones <br/>
+				<div id="floatingContainer">
+					<iframe id="message" src="./user-code_doc/index.html"></iframe>
+					<input type="button" id="message_close" value="Close" onclick="closeMessage()">
 				</div>
 			</div>
 			<div id="cleared"></div>
-			<div id="floatingContainer">
-				<iframe id="message" src="./user-code_doc/index.html"></iframe>
-				<input type="button" id="message_close" value="Close" onclick="closeMessage()">
-			</div>
 		</div>
 		<!-- doesnt work with requirejs -->
-		<script src="./js/external/flotr2/flotr2.min.js"></script>
 		<script src="./js/external/ace_min_noconflict/ace.js"></script>
 		<script src="./js/external/ace_min_noconflict/ext-language_tools.js"></script>
-		<script src="./js/settingsGlobal.js"></script>
-		<script data-main="./js/init" src="./js/external/require.js"></script>
 
-		<!-- undependant -->
-		<script src="./js/debug.js"></script>
-		<script src="./js/globals.js"></script>
 		<script src="./exampleAnts/simpleAnt.js"></script>
 		<script src="./exampleAnts/neuralNetworkAnt.js"></script>
+
+		<script src="./js/init.js"></script>
 	</body>
 </html>

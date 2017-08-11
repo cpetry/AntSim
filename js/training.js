@@ -13,7 +13,7 @@ return class Training {
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
 		
-		this.neuralNetwork.shouldTrain = true;		
+		this.neuralNetwork.shouldTrain = true;
 		var settings = new SettingsSimulation(AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
 		settings.neuralNetwork = this.neuralNetwork;		
 		new Simulation(this.canvas, settings);

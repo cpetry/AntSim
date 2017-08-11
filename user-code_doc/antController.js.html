@@ -46,8 +46,7 @@ return class AntController extends Controller {
 		this.food = 0;
 		this.foodMax = 0;
 		// simulation constructor is called directly
-		if (new.target === AntController)
-			this.userAntFunction = userAntFunction;
+		this.userAntFunction = userAntFunction;
 		
 		this.setAttributes(ant);
 	}
@@ -63,61 +62,7 @@ return class AntController extends Controller {
 			'agility' : ant.getAgility(),
 			'sensitivity' : ant.getSensitivity()
 		};
-	}
-	
-	static createEditor(elementID, defaultValue){
-		var antControllerWordCompleter = {
-			getCompletions: function(editor, session, pos, prefix, callback) {
-				var wordList = AntController.getAutoCompletionWordList();
-				callback(null, wordList.map(function(word) {
-					return {
-						caption: word,
-						value: word,
-						meta: "This ant"
-					};
-				}));
-			}
-		}
-		var globalWordCompleter = {
-			getCompletions: function(editor, session, pos, prefix, callback) {
-				var wordList = ["this."];
-				callback(null, wordList.map(function(word) {
-					return {
-						caption: word,
-						value: word,
-						meta: "global"
-					};
-				}));
-			}
-		}
-		ace.require("ace/ext/language_tools");
-		var customAntEditor = ace.edit(elementID);
-		customAntEditor.$blockScrolling = Infinity;
-		customAntEditor.setTheme("ace/theme/chrome");
-		customAntEditor.session.setMode("ace/mode/javascript");
-		customAntEditor.setOptions({
-			enableBasicAutocompletion: true,
-			enableLiveAutocompletion: true
-		});
-		customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
-		customAntEditor.setValue(defaultValue, -1); // -1 set cursor to begin
-		return customAntEditor;
-	}
-	
-	static getAutoCompletionWordList(){
-		return ["getFoodStorage()",
-				"getLife()", 
-				"getMaxFoodStorage()",
-				"getNearestEnemyAnt()",
-				"getNearestObjectType()",
-				"getObjectOfID()",
-				"getOwnHive()",
-				"getParentID()",
-				"getSmelledObjs()",
-				"getVisibleObjs()", 
-				];
-	}
-	
+	}	
 	
 	getAction(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
@@ -135,7 +80,7 @@ return class AntController extends Controller {
 			}
 			//console.log(result);
 			if (newResult == null) {throw "no result value given!"; }
-			if (newResult[0] &lt; 0 || newResult[0] > 4){throw "User input incorrect - First element has to be a ActionType!"; }
+			if (newResult[0] &lt; 0 || newResult[0] > ActionType.length){throw "User input incorrect - First element has to be a ActionType!"; }
 			else
 				result = newResult;
 		}
@@ -206,13 +151,14 @@ return class AntController extends Controller {
 		return prey;
 	}
 	
-	getFarthestPheromoneOfType(type){
-		var maxDist = 0;
+	getNextPheromoneOfType(type){
+		var minRot = 360;
 		var pheromone = null;
 		for (var id in this.smelledObjs){
 			if(this.smelledObjs[id].getObjectType() == ObjectType.PHEROMONE
-			&amp;&amp; this.smelledObjs[id].getPheromoneType() == type){
-				maxDist = this.smelledObjs[id].getDistanceToObj();
+			&amp;&amp; this.smelledObjs[id].getPheromoneType() == type
+			&amp;&amp; Math.abs(this.smelledObjs[id].getRotationToObj()) &lt; minRot){
+				minRot = Math.abs(this.smelledObjs[id].getRotationToObj())
 				var pheromone = this.smelledObjs[id];
 			}
 		}
