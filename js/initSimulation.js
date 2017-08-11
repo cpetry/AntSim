@@ -74,9 +74,10 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 	function getMessage(e){
 		//var mainWindow = e.source;
 		if ((window.location.protocol != 'file:') 
-		&& e.source != "https://cpetry.github.io/AntSim/simulation.html")
+		&& e.source != "https://cpetry.github.io/AntSim/index.html"){
+			console.log("Message blocked from: " + e.source)
 			return;
-		
+		}
 		var result = '';
 		var parsedData = e.data;
 		var command;

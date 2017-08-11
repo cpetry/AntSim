@@ -29,6 +29,7 @@ div#simulationContainer{
 	text-align: center;
 }
 div#simulationOptions{
+	display:none; /* at first hide it */
 	height:25px;
 }
 div#simulationButtons, div#trainingButtons, div#trainingContainer{
