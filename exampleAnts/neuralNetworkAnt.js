@@ -22,7 +22,7 @@ function createFeatureVector() {
 	var objsCategories = [this.visibleObjs, this.smelledObjs];
 	for (var objs in objsCategories) {
 		for (var id in objsCategories[objs]) {
-			var rotation = objsCategories[objs][id].getRotationToObj() / Math.PI * 180. + degreeShift;
+			var rotation = objsCategories[objs][id].getRotationToObj() + degreeShift;
 			while (rotation < 0) rotation += 360;
 			while (rotation >= 360) rotation -= 360;
 			var targetArea = Math.floor(rotation / degreePerArea);

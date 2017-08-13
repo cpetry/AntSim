@@ -26,16 +26,16 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>define(['controller'], 
-function(Controller) {
-
-/**
+            <pre class="prettyprint source linenums"><code>/**
  * The AntController enables the user to program his/hers ants behaviour.&lt;br>
  * It has limited access to some of the ants current values.&lt;br>
  * The action for the upcoming iteration is to be written by the user.&lt;br>
- * @class
+ * @module AntController
  * @augments Controller
+ * @hideconstructor
  */
+define(['controller'], function(Controller) {
+
 return class AntController extends Controller {
     /**
     * @ignore 
@@ -62,7 +62,7 @@ return class AntController extends Controller {
 			'agility' : ant.getAgility(),
 			'sensitivity' : ant.getSensitivity()
 		};
-	}	
+	}
 	
 	getAction(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
@@ -118,11 +118,16 @@ return class AntController extends Controller {
 	*/
 	isFull(){return this.food==this.foodMax;}
 	
+	/**
+	* Gets the maximum rotation the ant can perform when standing still.
+	* @return {number} maximum rotation.
+	*/
 	getMaximumRotation(){ return this.maxRotation;}
 	
 	/**
-	* Gets this ants genetic configuration. Access the attributes strength, agility and sensitivity like this:
-	* &lt;ant>.getGenes().strength.
+	* Gets this ants genetic configuration.&lt;br>
+	* Access the attributes strength, agility and sensitivity like this:&lt;br>
+	* &lt;> this.getGenes().strength.
 	* @return {dict} gene dictionary.
 	*/
 	getGenes() {return this.genes;}
@@ -197,7 +202,7 @@ return class AntController extends Controller {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li><li><a href="tutorial-11_advanced_moving.html">11_advanced_moving</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFoodStorage">getFoodStorage</a></li><li><a href="global.html#getGenes">getGenes</a></li><li><a href="global.html#getMaxFoodStorage">getMaxFoodStorage</a></li><li><a href="global.html#getParentID">getParentID</a></li><li><a href="global.html#isFull">isFull</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AntController.html">AntController</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-00_basics.html"><b>Basics</b></a></li><li><a href="tutorial-01_moving.html">&nbsp;Moving</a></li><li><a href="tutorial-02_harvest.html">&nbsp;Harvest</a></li><li><a href="tutorial-03_transfer.html">&nbsp;Transfer</a></li><li><a href="tutorial-04_pheromone.html">&nbsp;Pheromones</a></li><li><a href="tutorial-05_attack.html">&nbsp;Attack</a></li><li><a href="tutorial-10_neuralNetworks.html">Neural networks</a></li><li><a href="tutorial-11_advanced_moving.html">11_advanced_moving</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ActionType">ActionType</a></li><li><a href="global.html#angleBetweenVectorsDeg">angleBetweenVectorsDeg</a></li><li><a href="global.html#angleBetweenVectorsRad">angleBetweenVectorsRad</a></li><li><a href="global.html#argmax">argmax</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#DirectionType">DirectionType</a></li><li><a href="global.html#getDistance">getDistance</a></li><li><a href="global.html#maxElement">maxElement</a></li><li><a href="global.html#normalize">normalize</a></li><li><a href="global.html#ObjectType">ObjectType</a></li><li><a href="global.html#PheromoneType">PheromoneType</a></li><li><a href="global.html#radToDeg">radToDeg</a></li><li><a href="global.html#rand">rand</a></li><li><a href="global.html#rotateVector">rotateVector</a></li></ul>
 </nav>
 
 <br class="clear">

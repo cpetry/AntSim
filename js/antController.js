@@ -1,13 +1,13 @@
-define(['controller'], 
-function(Controller) {
-
 /**
  * The AntController enables the user to program his/hers ants behaviour.<br>
  * It has limited access to some of the ants current values.<br>
  * The action for the upcoming iteration is to be written by the user.<br>
- * @class
+ * @module AntController
  * @augments Controller
+ * @hideconstructor
  */
+define(['controller'], function(Controller) {
+
 return class AntController extends Controller {
     /**
     * @ignore 
@@ -34,7 +34,7 @@ return class AntController extends Controller {
 			'agility' : ant.getAgility(),
 			'sensitivity' : ant.getSensitivity()
 		};
-	}	
+	}
 	
 	getAction(){
 		//eval('(' + document.getElementById("customIterate").value + ')');
@@ -90,11 +90,16 @@ return class AntController extends Controller {
 	*/
 	isFull(){return this.food==this.foodMax;}
 	
+	/**
+	* Gets the maximum rotation the ant can perform when standing still.
+	* @return {number} maximum rotation.
+	*/
 	getMaximumRotation(){ return this.maxRotation;}
 	
 	/**
-	* Gets this ants genetic configuration. Access the attributes strength, agility and sensitivity like this:
-	* <ant>.getGenes().strength.
+	* Gets this ants genetic configuration.<br>
+	* Access the attributes strength, agility and sensitivity like this:<br>
+	* <> this.getGenes().strength.
 	* @return {dict} gene dictionary.
 	*/
 	getGenes() {return this.genes;}

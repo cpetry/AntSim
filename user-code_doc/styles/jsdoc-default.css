@@ -159,7 +159,7 @@ h1
 
 h2, h3.subsection-title
 {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 700;
     letter-spacing: -1px;
     margin-bottom: 12px;
@@ -167,7 +167,7 @@ h2, h3.subsection-title
 
 h3
 {
-    font-size: 24px;
+    font-size: 22px;
     letter-spacing: -0.5px;
     margin-bottom: 12px;
 }

@@ -4,7 +4,7 @@
     "source": {
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_",
-		"include": ["./js/antController.js"]
+		"include": ["./js/antController.js", "./js/globals.js"]
     },
 	"sourceType": "module",
     "tags": {
@@ -20,10 +20,11 @@
 	},
 	"plugins": [
         "plugins/markdown",
-        "plugins/summarize"
+		"plugins/underscore"
     ],
 	"opts": {
-        "template": "templates/default",
+        "template": "templates/antSim",
+        //"template": "../ink-docstrap/template",
         "encoding": "utf8",
 		"destination": "./user-code_doc/",	
 	    "recurse": true,

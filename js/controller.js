@@ -1,10 +1,11 @@
-define(function() {
-
 /**
  * The Controller enables the user to program his/hers ants behaviour.<br>
  * It has limited access to some of the ants current values.<br>
  * The action for the upcoming iteration is to be written by the user.<br>
+ * @module Controller
  */
+define(function() {
+
 return class Controller {
 	/**
      * @ignore 
