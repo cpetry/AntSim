@@ -59,27 +59,14 @@ function createFeatureVector() {
 
 	var additionalList = [(this.hasCollidedWithID() == -1) ? 1 : -1, this.getFoodStorage()/this.getMaxFoodStorage(), (this.wasAttacked ? -1 : 1)];
 	var inputSet = antList.concat(foodList.concat(hiveList.concat(spiderList.concat(additionalList))));
-
-	if (this.neuralNetwork.newNetwork) {
-		this.neuralNetwork.initNetwork(inputSet.length, 10, NetworkAction.length);
-	}
-
-	//console.log(inputSet.length);
-	
-	var outputSet = this.neuralNetwork.network.activate(inputSet);
-	var networkAnswer = {input: inputSet, output: outputSet, chosenAction: -1};
-	return networkAnswer;
+	return inputSet;
 }
 
-function chooseAction(networkAnswer){
+function chooseAction(networkOutput){
 	//console.log(networkAnswer)
 	// Chose action
 	
 	var foodGivingToHive = Math.max(this.getFoodStorage() - this.minimumFoodStorage,0);
-	
-	var networkOutput = networkAnswer.output;
-	var maxAction = argmax(networkOutput);
-
 
 	// Sort actions by value
 	var actionList = [0,1,2,3,4,5];
@@ -115,11 +102,11 @@ function chooseAction(networkAnswer){
 				}
 			}
 		} else if (action == NetworkAction.RUN_LEFT) {
-			actionTuple = [ActionType.MOVE, DirectionType.FORWARD, -30];
+			actionTuple = [ActionType.MOVE, DirectionType.NONE, -30];
 		} else if (action == NetworkAction.RUN_STRAIGHT) {
 			actionTuple = [ActionType.MOVE, DirectionType.FORWARD,   0];
 		} else if (action == NetworkAction.RUN_RIGHT) {
-			actionTuple = [ActionType.MOVE, DirectionType.FORWARD,  30];
+			actionTuple = [ActionType.MOVE, DirectionType.NONE,  30];
 		} else if (action == NetworkAction.HARVEST_NEAREST_FOOD) {
 
 			var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
@@ -172,18 +159,15 @@ function chooseAction(networkAnswer){
 		}
 
 		if (actionTuple != null) {
-			networkAnswer.chosenAction = action;
 			break;
 		}
 
 	}
-	
-	this.firstChoice.push(networkAnswer.chosenAction == maxAction);
 
-	return actionTuple;
+	return [action, actionTuple];
 }
 
-function reinforcementLearning(networkAnswer){
+function reinforcementLearning(networkOutput){
 	// Reward and reinforcement learning
 	var reward = 0;
 
@@ -191,15 +175,22 @@ function reinforcementLearning(networkAnswer){
 		this.memory.lastLife = this.getLife();
 
 	if (this.getLife() < this.memory.lastLife - 5) {
-		reward += -0.1;
+		reward -= 0.1;
 		this.memory.lastLife = this.getLife();
 	}
-	if (this.getFoodStorage() > this.memory.lastFoodStorage && this.memory.lastFoodStorage != -1)
-		reward += 0.8;
-	if (this.getFoodStorage() < this.memory.lastFoodStorage && this.memory.lastFoodStorage != -1 && this.getFoodStorage() <= this.minimumFoodStorage)
-		reward += 0.8;
+	
+	// food was harvested
+	if (this.getFoodStorage() > this.memory.lastFoodStorage)
+		reward += 0.5;
+	
+	// food was given to hive
+	else if (this.getFoodStorage() < this.memory.lastFoodStorage - 5
+	&& this.networkMemory[this.networkMemory.length-1].chosenAction == NetworkAction.GIVE_FOOD_TO_HIVE)
+		reward += 1;
+		
+	// collided with sth
 	if (this.collidedWithID != -1)
-		reward += -0.9;
+		reward -= 0.99;
 	// Reward for incoming ants of same type?
 
 	// Update food storage
@@ -209,7 +200,7 @@ function reinforcementLearning(networkAnswer){
 	var qLearningGamma = 0.9;
 
 	if (reward != 0 && this.networkMemory.length >= this.batchSize && this.neuralNetwork.shouldTrain) {
-		var lastBest = maxElement(networkAnswer.output);
+		var lastBest = maxElement(networkOutput);
 		for (var i = this.networkMemory.length - 1; i >= 0; --i) {
 
 			var originalOutput = this.networkMemory[i].output;
@@ -267,51 +258,62 @@ function reinforcementLearning(networkAnswer){
 
 var shouldSave = rand(0,1) < 0.001 ? true : false;
 
-if (shouldSave) {
+if (shouldSave){
 	localStorage.setItem("network", JSON.stringify(this.neuralNetwork.network.toJSON()));
 	console.log("Saved network!");
 }
 
-var networkAnswer = createFeatureVector.call(this);
-if (networkAnswer.output[0].isNaN)
+var featureVector = createFeatureVector.call(this);
+// check and create network if not created already
+// Create network here to use length of featureVector as input layer
+if (this.neuralNetwork.newNetwork) {
+	this.neuralNetwork.initNetwork(featureVector.length, 10, NetworkAction.length);
+}
+
+var networkOutput = this.neuralNetwork.network.activate(featureVector);
+reinforcementLearning.call(this, networkOutput);
+
+// check for valid network output
+if (networkOutput.length == 0 || networkOutput[0].isNaN)
 	throw new TypeError("Network input incorrect! (" + networkAnswer.input + ")")
 
-var actionTuple = chooseAction.call(this, networkAnswer);
-//console.log(actionTuple)
+var [action, actionTuple] = chooseAction.call(this, networkOutput);
 
-// Push into memory
+// remember firstChoice
+var maxAction = argmax(networkOutput);
+this.neuralNetwork.firstChoice.push(action == maxAction);
+
+// Push decision into memory
 if (actionTuple != null) {
+	var networkAnswer = {input: featureVector, output: networkOutput, chosenAction: actionTuple};
 	this.networkMemory.push(networkAnswer);
 	if (this.networkMemory.length > this.batchSize)
 		this.networkMemory.shift(1);
-	
-	this.realChosen.push(true);
+	this.neuralNetwork.realChosen.push(true);
 } else {
-	this.realChosen.push(false);
+	this.neuralNetwork.realChosen.push(false);
 }
 
-
-if (this.realChosen.length > 1000) {
+// After 1000 choices -> reset choices
+if (this.neuralNetwork.realChosen.length > 1000) {
 	var chosenPart = 0.;
 	var firstChoicePart = 0.;
-	for (var i = 0; i < this.realChosen.length; ++i) {
-		chosenPart += this.realChosen[i] ? 1. : 0.;
-		firstChoicePart += this.firstChoice[i] ? 1. : 0.;
+	for (var i = 0; i < this.neuralNetwork.realChosen.length; ++i) {
+		chosenPart += this.neuralNetwork.realChosen[i] ? 1. : 0.;
+		firstChoicePart += this.neuralNetwork.firstChoice[i] ? 1. : 0.;
 	}
-	chosenPart /= this.realChosen.length;
-	firstChoicePart /= this.realChosen.length;
+	chosenPart /= this.neuralNetwork.realChosen.length;
+	firstChoicePart /= this.neuralNetwork.realChosen.length;
 	console.log("Actively chosen %: "+chosenPart*100+"%");
 	console.log("First choice %:    "+firstChoicePart*100+"%");
-	this.realChosen = [];
-	this.firstChoice = [];
+	this.neuralNetwork.realChosen = [];
+	this.neuralNetwork.firstChoice = [];
 }
 
-
-reinforcementLearning.call(this, networkAnswer);
 
 //Return value
 
 if (actionTuple != null)
-		return actionTuple;
+	return actionTuple;
 else
 	return [ActionType.MOVE, DirectionType.NONE, 0];`
