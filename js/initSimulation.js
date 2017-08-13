@@ -56,7 +56,8 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 
 	function startTraining(){
 		console.log("startTraining")
-		SettingsGlobal.setShowUI(false);
+		SettingsGlobal.setShowUI(true);
+		SettingsGlobal.setFramesPerSecond(60);
 		training.start(userAntFunction);
 	}
 

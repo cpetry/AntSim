@@ -2,9 +2,12 @@ define(['hiveGenetic', 'antDead', 'spider', 'spiderDead', 'collider', 'graph', '
 function(HiveGenetic, AntDead, Spider, SpiderDead, Collider, Graph, Food, Pheromone) {
 
 return class Simulation {
-	constructor(canvas, settings){
+	constructor(canvas, settings, finishedFunc = null){
+		if (typeof(showGraph) !== 'undefined' )
+			showGraph(false);
 		Simulation.isFinished = false;
 		this.canvas = canvas;
+		this.finishedFunc = finishedFunc;
 
 		this.now;
 		this.delta;
@@ -208,9 +211,15 @@ return class Simulation {
 			this.clear();
 			this.draw();
 			document.getElementById('frame').value = this.iteration;
-			showGraph(true);
+
+			if (typeof(showGraph) !== 'undefined' )
+				showGraph(true);
 			this.graph.setStats(hiveStats);
 			this.updateGraph();
+
+			if (this.finishedFunc != null)
+				this.finishedFunc()
+
 			return;
 		}
 

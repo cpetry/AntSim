@@ -5,8 +5,6 @@ return class Tutorial extends Simulation {
 	constructor(canvas, settings, finishedFunc, part=0){
 		super(canvas, settings);
 		// defines the part of the tutorial
-		this.finishedFunc = finishedFunc;
-		this.isFinished = false;
 		this.part = part;
 		
 		// first check if ant has reached food location

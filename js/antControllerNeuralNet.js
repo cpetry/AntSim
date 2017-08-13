@@ -22,7 +22,7 @@ return class AntControllerNeuralNet extends AntController{
 		this.trainSet = this.neuralNetwork.trainSet;
 		this.realChosen = this.neuralNetwork.realChosen;
 		this.firstChoice = this.neuralNetwork.firstChoice;
-	}		
+	}
 }
 
 });

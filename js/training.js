@@ -15,8 +15,17 @@ return class Training {
 		
 		this.neuralNetwork.shouldTrain = true;
 		var settings = new SettingsSimulation(AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
-		settings.neuralNetwork = this.neuralNetwork;		
-		new Simulation(this.canvas, settings);
+		settings.neuralNetwork = this.neuralNetwork;
+		
+		var i = 0;
+		function simulate(){
+			i++;
+			if (i < 100){
+				Math.seedrandom();
+				new Simulation(this.canvas, settings, simulate.bind(this));
+			}
+		}
+		simulate.call(this);
 	}
 	
 	test(userAntFunction){

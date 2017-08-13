@@ -28,26 +28,20 @@ return class NeuralNetwork {
 		this.trainer = undefined;
 
 		this.shouldTrain = false;
-		this.newNetwork = false;
-
-		this.numInputs = 39;
-		this.numHidden = 20;
-		this.numOutputs = 6;
+		this.newNetwork = true;
 		
 		this.networkMemory = [];
 		this.trainSet = [];
 		this.realChosen = [];
 		this.firstChoice = [];
-
-		this.initNetwork();
 	}
 
-	initNetwork() {
+	initNetwork(numInput, numHidden, numOutput) {
 		if (localStorage.getItem("network")==null)
 			this.newNetwork = true;
 
 		if (this.newNetwork) {
-			this.network = this.createNetwork();
+			this.network = this.createNetwork(numInput, numHidden, numOutput);
 			console.dir(this.network);
 			this.setActivation(this.synaptic.Neuron.squash.RELU);
 			this.setXavier();
@@ -67,8 +61,8 @@ return class NeuralNetwork {
 			this.network.layers.output.list[j].squash = activation;
 	}
 
-	createNetwork() {
-		return new this.synaptic.Architect.Perceptron(this.numInputs, this.numHidden, this.numOutputs);
+	createNetwork(numInputs, numHidden, numOutputs) {
+		return new this.synaptic.Architect.Perceptron(numInputs, numHidden, numOutputs);
 	}
 
 	setXavier() {
