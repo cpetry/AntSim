@@ -138,9 +138,9 @@ return class Simulation {
 	foodCreation(){
 		// food creation
 		var maxFoodNmb = this.settings.getFoodMaxSiteNumber();
-		var reduceByTime = this.iteration/1000.0*this.settings.getFoodCreationPropability()/10;
+		var reduceByTime = this.iteration/1000.0*this.settings.getFoodCreationProbability()/10;
 		var reduceBySiteNumber = (maxFoodNmb-this.food.length)/maxFoodNmb;
-		var probability = (this.settings.getFoodCreationPropability()-reduceByTime)*reduceBySiteNumber;
+		var probability = (this.settings.getFoodCreationProbability()-reduceByTime)*reduceBySiteNumber;
 		var createFood = Math.floor(rand(0,1+probability));
 		if (createFood && this.food.length < this.settings.getFoodMaxSiteNumber()){
 			// food is positioned all over the ground
@@ -153,7 +153,7 @@ return class Simulation {
 	
 	spiderCreation(){
 		var maxSpiderNmb = 2;
-		var spiderCreationProb = 0.02;
+		var spiderCreationProb = this.settings.getSpiderCreationProbability();
 		var reduceByTime = this.iteration/1000.0*spiderCreationProb/10;
 		var reduceBySpiderNumber = (maxSpiderNmb-this.spiders.length)/maxSpiderNmb;
 		var probability = (spiderCreationProb-reduceByTime)*reduceBySpiderNumber;

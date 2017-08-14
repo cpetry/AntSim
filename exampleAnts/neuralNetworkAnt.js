@@ -3,12 +3,9 @@ this.minimumFoodStorage = this.getMaxFoodStorage() * 0.14;
 
 const NetworkAction = {
 	ATTACK_NEAREST_ANT : 0,
-	RUN_LEFT : 1,
-	RUN_STRAIGHT : 2,
-	RUN_RIGHT : 3,
-	HARVEST_NEAREST_FOOD : 4,
-	GIVE_FOOD_TO_HIVE : 5,
-	ATTACK_SPIDER : 6
+	HARVEST_NEAREST_FOOD : 1,
+	GIVE_FOOD_TO_HIVE : 2,
+	ATTACK_SPIDER : 3
 };
 
 function createFeatureVector() {
@@ -38,26 +35,26 @@ function createFeatureVector() {
 			var isEnemy = objsCategories[objs][id].getParentID() != this.getParentID();
 
 			if(objsCategories[objs][id].getObjectType() == ObjectType.ANT) {
-				antList[targetArea] += (isEnemy) ? 1 : -1;
+				antList[targetArea] += (isEnemy) ? 1 : 0;
 			} else if (objsCategories[objs][id].getObjectType() == ObjectType.FOOD) {
 				foodList[targetArea] += 1;
 			} else if (objsCategories[objs][id].getObjectType() == ObjectType.HIVE) {
-				hiveList[targetArea] += (isEnemy) ? -1 : 1;
+				hiveList[targetArea] += (isEnemy) ? 0 : 1;
 			} else if (objsCategories[objs][id].getObjectType() == ObjectType.SPIDER) {
-				spiderList[targetArea] += -1;
+				spiderList[targetArea] += 1;
 			}
 		}
 	}
 	
 	// Normalization
 	for (var i = 0; i < antList.length; ++i) {
-		antList[i] = Math.min(Math.max(-5,antList[i]),5)/5.;
-		foodList[i] = Math.min(Math.max(-4,foodList[i]),4)/4.;
-		hiveList[i] = Math.min(Math.max(-2,hiveList[i]),2)/2.;
-		spiderList[i] = Math.min(Math.max(-10,spiderList[i]),10)/10.;
+		antList[i] = Math.min(antList[i],10)/10.;
+		foodList[i] = Math.min(foodList[i],8)/8.;
+		hiveList[i] = Math.min(hiveList[i],2)/2.;
+		spiderList[i] = Math.min(spiderList[i],2)/2.;
 	}
 
-	var additionalList = [(this.hasCollidedWithID() == -1) ? 1 : -1, this.getFoodStorage()/this.getMaxFoodStorage(), (this.wasAttacked ? -1 : 1)];
+	var additionalList = [(this.hasCollidedWithID() == -1) ? 1 : 0, this.getFoodStorage()/this.getMaxFoodStorage(), (this.wasAttacked ? 0 : 1)];
 	var inputSet = antList.concat(foodList.concat(hiveList.concat(spiderList.concat(additionalList))));
 	return inputSet;
 }
@@ -66,10 +63,8 @@ function chooseAction(networkOutput){
 	//console.log(networkAnswer)
 	// Chose action
 	
-	var foodGivingToHive = Math.max(this.getFoodStorage() - this.minimumFoodStorage,0);
-
 	// Sort actions by value
-	var actionList = [0,1,2,3,4,5];
+	var actionList = [0,1,2,3];
 	actionList.sort(function(a,b){return networkOutput[b] - networkOutput[a];});
 
 	var continiousSum = 0;
@@ -95,18 +90,15 @@ function chooseAction(networkOutput){
 			var prey = this.getNearestEnemyAnt();
 			if (prey != null) {
 				if (prey.canBeInteractedWith(this)) {
-					return [ActionType.ATTACK, prey]
+					actionTuple =  [ActionType.ATTACK, prey]
 				} else {
 					var fromObjToDirRad = prey.getRotationToObj();
 					actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
-		} else if (action == NetworkAction.RUN_LEFT) {
-			actionTuple = [ActionType.MOVE, DirectionType.NONE, -30];
-		} else if (action == NetworkAction.RUN_STRAIGHT) {
-			actionTuple = [ActionType.MOVE, DirectionType.FORWARD,   0];
-		} else if (action == NetworkAction.RUN_RIGHT) {
-			actionTuple = [ActionType.MOVE, DirectionType.NONE,  30];
+			else
+				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
+
 		} else if (action == NetworkAction.HARVEST_NEAREST_FOOD) {
 
 			var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
@@ -127,6 +119,8 @@ function chooseAction(networkOutput){
 					}
 				}
 			}
+			else
+				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 
 		} else if (action == NetworkAction.GIVE_FOOD_TO_HIVE) {
 
@@ -135,6 +129,7 @@ function chooseAction(networkOutput){
 
 				// harvest food if possible
 				if(hive.canBeInteractedWith(this)){
+					var foodGivingToHive = Math.max(this.getFoodStorage() - this.minimumFoodStorage,0);
 					actionTuple = [ActionType.TRANSFER, hive, foodGivingToHive];
 				} else {
 					// MOVE towards hive
@@ -142,6 +137,8 @@ function chooseAction(networkOutput){
 					actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
+			else
+				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 		}
 		else if (action == NetworkAction.ATTACK_SPIDER) {
 
@@ -150,12 +147,14 @@ function chooseAction(networkOutput){
 
 				// attack spider if possible
 				if (spider.canBeInteractedWith(this)) {
-					return [ActionType.ATTACK, spider]
+					actionTuple = [ActionType.ATTACK, spider]
 				} else {
 					var fromObjToDirRad = spider.getRotationToObj();
 					actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
+			else
+				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 		}
 
 		if (actionTuple != null) {
@@ -167,34 +166,41 @@ function chooseAction(networkOutput){
 	return [action, actionTuple];
 }
 
-function reinforcementLearning(networkOutput){
+function determineReward(){
 	// Reward and reinforcement learning
 	var reward = 0;
 
 	if (this.memory.lastLife == -1)
 		this.memory.lastLife = this.getLife();
 
+	// were hit
 	if (this.getLife() < this.memory.lastLife - 5) {
-		reward -= 0.1;
+		reward -= 0.9;
 		this.memory.lastLife = this.getLife();
 	}
+	
+	reward += this.getLastDistanceWalked() / 10;
 	
 	// food was harvested
 	if (this.getFoodStorage() > this.memory.lastFoodStorage)
 		reward += 0.5;
 	
 	// food was given to hive
-	else if (this.getFoodStorage() < this.memory.lastFoodStorage - 5
+	else if (this.getFoodStorage() < this.memory.lastFoodStorage - 2
 	&& this.networkMemory[this.networkMemory.length-1].chosenAction == NetworkAction.GIVE_FOOD_TO_HIVE)
-		reward += 1;
+		reward += 0.3;
 		
 	// collided with sth
 	if (this.collidedWithID != -1)
-		reward -= 0.99;
+		reward -= 0.5;
 	// Reward for incoming ants of same type?
 
 	// Update food storage
 	this.memory.lastFoodStorage = this.getFoodStorage();
+	return reward;
+}
+
+function reinforcementLearning(reward, networkOutput){
 
 	var qLearningAlpha = 0.01;
 	var qLearningGamma = 0.9;
@@ -271,7 +277,8 @@ if (this.neuralNetwork.newNetwork) {
 }
 
 var networkOutput = this.neuralNetwork.network.activate(featureVector);
-reinforcementLearning.call(this, networkOutput);
+var reward = determineReward.call(this);
+reinforcementLearning.call(this, reward, networkOutput);
 
 // check for valid network output
 if (networkOutput.length == 0 || networkOutput[0].isNaN)

@@ -28,8 +28,6 @@ return class Animal extends SmellableObject {
 		this._visibilityDistance = 0;
 		this._visibilityRangeRad = 0;
 		this._life = 100;
-		this._collidedWithSth = null;
-		this._wasAttacked = false;
 		this._controller = null;
 		this._attackDamage = 0;
 		this._interactionDistance = settings.getInteractionDistance();
@@ -38,6 +36,11 @@ return class Animal extends SmellableObject {
 		
 		this._visibleObjs = {};
 		this._smelledObjs = {};
+
+		this._collidedWithSth = null;
+		this._wasAttacked = false;
+		this._lastDistanceWalked = 0;
+		this._lastRotated = 0;
 		
 		// stats
 		this._stats = { movedDistance: 0, harvested: 0, transferred: 0, received: 0, 
@@ -59,12 +62,18 @@ return class Animal extends SmellableObject {
 	
 	hasCollidedWith(){ return this._collidedWithSth;}
 	wasAttacked(){ return this._wasAttacked;}
-
+	getLastDistanceWalked() { return this._lastDistanceWalked; }
+	getLastRotated() { return this._lastRotated; }
+	
 	setController(controller) {this._controller = controller;}
 	
 	iterate(allObjects){
 		if (this.getLife() <= 0)
 			throw new TypeError("Dead animals shouldn't be able to do anything! - We don't like zombies!");
+		
+		// reset last iteration stuff
+		this._lastDistanceWalked = 0;
+		this._lastRotated = 0;
 		
 		// setting sight and smell
 		this.setVisibleObjects(allObjects);
@@ -95,8 +104,7 @@ return class Animal extends SmellableObject {
 		var rotationDiff = Math.min(Math.abs(rotation), this.getSpeedRotation());
 		var possibleRotation = Math.sign(rotation) * rotationDiff;
 		super.setNewRotation(this.getRotation() + possibleRotation);
-
-		
+		this._lastRotated = possibleRotation;
 		
 		var moveSpeed = this.getSpeed();
 		// being attacked -> 0.5*moveSpeed!
@@ -127,6 +135,7 @@ return class Animal extends SmellableObject {
 		this._collidedWithSth = this.checkCollision(newPos, allObjects);
 		if (this._collidedWithSth === null){
 			this._stats.movedDistance += moveSpeed;
+			this._lastDistanceWalked = moveSpeed;
 			this.setPosition(newPos);
 		}
 	}

@@ -23,17 +23,18 @@ return class SettingsSimulation
 		this.foodAmountDeadSpider = 200;
 		this.foodDecayProb = 0.25; // probability of rotting
 		this.foodSize = 0.005; // percentage of food amount
-		this.foodCreationPropability = 0.05; // chance for each iteration to create food
+		this.foodCreationProbability = 0.05; // chance for each iteration to create food
 		this.foodMaxSiteNumber = 10; // maximum number of food sites
 		this.foodMaxHive = 100; // food till next ant
 		this.foodMaxAnt = 35;
 		this.foodMaxHarvestAmountAnt = 1;
 		this.spiderSize = 10;
 		this.spiderSizeLevelFactor = 3;
-		this.spiderLife = 1000;
+		this.spiderLife = 500;
 		this.spiderSpeed = 1;
 		this.spiderSpeedRotation = 0.05; // radians
 		this.spiderAttackDamage = 3;
+		this.spiderCreationProb = 0.005;
 		this.spiderDecayProb = 0.3;
 		this.spiderSmellingDistance = 50;
 		this.spiderVisibilityDistance = 30;
@@ -70,6 +71,7 @@ return class SettingsSimulation
 	getSpiderSpeed(){ return this.spiderSpeed; }
 	getSpiderSpeedRotation(){ return this.spiderSpeedRotation; }
 	getSpiderAttackDamage() { return this.spiderAttackDamage; }
+	getSpiderCreationProbability() { return this.spiderCreationProb; }
 	getSpiderDecayProb(){ return this.spiderDecayProb; }
 	getSpiderSmellingDistance() { return this.spiderSmellingDistance; }
 	getSpiderVisibilityDistance() { return this.spiderVisibilityDistance; }
@@ -79,7 +81,7 @@ return class SettingsSimulation
 	getFoodAmountDeadAnt(){ return this.foodAmountDeadAnt; }
 	getFoodAmountDeadSpider(){ return this.foodAmountDeadSpider; }
 	getFoodDecayProb(){ return this.foodDecayProb; }
-	getFoodCreationPropability(){ return this.foodCreationPropability; }
+	getFoodCreationProbability(){ return this.foodCreationProbability; }
 	getFoodMaxSiteNumber(){ return this.foodMaxSiteNumber; }
 	getFoodMaxHive(){ return this.foodMaxHive; }
 	getFoodMaxAnt(){ return this.foodMaxAnt; }

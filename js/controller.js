@@ -19,6 +19,8 @@ return class Controller {
 		
 		this.collidedWithID = -1;
 		this.wasAttacked = false;
+		this.lastDistanceWalked = 0;
+		this.lastRotated = 0;
 		
 		this.memory = { };
 		
@@ -37,6 +39,8 @@ return class Controller {
 		this.wasAttacked = animal.wasAttacked();
 		this.interactionDistance = animal.getInteractionDistance();
 		this.interactionRange = animal.getInteractionRange();
+		this.lastDistanceWalked = animal.getLastDistanceWalked();
+		this.lastRotated = animal.getLastRotated();
 	}
 
 	/**
@@ -81,6 +85,10 @@ return class Controller {
 	* @return {number} Collision object ID.
 	*/
 	hasCollidedWithID() {return this.collidedWithID;}
+	
+	getLastDistanceWalked() {return this.lastDistanceWalked;}
+
+	getLastRotated() {return this.lastRotated;}
 	
 	/**
 	* Returns the action the ant should do in the upcoming iteration.<br>
