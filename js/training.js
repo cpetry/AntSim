@@ -7,14 +7,14 @@ return class Training {
 		this.neuralNetwork = new NeuralNetwork();
 	}
 	
-	start(userAntFunction){
+	start(mode, userAntFunction){
 		// for now only neural networks are trained
 		Math.seedrandom();
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
 		
 		this.neuralNetwork.shouldTrain = true;
-		var settings = new SettingsSimulation(AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(mode, AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
 		settings.neuralNetwork = this.neuralNetwork;
 		
 		var i = 0;
@@ -28,14 +28,14 @@ return class Training {
 		simulate.call(this);
 	}
 	
-	test(userAntFunction){
+	test(mode, userAntFunction){
 		// for now only neural networks are trained
 		Math.seedrandom();
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
 
 		this.neuralNetwork.shouldTrain = false;
-		var settings = new SettingsSimulation(AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(mode, AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
 		settings.neuralNetwork = this.neuralNetwork;
 		new Simulation(this.canvas, settings);
 	}

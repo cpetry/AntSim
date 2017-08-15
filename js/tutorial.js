@@ -3,7 +3,7 @@ function(Simulation, Ant, AntGenetic, Hive, HiveGenetic, Food, Collider, Shape) 
 
 return class Tutorial extends Simulation {
 	constructor(canvas, settings, finishedFunc, part=0){
-		super(canvas, settings);
+		super(canvas, settings, finishedFunc);
 		// defines the part of the tutorial
 		this.part = part;
 		

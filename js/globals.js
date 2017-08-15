@@ -68,6 +68,11 @@ const HiveType = {
 	CUSTOM : 1
 }
 
+const SimulationMode = {
+	SOLO : 0,
+	COMPETITIVE : 1
+}
+
 const _FILL_STYLE_TABLE = ['#000000','#ff0000','#00ff00','#0000ff']; // Ant color per hive
 
 /**

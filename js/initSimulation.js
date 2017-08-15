@@ -44,27 +44,28 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 	
 	function startTeaser(){
 		SettingsGlobal.setShowUI(true);
-		var settings = new SettingsSimulation(AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(SimulationMode.COMPETITIVE, 
+						AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
 		new Simulation(canvas, settings);
 	}
 
-	function startSimulation(){
+	function startSimulation(mode){
 		console.log("Simulation")
-		var settings = new SettingsSimulation(AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(mode, AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
 		new Simulation(canvas, settings);
 	}
 
-	function startTraining(){
+	function startTraining(mode){
 		console.log("startTraining")
 		SettingsGlobal.setShowUI(true);
 		SettingsGlobal.setFramesPerSecond(60);
-		training.start(userAntFunction);
+		training.start(mode, userAntFunction);
 	}
 
-	function testTraining(){
+	function testTraining(mode){
 		console.log("testTraining")
 		SettingsGlobal.setShowUI(true);
-		training.test(userAntFunction);
+		training.test(mode, userAntFunction);
 	}
 
 	function resetTraining(){
@@ -81,6 +82,7 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 		var result = '';
 		var parsedData = e.data;
 		var command;
+		var mode = SimulationMode.SOLO;
 		
 		// setImmediate() uses postMessage! We therefor have to intercept this message here.
 		if ((typeof parsedData === 'string' || parsedData instanceof String) 
@@ -90,13 +92,13 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 		
 		try {
 			command = parsedData.command;
+			mode = parsedData.mode;
 			userAntFunction = new Function(parsedData.code);
 			SettingsGlobal.setShowUI(parsedData.showUI == true);
 		} catch (err) {
 			console.log("postMessage didn't work with: " + err);
 		}
 		var showUI = SettingsGlobal.getShowUI();
-		console.log(showUI)
 		document.getElementById('graphs').style.display = 'none';
 		document.getElementById('NoUI').style.display = (showUI ? 'none' : 'inline');
 		document.getElementById('canvasContainer').style.display = (showUI ? 'inline' : 'none');
@@ -111,13 +113,13 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 			startTeaser();
 		}
 		else if (parsedData.command == "Simulation"){
-			startSimulation();
+			startSimulation(mode);
 		}
 		else if (parsedData.command == "StartTraining"){
-			startTraining();
+			startTraining(mode);
 		}
 		else if (parsedData.command == "TestTraining"){
-			testTraining();
+			testTraining(mode);
 		}
 		else if (parsedData.command == "ResetTraining"){
 			resetTraining();

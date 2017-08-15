@@ -36,6 +36,9 @@ div#simulationButtons, div#trainingButtons, div#trainingContainer{
 	float:left;
 	margin-left:80px;
 }
+div#modes{
+	float:right;
+}
 div#types{
 	float:right;
 	margin-right:80px;

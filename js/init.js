@@ -93,6 +93,17 @@ function simulate(commandString) {
 	var frame = document.getElementById('simulationSandbox');	
 	var showUIvalue = document.getElementById("showUI").checked;
 	var codeString = editor.getValue();
+	var modeValue = SimulationMode.SOLO;
+	
+	var radios = document.getElementsByName('simulationMode');
+	for (var i = 0, length = radios.length; i < length; i++) {
+		if (radios[i].checked) {
+			// do whatever you want with the checked radio
+			modeValue = radios[i].value;
+			// only one radio can be logically checked, don't check the rest
+			break;
+		}
+	}
 	
     if (commandString == "Teaser"){
 		showUIvalue = true;
@@ -103,7 +114,7 @@ function simulate(commandString) {
 	// origin. Sandboxed iframes which lack the 'allow-same-origin' header
 	// don't have an origin which you can target: you'll have to send to any
 	// origin, which might alow some esoteric attacks. Validate your output!
-	var message = {command : commandString, code : codeString, showUI : showUIvalue};
+	var message = {command : commandString, mode : modeValue, code : codeString, showUI : showUIvalue};
 	if (window.location.protocol == 'file:')
 		frame.contentWindow.postMessage( message, '*');
 	else frame.contentWindow.postMessage( message, 'https://cpetry.github.io/AntSim/simulation.html');

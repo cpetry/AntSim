@@ -20,47 +20,51 @@ return class Simulation {
 		this.allObjects = [];
 		this.spiders = [];
 		this.settings = settings;
+		this.mode = settings.getMode();
 
 		// simulation constructor is called directly
 		if (new.target === Simulation) {
 			this.graph = new Graph();
-			this.init();
+			if (this.mode == SimulationMode.SOLO)
+				this.init(1);
+			else if (this.mode == SimulationMode.COMPETITIVE)
+				this.init(2);
+			else
+				throw new TypeError ("invalid simulation mode!");
+			
 			this.clear();
 			this.draw();
 			this.loop();
 		}
 	}
 
-	init(numHives=2) {
-		var hiveConfigurations = [
-						[{x: this.canvas.width / 2, y: this.canvas.height / 2}], // One hive
-						[{x: 50, y: this.canvas.height / 2},{x: this.canvas.width - 50, y: this.canvas.height / 2}], // Two hives
-						[{x: this.canvas.width * 1 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width * 2 / 3, y: this.canvas.height * 2 / 3},{x: this.canvas.width / 2, y: this.canvas.height * 1 / 3}], // Three hives
-						[{x: this.canvas.width * 1 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 3 / 4},{x: this.canvas.width * 1 / 4, y: this.canvas.height * 1 / 4},{x: this.canvas.width * 3 / 4, y: this.canvas.height * 1 / 4}]  // Four hives
-						// TODO ... to be continued, but actually there should be found a better way to do this.
-					];
-
-		/*
-		 * TODO As well, this code part has to adapted to only
-		 *      be thrown when there is no space left or something.
-		 */
-		if (hiveConfigurations.length < numHives)
-			throw "Number of hives selected is higher than possible!"
+	init(numHives = 1) {
+		var hivePositions = this.determineHivePositions(numHives);
 
 		// Hive creation
 		for (var i = 0; i < numHives; ++i) {
-
-			// Get hive position (with regard to hive configuration)
-			var hivePos = hiveConfigurations[numHives-1][i];
-
 			// Create hive
-			this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.allObjects)); // i = hiveNumber
+			this.hives.push(new HiveGenetic(this.canvas, hivePositions[i], this.settings, this.allObjects)); // i = hiveNumber
 		}
 
 		// first hives need their ids, then ants can be created
 		for (var i = 0; i < this.hives.length; ++i) 
 			for (var a=0; a < this.settings.getAntStartNumber(); a++)
 				this.hives[i].createAnt(this.allObjects);
+	}
+	
+	// creates init positions for hives
+	determineHivePositions(numHives){
+		if (numHives > 4)
+			throw new TypeError("Too many hives! If really needed think about a better positioning concept!")
+		
+		var hivePositions = [];
+		for (var i=0; i<numHives; i++){
+			var xPos = this.canvas.width  / (numHives == 1 ? 2 : 6 ) * (i%2 == 0 ? 1 : 5);
+			var yPos = this.canvas.height / (numHives <= 2 ? 2 : 4 ) * (i>1      ? 3 : 1);
+			hivePositions.push( {x: xPos,y: yPos} );
+		}
+		return hivePositions;
 	}
 	
 	getHiveIndexFromParentID(parentID){

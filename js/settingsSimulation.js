@@ -2,12 +2,13 @@ define(function() {
 
 return class SettingsSimulation
 {
-	constructor(antType, hiveType, userAntFunction){
+	constructor(mode, antType, hiveType, userAntFunction){
+		this.mode = mode;
 		this.hiveSize = 14;
 		this.antType = antType;
 		this.hiveType = hiveType;
 		this.antSize = 5;
-		this.antStartNumber = 20;
+		this.antStartNumber = 10;
 		this.antStartPositionDistance = 40;
 		this.antLife = 100;
 		this.antSpeed = 2.5;
@@ -48,6 +49,7 @@ return class SettingsSimulation
 		this.userAntFunction = userAntFunction;
 	}
 	// attribute related settings
+	getMode() { return this.mode; } // SOLO / COMPETETIVE
 	getTerrariumWidth(){ return this.terrariumWidth; }
 	getTerrariumHeight(){ return this.terrariumHeight; }
 	getHiveType(){ return this.hiveType; }
