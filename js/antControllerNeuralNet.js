@@ -10,12 +10,13 @@ define(['antController'], function(AntController) {
  * meant as an example and case study.
  */
 return class AntControllerNeuralNet extends AntController{
-	constructor(ant, neuralNetwork, userCode){
+	constructor(ant, userCode, neuralNetwork, mayTrain){
 		super(ant, userCode);
 		this.memory = { harvestedFood : false, lastLife : -1 };
 		this.neuralNetwork = neuralNetwork;
-		this.networkMemory = this.neuralNetwork.networkMemory;
-		
+		this.neuralNetwork.shouldTrain = mayTrain;
+
+		this.networkMemory = this.neuralNetwork.networkMemory;		
 		this.batchSize = 10;
 		this.minTrainSet = this.batchSize * 500;
 

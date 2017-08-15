@@ -2,11 +2,9 @@ define(function() {
 
 return class SettingsSimulation
 {
-	constructor(mode, antType, hiveType, userAntFunction){
+	constructor(mode, playerSettings){
 		this.mode = mode;
 		this.hiveSize = 14;
-		this.antType = antType;
-		this.hiveType = hiveType;
 		this.antSize = 5;
 		this.antStartNumber = 10;
 		this.antStartPositionDistance = 40;
@@ -46,15 +44,14 @@ return class SettingsSimulation
 		this.interactionDistance = 5;
 		this.interactionRange = Math.PI*0.25;
 		this.rotationSpeedReduction = 0.5; // 50% of speed is reduced when rotation is max
-		this.userAntFunction = userAntFunction;
+		this.playerSettings = playerSettings;
+		this.globalMemory = new Array(playerSettings.length);
 	}
 	// attribute related settings
 	getMode() { return this.mode; } // SOLO / COMPETETIVE
 	getTerrariumWidth(){ return this.terrariumWidth; }
 	getTerrariumHeight(){ return this.terrariumHeight; }
-	getHiveType(){ return this.hiveType; }
 	getHiveSize(){ return this.hiveSize; }
-	getAntType(){ return this.antType; }
 	getAntDecayProb(){ return this.antDecayProb; }
 	getAntFoodBonusProb(){ return this.antFoodBonusProb; }
 	getAntSize(){ return this.antSize; }
@@ -94,7 +91,7 @@ return class SettingsSimulation
 	getInteractionDistance() { return this.interactionDistance; }
 	getInteractionRange() { return this.interactionRange; }
 	getRotationSpeedReduction() { return this.rotationSpeedReduction; }
-	getUserAntFunction() { return this.userAntFunction; }
+	getPlayerSettings() { return this.playerSettings; }
 }
 
 });

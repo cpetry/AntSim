@@ -25,14 +25,15 @@ return class Tutorial extends Simulation {
 		// don't let ants age
 		this.settings.antDecayProb = 0;
 		this.settings.foodDecayProb = 0;
+
+		// first create hive! ID has to be set correctly
+		var hivePos = {x: this.canvas.width / 4, y: this.canvas.height / 2};
+		this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.allObjects));
 		
 		var foodPos = {x: this.canvas.width / 4*3, y: this.canvas.height / 2};
 		var size = this.settings.getFoodAmount() * this.settings.getFoodSize();
 		var newFood = new Food(this.canvas, foodPos, size, this.settings, this.allObjects);
 		this.food.push(newFood);
-		
-		var hivePos = {x: this.canvas.width / 4, y: this.canvas.height / 2};
-		this.hives.push(new HiveGenetic(this.canvas, hivePos, this.settings, this.allObjects));
 		
 		this.checkAreaFood = new Collider(this.canvas, foodPos, ShapeType.CIRCLE, newFood.getSize()+5, 0, []);
 		this.checkAreaHive = new Collider(this.canvas, hivePos, ShapeType.CIRCLE, this.hives[0].getSize()+5, 0, []);			

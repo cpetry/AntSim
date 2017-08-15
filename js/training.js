@@ -1,22 +1,18 @@
-define([ 'neuralNetwork', 'settingsSimulation', 'simulation'], 
-function(NeuralNetwork, SettingsSimulation, Simulation) {
+define([ 'settingsSimulation', 'simulation'], 
+function( SettingsSimulation, Simulation) {
 
 return class Training {
 	constructor(canvas){
 		this.canvas = canvas;
-		this.neuralNetwork = new NeuralNetwork();
 	}
 	
-	start(mode, userAntFunction){
+	start(mode, playerSettings){
 		// for now only neural networks are trained
 		Math.seedrandom();
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
-		
-		this.neuralNetwork.shouldTrain = true;
-		var settings = new SettingsSimulation(mode, AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
-		settings.neuralNetwork = this.neuralNetwork;
-		
+		playerSettings[0].mayTrain = true;
+		var settings = new SettingsSimulation(mode, playerSettings);
 		var i = 0;
 		function simulate(){
 			i++;
@@ -28,15 +24,14 @@ return class Training {
 		simulate.call(this);
 	}
 	
-	test(mode, userAntFunction){
+	test(mode, playerSettings){
 		// for now only neural networks are trained
 		Math.seedrandom();
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
 
-		this.neuralNetwork.shouldTrain = false;
-		var settings = new SettingsSimulation(mode, AntType.NEURALNET, HiveType.DEFAULT, userAntFunction);
-		settings.neuralNetwork = this.neuralNetwork;
+		playerSettings[0].mayTrain = false;
+		var settings = new SettingsSimulation(mode, playerSettings);
 		new Simulation(this.canvas, settings);
 	}
 	

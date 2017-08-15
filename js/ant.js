@@ -1,5 +1,5 @@
-define(['animal', 'pheromone', 'antController','antControllerNeuralNet'], 
-function(Animal, Pheromone, AntController, AntControllerNeuralNet) {
+define(['animal', 'pheromone', 'antController','antControllerNeuralNet', 'neuralNetwork'], 
+function(Animal, Pheromone, AntController, AntControllerNeuralNet, NeuralNetwork) {
 
 /**
  * Ant
@@ -43,10 +43,30 @@ return class Ant extends Animal {
 		this._pheromoneDecayProb = settings.getPheromoneDecayProb();
 		
 		var controller=null;
-		if (settings.getAntType() == AntType.NEURALNET)
-			controller = new AntControllerNeuralNet(this, settings.neuralNetwork, settings.getUserAntFunction());
+		var playerSettings = settings.getPlayerSettings()[this._parentID];
+		var userFunction = playerSettings.antCode;
+		if (!isFunction(userFunction))
+			throw new TypeError("No valid user function!");
+		
+		if (playerSettings.antType == AntType.NEURALNET){
+			
+			var mayTrain = playerSettings.mayTrain;
+			var neuralNetwork = null;
+			if (mayTrain){
+				if (settings.globalMemory[this._parentID] == null)
+					settings.globalMemory[this._parentID] = new NeuralNetwork();
+				neuralNetwork = settings.globalMemory[this._parentID]; // reference to global memory
+			}
+			else{
+				if (settings.globalMemory[this._parentID] == null)
+					neuralNetwork = new NeuralNetwork();
+				else
+					neuralNetwork = JSON.parse(JSON.stringify(settings.globalMemory[this._parentID])) // deep copy
+			}
+			controller = new AntControllerNeuralNet(this, userFunction, neuralNetwork, mayTrain);
+		}
 		else
-			controller = new AntController(this, settings.getUserAntFunction())
+			controller = new AntController(this, userFunction)
 		
 		this.setController(controller);
 	}

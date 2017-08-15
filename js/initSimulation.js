@@ -18,8 +18,8 @@ function showGraph(show){
 
 SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);
 
-userAntFunction = new Function(simpleAntCode);
-
+playerSettings =  [{antType: AntType.CUSTOM, hiveType: HiveType.DEFAULT, antCode: new Function(simpleAntCode), hiveCode: null},
+			{antType: AntType.CUSTOM, hiveType: HiveType.DEFAULT, antCode: new Function(simpleAntCode), hiveCode: null}]
 
 requirejs.config({
 	//By default load any module IDs from js
@@ -44,14 +44,13 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 	
 	function startTeaser(){
 		SettingsGlobal.setShowUI(true);
-		var settings = new SettingsSimulation(SimulationMode.COMPETITIVE, 
-						AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(SimulationMode.COMPETITIVE, playerSettings);
 		new Simulation(canvas, settings);
 	}
 
 	function startSimulation(mode){
 		console.log("Simulation")
-		var settings = new SettingsSimulation(mode, AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(mode, playerSettings);
 		new Simulation(canvas, settings);
 	}
 
@@ -59,13 +58,13 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 		console.log("startTraining")
 		SettingsGlobal.setShowUI(true);
 		SettingsGlobal.setFramesPerSecond(60);
-		training.start(mode, userAntFunction);
+		training.start(mode, playerSettings);
 	}
 
 	function testTraining(mode){
 		console.log("testTraining")
 		SettingsGlobal.setShowUI(true);
-		training.test(mode, userAntFunction);
+		training.test(mode, playerSettings);
 	}
 
 	function resetTraining(){
@@ -93,7 +92,9 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 		try {
 			command = parsedData.command;
 			mode = parsedData.mode;
-			userAntFunction = new Function(parsedData.code);
+			playerSettings = parsedData.playerSettings;
+			for (var s in playerSettings)
+				playerSettings[s].antCode = new Function(playerSettings[s].antCode);
 			SettingsGlobal.setShowUI(parsedData.showUI == true);
 		} catch (err) {
 			console.log("postMessage didn't work with: " + err);

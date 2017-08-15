@@ -30,18 +30,16 @@ div#simulationContainer{
 }
 div#simulationOptions{
 	display:none; /* at first hide it */
-	height:25px;
 }
 div#simulationButtons, div#trainingButtons, div#trainingContainer{
-	float:left;
-	margin-left:80px;
+	float: left;
+	display: none;
 }
-div#modes{
-	float:right;
+div#typesEnemy{
+	display: none;
 }
-div#types{
-	float:right;
-	margin-right:80px;
+div#typesSelf{
+	float: right;
 }
 
 div#graphs{

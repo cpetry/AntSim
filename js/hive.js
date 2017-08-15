@@ -16,10 +16,9 @@ return class Hive extends SmellableObject {
 		this.collisionObjs = collisionObjs;
 		this.settings = settings;
 		
-		if (settings.getHiveType() == HiveType.CUSTOM)
+		var playerSettings = settings.getPlayerSettings()[this.getID()];
+		if (playerSettings.hiveType == HiveType.CUSTOM)
 			this.controller = new HiveControllerCustom();
-		else if (settings.getHiveType() == HiveType.NEURALNET)
-			this.controller = new HiveController(); // TODO neuralnet hivecontroller
 		else
 			this.controller = new HiveController();
 		

@@ -59,8 +59,9 @@ const ShapeType = {
 
 
 const AntType = {
-	SIMPLE: 0,
-	CUSTOM: 1
+	CUSTOM: 0,
+	SIMPLE: 1,
+	NEURALNET : 2
 }
 
 const HiveType = {
@@ -236,4 +237,9 @@ function createEditor(elementID, defaultValue){
 	customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
 	customAntEditor.setValue(defaultValue, -1); // -1 set cursor to begin
 	return customAntEditor;
+}
+
+function isFunction(functionToCheck) {
+  var getType = {};
+  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }

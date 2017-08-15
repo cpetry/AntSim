@@ -23,41 +23,52 @@
 		<div id="all">
 			<p id="mode"></p>
 			<div id="allContainer">
-				<!-- Training view -->
 				<div id="simulationOptions">
-					<div id="simulationButtons">
-						<input type="button" value="API" onclick="apiClicked()">
-						<input type="checkbox" id="showUI"  checked /> ShowUI
-						<input type="button" value="Run" id="runButton">
-					</div>
 					<div id="modes">
 						<input type="radio" id="solo" name="simulationMode" value="0" checked>
 						<label for="solo"> Solo</label> 
 						<input type="radio" id="competitive" name="simulationMode" value="1">
 						<label for="competitive"> Competitive</label>
 					</div>
-					<div id="types">
-						AntType<select id="AntType" size="1"> 
-							<option selected>Custom</option> 
-							<option>Simple</option> 
-							<option>NeuralNet</option>
+					<div id="typesEnemy">
+						EnemyAnt<select id="AntTypeEnemy" size="1"> 
+							<option value="1" selected>Simple</option> 
+							<option value="2">NeuralNet</option>
 						</select>
-						HiveType<select id="HiveType" size="1"> 
+						<!-- HiveType<select id="HiveTypeEnemy" size="1"> 
 							<option selected>Default</option> 
 							<option>Custom</option> 
-						</select>
+						</select>-->
 					</div>
+					<input type="button" value="Next" id="nextButton">
+					<!-- Editor stuff -->
+				</div>
+				<!-- Training view -->
+				<div id="editorContainer">
 					<div id="trainingButtons">
 						<input type="button" value="train" id="startTrainingButton">
 						<input type="button" value="test"  id="testTrainingButton">
 						<input type="button" value="reset" id="resetTrainingButton">
 						Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
 					</div>
-					
-					<!-- Editor stuff -->
-				</div>
-				
-				<div id="editorContainer">
+					<div id="simulationButtons">
+						<input type="button" value="API" onclick="apiClicked()">
+						<input type="checkbox" id="showUI"  checked /> ShowUI
+						<input type="button" value="Run" id="runButton">
+					</div>
+
+					<div id="typesSelf">
+						AntType<select id="AntTypeSelf" size="1"> 
+							<option value="0" selected>Custom</option> 
+							<option value="1">Simple</option> 
+							<option value="2">NeuralNet</option>
+						</select>
+						<!-- HiveType<select id="HiveTypeSelf" size="1"> 
+							<option selected>Default</option> 
+							<option>Custom</option> 
+						</select> -->
+					</div>
+					<br>
 					<pre id="editor"></pre>
 				</div>
 				

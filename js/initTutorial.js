@@ -181,7 +181,7 @@ return [ActionType.MOVE, DirectionType.NONE, rand(-60,60)];`];
 		Math.seedrandom();
 
 		var canvas = document.getElementById('canvasTutorial');
-		var settings = new SettingsSimulation(SimulationMode.SOLO, AntType.CUSTOM, HiveType.DEFAULT, userAntFunction);
+		var settings = new SettingsSimulation(SimulationMode.SOLO, AntType.CUSTOM, HiveType.DEFAULT, [userAntFunction]);
 		new Tutorial(canvas, settings, finishedFunc, part);
 	};
 
