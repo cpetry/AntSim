@@ -90,20 +90,6 @@ function changeEditorCode(antType){
 	else
 		editor.setValue(defaultValue, -1);
 }
-	
-function getAutoCompletionWordList(){
-	return ["getFoodStorage()",
-			"getLife()", 
-			"getMaxFoodStorage()",
-			"getNearestEnemyAnt()",
-			"getNearestObjectType()",
-			"getObjectOfID()",
-			"getOwnHive()",
-			"getParentID()",
-			"getSmelledObjs()",
-			"getVisibleObjs()", 
-			];
-}
 
 function getSimulationMode(){
 	var radios = document.getElementsByName('simulationMode');

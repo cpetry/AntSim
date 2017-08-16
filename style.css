@@ -17,9 +17,6 @@ div#tutorial{
 	visibility: hidden;
 }
 div#allContainer{
-	width: 850px;
-    height: 400px;
-    margin: auto;
 	text-align: center;
 }
 div#simulationContainer{
@@ -61,8 +58,7 @@ div#graphAnts{
 }
 div#editorContainer{
 	display:none; /* at first hide it */
-	width: 700px;
-	height:90%;
+	width: 80%;
 	margin:auto;
 }
 div#NoUI{
@@ -108,8 +104,9 @@ div#cleared {
     clear: both;
 }
 #simulationSandbox {
-	height: 100%;
-	width: 100%;
+	width: 850px;
+    height: 400px;
+    margin: auto;
 	border: none;
 }
 #frameCounter {

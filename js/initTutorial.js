@@ -15,18 +15,18 @@ window.requestAnimationFrame = function() {
 
 var child = document.createElement('div');
 child.innerHTML = `
-<div style="width:850px;">
-	<div style="width:550px; float:left;">
-		<input type="button" value="run" id="runTutorial" >
-		<input type="button" value="cheat" id="cheat" >
-		<div id="customAntContainer" style="height:150px;margin:10px;">
-			<pre id="editor"></pre>
-		</div>
-	</div>
-	<div style="width:250px; float:right; text-align:center;">
+<div>
+	<div style="width:250px; float:left; text-align:center;">
 		<canvas width="250" height="200" class="terrarium" id="canvasTutorial"></canvas>
 		<input type="checkbox" value="speedUp" id="speedUp">SpeedUp!
 		<input type="checkbox" value="debug"   id="debug">debug
+	</div>
+	<div style="width:100%; margin-left: 280px">
+		<input type="button" value="run" id="runTutorial" >
+		<input type="button" value="cheat" id="cheat" >
+		<div id="customAntContainer" style="margin:10px;">
+			<pre id="editor"></pre>
+		</div>
 	</div>
 	<div style="clear:both;"></div>
 </div>`

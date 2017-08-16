@@ -200,29 +200,43 @@ function maxElement(tlist) {
 	return max;
 }
 
+function getAutoCompletionWordLists(){
+	return { antController : ["this.getFoodStorage()",
+			"this.getLife()", 
+			"this.getMaxFoodStorage()",
+			"this.getNearestEnemyAnt()",
+			"this.getNearestObjectType()",
+			"this.getObjectOfID()",
+			"this.getOwnHive()",
+			"this.getParentID()",
+			"this.getSmelledObjs()",
+			"this.getVisibleObjs()", 
+			],
+			global: ["maxElement(<list>)",
+			"argmax(<list>)"]};
+}
+
 function createEditor(elementID, defaultValue){
 	var antControllerWordCompleter = {
 		getCompletions: function(editor, session, pos, prefix, callback) {
-			var wordList = AntController.getAutoCompletionWordList();
-			callback(null, wordList.map(function(word) {
-				return {
-					caption: word,
-					value: word,
-					meta: "This ant"
-				};
-			}));
-		}
-	}
-	var globalWordCompleter = {
-		getCompletions: function(editor, session, pos, prefix, callback) {
-			var wordList = ["this."];
-			callback(null, wordList.map(function(word) {
-				return {
-					caption: word,
-					value: word,
-					meta: "global"
-				};
-			}));
+			var wordLists = getAutoCompletionWordLists();
+			console.log(prefix)
+			if (prefix === "this.")
+				callback(null, wordLists.antController.map(function(word) {
+					return {
+						caption: word,
+						value: word,
+						meta: "This ant"
+					};
+				}));
+			else
+				callback(null, wordLists.global.map(function(word) {
+					return {
+						caption: word,
+						value: word,
+						meta: "static"
+					};
+				}));
 		}
 	}
 	ace.require("ace/ext/language_tools");
@@ -234,8 +248,12 @@ function createEditor(elementID, defaultValue){
 		enableBasicAutocompletion: true,
 		enableLiveAutocompletion: true
 	});
-	customAntEditor.completers = [globalWordCompleter, antControllerWordCompleter];
+	customAntEditor.completers = [antControllerWordCompleter];
 	customAntEditor.setValue(defaultValue, -1); // -1 set cursor to begin
+	customAntEditor.setAutoScrollEditorIntoView(true);
+	customAntEditor.setOption("maxLines", 100);
+    customAntEditor.setOption("minLines", 10);
+
 	return customAntEditor;
 }
 
