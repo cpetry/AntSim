@@ -24,11 +24,10 @@ return class NeuralNetwork {
 	constructor(){
 		this.synaptic = synaptic;
 
-		this.network = undefined;
-		this.trainer = undefined;
+		this.network = null;
+		this.trainer = null;
 
 		this.shouldTrain = false;
-		this.newNetwork = true;
 		
 		this.networkMemory = [];
 		this.trainSet = [];
@@ -37,32 +36,19 @@ return class NeuralNetwork {
 	}
 
 	initNetwork(numInput, numHidden, numOutput) {
-		if (localStorage.getItem("network")==null)
-			this.newNetwork = true;
-
-		if (this.newNetwork) {
-			this.network = this.createNetwork(numInput, numHidden, numOutput);
-			console.dir(this.network);
-			this.setActivation(this.synaptic.Neuron.squash.RELU);
-			this.setXavier();
-			this.newNetwork = false;
-		} else
-			this.network = this.synaptic.Network.fromJSON(JSON.parse(localStorage.getItem("network")));
-
+		this.network = new this.synaptic.Architect.Perceptron(numInput, numHidden, numOutput);
+		this.setActivation(this.synaptic.Neuron.squash.RELU);
+		this.setXavier();
 		this.trainer = new this.synaptic.Trainer(this.network);
 		console.log("Initiated!");
 	}
-	
+		
 	setActivation(activation) {
 		for (var i = 0; i < this.network.layers.hidden.length; ++i)
 			for (var j = 0; j < this.network.layers.hidden[i].list.length; ++j)
 				this.network.layers.hidden[i].list[j].squash = activation;
 		for (var j = 0; j <this.network.layers.output.list.length; ++j)
 			this.network.layers.output.list[j].squash = activation;
-	}
-
-	createNetwork(numInputs, numHidden, numOutputs) {
-		return new this.synaptic.Architect.Perceptron(numInputs, numHidden, numOutputs);
 	}
 
 	setXavier() {

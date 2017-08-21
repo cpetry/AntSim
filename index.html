@@ -49,6 +49,12 @@
 						<input type="button" value="train" id="startTrainingButton">
 						<input type="button" value="test"  id="testTrainingButton">
 						<input type="button" value="reset" id="resetTrainingButton">
+						<input id="selectNetwork" type="file" accept=".neuraln" onpropertychange="handleFileSelect()" style="position:absolute;visibility:hidden;"/>
+						<input type="button" value="load" id="loadNetwork">
+						<a id="downloadAnchorElem" style="display:none"></a>
+						<input type="button" value="save" id="saveNetwork">
+						<!--<div id="loadNetwork" style="display: inline-block; width:50px; height:50px">
+						</div>-->
 						Seed <input type="number" id="seed" style="width:50px" value="0" /><br/>
 					</div>
 					<div id="simulationButtons">
@@ -73,8 +79,33 @@
 				</div>
 				
 				<!-- Simulation view -->
-				<iframe sandbox='allow-scripts allow-same-origin' id='simulationSandbox' src='simulation.html'></iframe>
-
+				<div id="simulationSandbox">
+					<div id="simulationContainer">
+						<div id="frameCounter">
+							Frame<input type="number" id="frame" style="width:50px" value="0" readonly /><br/>
+						</div>
+						<div align="center" id="graphs" style="display:none;">
+							<div id="graphAnts"></div>
+							<div id="graphStats"></div>
+						</div>
+						<canvas align="center" width="600" height="350" class="terrarium" id="canvasSimulation"></canvas>
+						<div id="settings">Settings<br/>
+							FPS<input type="number" id="fps" style="width:50px" value="30" max="60" min="1" onchange="SettingsGlobal.setFramesPerSecond(document.getElementById('fps').value);" /><br/>
+							<div id="debugContainer">Debug stuff<br>
+								<input type="checkbox" id="debugShowLife" onchange="Debug.setShowLife(document.getElementById('debugShowLife').checked);" /> Show life <br/>
+								<input type="checkbox" id="debugVisibility" onchange="Debug.setVisibility(document.getElementById('debugVisibility').checked);" /> Show visibility <br/>
+								<input type="checkbox" id="debugCollider" onchange="Debug.setShowCollider(document.getElementById('debugCollider').checked);" /> Show collider <br/>
+								<input type="checkbox" id="debugFoodAmount" onchange="Debug.setShowFoodAmount(document.getElementById('debugFoodAmount').checked);" /> Show food amount <br/>
+								<input type="checkbox" id="debugSmellingDistance" onchange="Debug.setShowSmellingDistance(document.getElementById('debugSmellingDistance').checked);" /> Show smelling distance <br/>
+								<input type="checkbox" id="debugSmelledObjectsPosition" onchange="Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjectsPosition').checked);" /> Show smelled object distance <br/>
+								<input type="checkbox" id="debugPheromones" onchange="Debug.setShowPheromones(document.getElementById('debugPheromones').checked);" /> Show pheromones <br/>
+							</div>
+						</div>
+						
+						<!-- no ui -->
+						<div id="NoUI" style="display:none;">...Simulating...</div>
+					</div>
+				</div>
 				<div id="cleared"></div>
 				<div id="floatingContainer">
 					<iframe id="message" src="./user-code_doc/index.html"></iframe>
@@ -86,11 +117,16 @@
 		<!-- doesnt work with requirejs -->
 		<script src="./js/external/ace_min_noconflict/ace.js"></script>
 		<script src="./js/external/ace_min_noconflict/ext-language_tools.js"></script>
+		<script src="./js/external/flotr2/flotr2.min.js"></script>
+		<script src="./js/external/require.js"></script>
 
 		<script src="./exampleAnts/simpleAnt.js"></script>
 		<script src="./exampleAnts/neuralNetworkAnt.js"></script>
 
+		<script src="./js/settingsGlobal.js"></script>
+		<script src="./js/debug.js"></script>
 		<script src="./js/globals.js"></script>
+		<script src="./js/initSimulation.js"></script>
 		<script src="./js/init.js"></script>
 	</body>
 </html>

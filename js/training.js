@@ -1,5 +1,5 @@
-define([ 'settingsSimulation', 'simulation'], 
-function( SettingsSimulation, Simulation) {
+define([ 'settingsSimulation', 'simulation', 'neuralNetwork'], 
+function( SettingsSimulation, Simulation, NeuralNetwork) {
 
 return class Training {
 	constructor(canvas){
@@ -7,14 +7,22 @@ return class Training {
 	}
 	
 	start(mode, playerSettings){
-		// for now only neural networks are trained
 		Math.seedrandom();
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
+		
+		// check if neural network ants do have a brain
+		if (playerSettings[0].antType == AntType.NEURALNET
+		&& playerSettings[0].globalMemory == null){
+			globalMemorySelf = new NeuralNetwork();
+			playerSettings[0].globalMemory = globalMemorySelf;
+		}			
+		
 		playerSettings[0].mayTrain = true;
 		var settings = new SettingsSimulation(mode, playerSettings);
 		var i = 0;
 		function simulate(){
+			console.log(playerSettings[0].globalMemory)
 			i++;
 			if (i < 100){
 				Math.seedrandom();
@@ -25,10 +33,15 @@ return class Training {
 	}
 	
 	test(mode, playerSettings){
-		// for now only neural networks are trained
 		Math.seedrandom();
 		window.cancelAnimationFrame(requestID);
 		requestID = undefined;
+		
+		// check if neural network ants do have a brain
+		for (var s in playerSettings)
+			if (playerSettings[s].antType == AntType.NEURALNET
+			&& playerSettings[s].globalMemory == null)
+				throw new TypeError("No neural network existing!")
 
 		playerSettings[0].mayTrain = false;
 		var settings = new SettingsSimulation(mode, playerSettings);

@@ -10,7 +10,7 @@ Debug.setShowSmelledObjectsPosition(document.getElementById('debugSmelledObjects
 Debug.setShowPheromones(document.getElementById('debugPheromones').checked);
 
 function showGraph(show){
-	document.getElementById('canvasContainer').style.display = (show ? 'none' : 'inline');
+	document.getElementById('canvasSimulation').style.display = (show ? 'none' : 'inline');
 	document.getElementById('graphs').style.display = (show ? 'block' : 'none');
 	document.getElementById('NoUI').style.display = (show ? 'none' : 'inline');
 	document.getElementById('settings').style.display = (show ? 'none' : 'inline');
@@ -50,6 +50,13 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 
 	function startSimulation(mode){
 		console.log("Simulation")
+
+		// check if neural network ants do have a brain
+		for (var s in playerSettings)
+			if (playerSettings[s].antType == AntType.NEURALNET
+			&& playerSettings[s].globalMemory == null)
+				throw new TypeError("No neural network existing!")
+
 		var settings = new SettingsSimulation(mode, playerSettings);
 		new Simulation(canvas, settings);
 	}
@@ -72,37 +79,37 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 		training.reset();
 	}
 	
-	function getMessage(e){
-		if ((window.location.protocol != 'file:') 
+	function initSimulation(simulationSettings){
+		/*if ((window.location.protocol != 'file:') 
 		&& e.origin != "https://cpetry.github.io"){
 			console.log("Message blocked from: " + e.origin)
 			return;
-		}
+		}*/
 		var result = '';
-		var parsedData = e.data;
+		var parsedData = simulationSettings;
 		var command;
 		var mode = SimulationMode.SOLO;
 		
 		// setImmediate() uses postMessage! We therefor have to intercept this message here.
-		if ((typeof parsedData === 'string' || parsedData instanceof String) 
+		/*if ((typeof parsedData === 'string' || parsedData instanceof String) 
 		&& parsedData.startsWith("setImmediate")){
 			return;
-		}
+		}*/
 		
-		try {
-			command = parsedData.command;
-			mode = parsedData.mode;
-			playerSettings = parsedData.playerSettings;
-			for (var s in playerSettings)
-				playerSettings[s].antCode = new Function(playerSettings[s].antCode);
-			SettingsGlobal.setShowUI(parsedData.showUI == true);
-		} catch (err) {
-			console.log("postMessage didn't work with: " + err);
-		}
+		command = parsedData.command;
+		mode = parsedData.mode;
+		playerSettings = parsedData.playerSettings;
+
+		// interprete code
+		for (var s in playerSettings)
+			playerSettings[s].antCode = new Function(playerSettings[s].antCode);
+		
+		SettingsGlobal.setShowUI(parsedData.showUI == true);
+
 		var showUI = SettingsGlobal.getShowUI();
 		document.getElementById('graphs').style.display = 'none';
 		document.getElementById('NoUI').style.display = (showUI ? 'none' : 'inline');
-		document.getElementById('canvasContainer').style.display = (showUI ? 'inline' : 'none');
+		document.getElementById('canvasSimulation').style.display = (showUI ? 'inline' : 'none');
 		document.getElementById('settings').style.display = 'inline';
 
 		document.getElementById('frame').value = 0;
@@ -127,6 +134,8 @@ function   (seed, setImmediate, Simulation, SettingsSimulation, Training, Ant) {
 		}
 	}
 	
-	window.addEventListener('message', getMessage);
+	//window.addEventListener('message', getMessage);
 	startTeaser()
+	// make the init function visible from outside
+	window.initSimulation = initSimulation;
 });

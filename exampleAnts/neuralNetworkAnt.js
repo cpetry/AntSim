@@ -2,11 +2,16 @@ var neuralNetworkAntCode = `
 this.minimumFoodStorage = this.getMaxFoodStorage() * 0.14;
 
 const NetworkAction = {
-	ATTACK_NEAREST_ANT : 0,
-	HARVEST_NEAREST_FOOD : 1,
-	GIVE_FOOD_TO_HIVE : 2,
-	ATTACK_SPIDER : 3
+	WALK_FORWARD : 0,
+	WALK_LEFT : 1,
+	WALK_RIGHT : 2,
+	ATTACK_NEAREST_ANT : 3,
+	HARVEST_NEAREST_FOOD : 4,
+	GIVE_FOOD_TO_HIVE : 5,
+	ATTACK_SPIDER : 6
 };
+
+var _networkOutputSize = Object.keys(NetworkAction).length
 
 function createFeatureVector() {
 	
@@ -48,7 +53,7 @@ function createFeatureVector() {
 	
 	// Normalization
 	for (var i = 0; i < antList.length; ++i) {
-		antList[i] = Math.min(antList[i],10)/10.;
+		antList[i] = Math.min(antList[i],20)/20.;
 		foodList[i] = Math.min(foodList[i],8)/8.;
 		hiveList[i] = Math.min(hiveList[i],2)/2.;
 		spiderList[i] = Math.min(spiderList[i],2)/2.;
@@ -60,11 +65,12 @@ function createFeatureVector() {
 }
 
 function chooseAction(networkOutput){
-	//console.log(networkAnswer)
 	// Chose action
 	
 	// Sort actions by value
-	var actionList = [0,1,2,3];
+	var actionList = []
+	for (var i=0; i < _networkOutputSize; i++)
+		actionList.push(i);
 	actionList.sort(function(a,b){return networkOutput[b] - networkOutput[a];});
 
 	var continiousSum = 0;
@@ -82,31 +88,33 @@ function chooseAction(networkOutput){
 		var action = actionList[j];
 
 		// Randomly chosen action
-		currentSum += networkOutput[action];
+		currentSum += networkOutput[j];
 		if (currentSum < randomChosen)
 			continue;
-
-		if (action == NetworkAction.ATTACK_NEAREST_ANT) {
+		
+		//console.log("Chosen action: " + action);
+		if (action == NetworkAction.WALK_FORWARD)
+			actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 0];
+		else if (action == NetworkAction.WALK_LEFT)
+			actionTuple = [ActionType.MOVE, DirectionType.FORWARD, -30];
+		else if (action == NetworkAction.WALK_RIGHT)
+			actionTuple = [ActionType.MOVE, DirectionType.FORWARD, 30];		
+		else if (action == NetworkAction.ATTACK_NEAREST_ANT) {
 			var prey = this.getNearestEnemyAnt();
 			if (prey != null) {
 				if (prey.canBeInteractedWith(this)) {
-					actionTuple =  [ActionType.ATTACK, prey]
+					actionTuple = [ActionType.ATTACK, prey]
 				} else {
 					var fromObjToDirRad = prey.getRotationToObj();
 					actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
-			else
-				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
-
 		} else if (action == NetworkAction.HARVEST_NEAREST_FOOD) {
 
 			var nearestFood = this.getNearestObjectType(ObjectType.FOOD);
-			if (nearestFood != null) {
-
+			var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
+			if (nearestFood != null && canHarvestMore) {
 				var canBeHarvested = nearestFood.canBeInteractedWith(this);
-				var isFull = (this.getFoodStorage() == this.getMaxFoodStorage());
-				var canHarvestMore = (this.getFoodStorage() < this.getMaxFoodStorage());
 
 				// harvest food if possible
 				if (canHarvestMore) {
@@ -119,13 +127,11 @@ function chooseAction(networkOutput){
 					}
 				}
 			}
-			else
-				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
-
 		} else if (action == NetworkAction.GIVE_FOOD_TO_HIVE) {
 
 			var hive = this.getOwnHive();
-			if (hive != null){
+			var shouldReturnFood = this.getFoodStorage() > this.minimumFoodStorage;
+			if (hive != null && shouldReturnFood){
 
 				// harvest food if possible
 				if(hive.canBeInteractedWith(this)){
@@ -137,8 +143,6 @@ function chooseAction(networkOutput){
 					actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
-			else
-				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 		}
 		else if (action == NetworkAction.ATTACK_SPIDER) {
 
@@ -153,8 +157,9 @@ function chooseAction(networkOutput){
 					actionTuple = [ActionType.MOVE, DirectionType.FORWARD, fromObjToDirRad];
 				}
 			}
-			else
-				actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
+		}
+		else {
+			throw new TypeError("invalid action")
 		}
 
 		if (actionTuple != null) {
@@ -162,7 +167,7 @@ function chooseAction(networkOutput){
 		}
 
 	}
-
+	
 	return [action, actionTuple];
 }
 
@@ -175,23 +180,24 @@ function determineReward(){
 
 	// were hit
 	if (this.getLife() < this.memory.lastLife - 5) {
-		reward -= 0.9;
+		reward -= 3;
 		this.memory.lastLife = this.getLife();
 	}
 	
-	reward += this.getLastDistanceWalked() / 10;
+	// ant walks? Great!
+	//reward += this.getLastDistanceWalked() / 10;
 	
 	// food was harvested
 	if (this.getFoodStorage() > this.memory.lastFoodStorage)
 		reward += 0.5;
 	
 	// food was given to hive
-	else if (this.getFoodStorage() < this.memory.lastFoodStorage - 2
+	else if (this.getFoodStorage() < this.memory.lastFoodStorage - 5
 	&& this.networkMemory[this.networkMemory.length-1].chosenAction == NetworkAction.GIVE_FOOD_TO_HIVE)
 		reward += 0.3;
 		
 	// collided with sth
-	if (this.collidedWithID != -1)
+	if (this.hasCollidedWithID() != -1)
 		reward -= 0.5;
 	// Reward for incoming ants of same type?
 
@@ -202,8 +208,9 @@ function determineReward(){
 
 function reinforcementLearning(reward, networkOutput){
 
-	var qLearningAlpha = 0.01;
+	var qLearningAlpha = 0.05;
 	var qLearningGamma = 0.9;
+	var learningRate = 0.001;
 
 	if (reward != 0 && this.networkMemory.length >= this.batchSize && this.neuralNetwork.shouldTrain) {
 		var lastBest = maxElement(networkOutput);
@@ -220,10 +227,10 @@ function reinforcementLearning(reward, networkOutput){
 			if (chosenAction != -1)
 				modifiedOutput[chosenAction] = modifiedOutput[chosenAction] + qLearningAlpha * (reward + qLearningGamma * lastBest - modifiedOutput[chosenAction]);
 
-			// Normalize vector and clip to [0.001,inf.)
+			// Normalize vector and clip to [learningRate,inf.)
 			var sum = 0;
 			for (var j = 0; j < modifiedOutput.length; ++j)
-				modifiedOutput[j] = Math.max(modifiedOutput[j], 0.001);
+				modifiedOutput[j] = Math.max(modifiedOutput[j], learningRate);
 			for (var j = 0; j < modifiedOutput.length; ++j)
 				sum += modifiedOutput[j];
 			for (var j = 0; j < modifiedOutput.length; ++j)
@@ -242,11 +249,10 @@ function reinforcementLearning(reward, networkOutput){
 			if (this.trainSet.length > this.minTrainSet)
 				this.trainSet.shift(this.trainSet.length - this.minTrainSet);
 
-			//var showDebug = rand(0,1) < 0.01;
 			var showDebug = true;
 			if (showDebug)
 				console.log("Starting training...");
-			var data = this.neuralNetwork.trainer.train(this.trainSet,{iterations: 100, rate: 0.001, error: 1e-10, shuffle: true, log: showDebug ? 10 : 1e8});
+			var data = this.neuralNetwork.trainer.train(this.trainSet,{iterations: 100, rate: learningRate, error: 1e-10, shuffle: true, log: showDebug ? 10 : 1e8});
 			this.trainSet = [];
 
 			if (showDebug){
@@ -262,18 +268,11 @@ function reinforcementLearning(reward, networkOutput){
 }
 
 
-var shouldSave = rand(0,1) < 0.001 ? true : false;
-
-if (shouldSave){
-	localStorage.setItem("network", JSON.stringify(this.neuralNetwork.network.toJSON()));
-	console.log("Saved network!");
-}
-
 var featureVector = createFeatureVector.call(this);
 // check and create network if not created already
 // Create network here to use length of featureVector as input layer
-if (this.neuralNetwork.newNetwork) {
-	this.neuralNetwork.initNetwork(featureVector.length, 10, NetworkAction.length);
+if (this.neuralNetwork.network == null) {
+	this.neuralNetwork.initNetwork(featureVector.length, 10,10, _networkOutputSize);
 }
 
 var networkOutput = this.neuralNetwork.network.activate(featureVector);
@@ -299,10 +298,12 @@ if (actionTuple != null) {
 	this.neuralNetwork.realChosen.push(true);
 } else {
 	this.neuralNetwork.realChosen.push(false);
+	// search around
+	actionTuple = [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];
 }
 
-// After 1000 choices -> reset choices
-if (this.neuralNetwork.realChosen.length > 1000) {
+// After 500 choices -> reset choices
+if (this.neuralNetwork.realChosen.length > 500) {
 	var chosenPart = 0.;
 	var firstChoicePart = 0.;
 	for (var i = 0; i < this.neuralNetwork.realChosen.length; ++i) {
@@ -319,8 +320,10 @@ if (this.neuralNetwork.realChosen.length > 1000) {
 
 
 //Return value
+	//console.log("Chose action: " + actionTuple)
 
 if (actionTuple != null)
 	return actionTuple;
-else
-	return [ActionType.MOVE, DirectionType.NONE, 0];`
+else{
+	return [ActionType.MOVE, DirectionType.NONE, 0];
+}`

@@ -105,52 +105,51 @@ function getSimulationMode(){
 	return modeValue;
 }
 
-function simulate(commandString) {
-	var frame = document.getElementById('simulationSandbox');	
+function startSimulation(mode){
+	document.getElementById('mode').innerHTML = mode;
+	showSimulation();
+	document.getElementById('floatingContainer').style.display = 'none';
+	
+	//var frame = document.getElementById('simulationSandbox');	
 	var showUIvalue = document.getElementById("showUI").checked;
 	var playerSettings = [];
 	var simulationModeValue = getSimulationMode();
 	
-    if (commandString == "Teaser"){
+    if (mode == "Teaser"){
 		showUIvalue = true;
+		playerSettings.push({ antType: AntType.CUSTOM, hiveType: HiveType.DEFAULT, antCode: simpleAntCode, hiveCode: null});
 		playerSettings.push({ antType: AntType.CUSTOM, hiveType: HiveType.DEFAULT, antCode: simpleAntCode, hiveCode: null});
 	}
 	else {
-		function addPlayer(type){
+		/**
+		* type : AntType
+		* globalMemory : neuralNetwork JSON string or null
+		*/
+		function addPlayer(type, globalMemoryValue){
 			type = parseInt(type)
-			var antCodeString = "";
-			if (type == AntType.CUSTOM)
-				antCodeString = editor.getValue();
-			else if (type == AntType.SIMPLE)
-				antCodeString = simpleAntCode;
-			else if (type == AntType.NEURALNET)
-				antCodeString = neuralNetworkAntCode;
-			else
-				throw new TypeError("AntType incorrect! (" + type + ")")
-			playerSettings.push({ antType: type, hiveType: HiveType.DEFAULT, antCode: antCodeString, hiveCode: null});
+			var antCodeString = editor.getValue();
+			//else
+			//	throw new TypeError("AntType incorrect! (" + type + ")")
+			playerSettings.push({ antType: type, hiveType: HiveType.DEFAULT, antCode: antCodeString, hiveCode: null,
+						globalMemory : globalMemoryValue});
 		}
-		addPlayer.call(this, document.getElementById('AntTypeSelf').value);
+		addPlayer.call(this, document.getElementById('AntTypeSelf').value, globalMemorySelf);
 
 		if (simulationModeValue == SimulationMode.COMPETITIVE){
-			addPlayer.call(this, document.getElementById('AntTypeEnemy').value);
+			addPlayer.call(this, document.getElementById('AntTypeEnemy').value, globalMemoryEnemy);
 		}
 	}
 	// Note that we're sending the message to "*", rather than some specific
 	// origin. Sandboxed iframes which lack the 'allow-same-origin' header
 	// don't have an origin which you can target: you'll have to send to any
 	// origin, which might alow some esoteric attacks. Validate your output!
-	var message = {command : commandString, mode : simulationModeValue, playerSettings : playerSettings, showUI : showUIvalue};
-	if (window.location.protocol == 'file:')
+	var simulationSettings = {command : mode, mode : simulationModeValue, playerSettings : playerSettings, showUI : showUIvalue};
+	/*if (window.location.protocol == 'file:')
 		frame.contentWindow.postMessage( message, '*');
-	else frame.contentWindow.postMessage( message, 'https://cpetry.github.io/AntSim/simulation.html');
+	else frame.contentWindow.postMessage( message, 'https://cpetry.github.io/AntSim/simulation.html');*/
+	initSimulation(simulationSettings);
 }
 
-function startSimulation(mode){
-	document.getElementById('mode').innerHTML = mode;
-	showSimulation();
-	document.getElementById('floatingContainer').style.display = 'none';
-	simulate(mode);
-}
 
 function setupDone(){
 	var mode = document.getElementById('mode').innerHTML;
@@ -174,9 +173,56 @@ function runClicked(){
 	document.getElementById('runButton').value = (runState ? 'stop' : 'run')
 }
 
+
+// Setup the dnd listeners.
+function handleFileSelect(evt) {
+	alert(evt.target.param);
+	if (typeof evt !== 'undefined'){
+		readNetworkFile(evt.target.files[0]); // files is a FileList of File objects. List some properties.
+	}
+};
+	
+function readNetworkFile(file){
+	//console.log(file);
+	if(!imgFile.type.match(/image.*/)){
+		console.log("The dropped file is not an image: ", file.type);
+		return;
+	}
+
+	var reader = new FileReader();
+	reader.onload = function(e){
+		var data = e.target.result;
+		if (imgFile.type == "image/targa"){
+			//console.log(uint8ArrayNew);
+			var tga = new TGA();
+			tga.load(new Uint8Array(data));
+			data = tga.getDataURL('image/png');
+		}
+		if (type === "height")
+			NMO_FileDrop.loadHeightmap(data);
+		else if (type === "pictures")
+			NMO_FileDrop.loadHeightFromPictures(data, direction);
+	};
+	if (imgFile.type == "image/targa")
+		reader.readAsArrayBuffer(imgFile);
+	else
+		reader.readAsDataURL(imgFile);
+};
+
+function saveNetwork(){
+	var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(globalMemorySelf));
+	var dlAnchorElem = document.getElementById('downloadAnchorElem');
+	dlAnchorElem.setAttribute("href",     dataStr     );
+	dlAnchorElem.setAttribute("download", "scene.json");
+	dlAnchorElem.click();
+}
+
+
 var runState = true;
 var defaultValue = "return [ActionType.MOVE, DirectionType.FORWARD, rand(-30,30)];"
 var editor = createEditor("editor", defaultValue);
+var globalMemorySelf = null;
+var globalMemoryEnemy = null;
 
 document.getElementById("runButton").onclick           = function(){ runClicked() };
 document.getElementById("nextButton").onclick          = function(){ setupDone() };
@@ -186,6 +232,17 @@ document.getElementById("testTrainingButton").onclick  = function(){ startSimula
 document.getElementById("resetTrainingButton").onclick = function(){ startSimulation("ResetTraining") };
 document.getElementById("AntTypeSelf").onchange = function(){ changeEditorCode(this.value)};
 
+document.getElementById('loadNetwork').onclick = function(){ document.getElementById("selectNetwork").click()};
+/*document.getElementById('loadNetwork').addEventListener('change', handleFileSelect, false);
+document.getElementById('loadNetwork').addEventListener("dragover", function(e) {e.preventDefault();}, true);
+document.getElementById('loadNetwork').addEventListener("drop", function(e){
+	e.preventDefault(); 
+	readNetworkFile(e.dataTransfer.files[0]);
+}, true);*/
+document.getElementById('saveNetwork').onclick = function(){ saveNetwork(); };
+
+
+
 var radios = document.getElementsByName('simulationMode');
 for(var i = 0; i < radios.length; i++) {
 	radios[i].onclick = function() { simulationModeChanged(this.value); }; // "this" is here the radio button element
@@ -193,4 +250,4 @@ for(var i = 0; i < radios.length; i++) {
 
 // TODO try to find a better solution
 //window.addEvent("domready",function(){ startSimulation("Teaser") });
-window.onload = function(){ startSimulation("Teaser") };
+//window.onload = function(){ startSimulation("Teaser") };

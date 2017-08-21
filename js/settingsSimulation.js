@@ -33,7 +33,7 @@ return class SettingsSimulation
 		this.spiderSpeed = 1;
 		this.spiderSpeedRotation = 0.05; // radians
 		this.spiderAttackDamage = 3;
-		this.spiderCreationProb = 0.005;
+		this.spiderCreationProb = 0.001;
 		this.spiderDecayProb = 0.3;
 		this.spiderSmellingDistance = 50;
 		this.spiderVisibilityDistance = 30;
@@ -45,7 +45,12 @@ return class SettingsSimulation
 		this.interactionRange = Math.PI*0.25;
 		this.rotationSpeedReduction = 0.5; // 50% of speed is reduced when rotation is max
 		this.playerSettings = playerSettings;
-		this.globalMemory = new Array(playerSettings.length);
+		for (var s in playerSettings)
+			// check if neural network ants do have a brain
+			if (playerSettings[s].antType == AntType.NEURALNET
+			&& playerSettings[s].globalMemory == null)
+				throw new TypeError("No neural network existing!")
+
 	}
 	// attribute related settings
 	getMode() { return this.mode; } // SOLO / COMPETETIVE

@@ -158,9 +158,9 @@ return class Simulation {
 	spiderCreation(){
 		var maxSpiderNmb = 2;
 		var spiderCreationProb = this.settings.getSpiderCreationProbability();
-		var reduceByTime = this.iteration/1000.0*spiderCreationProb/10;
-		var reduceBySpiderNumber = (maxSpiderNmb-this.spiders.length)/maxSpiderNmb;
-		var probability = (spiderCreationProb-reduceByTime)*reduceBySpiderNumber;
+		var timeFactor = this.iteration/1000.0;
+		var reduceBySpiderNumber = (maxSpiderNmb-this.spiders.length) / maxSpiderNmb;
+		var probability = spiderCreationProb*timeFactor*reduceBySpiderNumber;
 		var createSpider = Math.floor(rand(0,1+probability));
 		if (createSpider && this.spiders.length < maxSpiderNmb){
 			// spiders are positioned outside of canvas

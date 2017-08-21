@@ -53,15 +53,10 @@ return class Ant extends Animal {
 			var mayTrain = playerSettings.mayTrain;
 			var neuralNetwork = null;
 			if (mayTrain){
-				if (settings.globalMemory[this._parentID] == null)
-					settings.globalMemory[this._parentID] = new NeuralNetwork();
-				neuralNetwork = settings.globalMemory[this._parentID]; // reference to global memory
+				neuralNetwork = playerSettings.globalMemory; // reference to global memory
 			}
 			else{
-				if (settings.globalMemory[this._parentID] == null)
-					neuralNetwork = new NeuralNetwork();
-				else
-					neuralNetwork = JSON.parse(JSON.stringify(settings.globalMemory[this._parentID])) // deep copy
+				neuralNetwork = JSON.parse(JSON.stringify(playerSettings.globalMemory)) // deep copy
 			}
 			controller = new AntControllerNeuralNet(this, userFunction, neuralNetwork, mayTrain);
 		}
